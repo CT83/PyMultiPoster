@@ -42,8 +42,8 @@
       <file leaf-file-name="blogger_login.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/blogger_login.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="262">
-              <caret line="78" column="31" lean-forward="false" selection-start-line="78" selection-start-column="31" selection-end-line="78" selection-end-column="31" />
+            <state relative-caret-position="287">
+              <caret line="79" column="67" lean-forward="true" selection-start-line="79" selection-start-column="67" selection-end-line="79" selection-end-column="67" />
               <folding>
                 <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#button#1;n#!!top" expanded="true" />
@@ -688,8 +688,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/blogger_login.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="78" column="31" lean-forward="false" selection-start-line="78" selection-start-column="31" selection-end-line="78" selection-end-column="31" />
+        <state relative-caret-position="287">
+          <caret line="79" column="67" lean-forward="true" selection-start-line="79" selection-start-column="67" selection-end-line="79" selection-end-column="67" />
           <folding>
             <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#1;n#!!top" expanded="true" />
