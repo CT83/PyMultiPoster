@@ -35,7 +35,7 @@ def homepage():
     return render_template('home.html', app_id='101206834030831')
 
 
-@app.route('/google91e934bee0a01da8')
+@app.route('/google91e934bee0a01da8.html')
 def google91e934bee0a01da8():
     return render_template('google91e934bee0a01da8.html')
 
