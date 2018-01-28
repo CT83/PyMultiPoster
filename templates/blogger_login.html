@@ -29,6 +29,7 @@
       // Handle initial sign-in state. (Determine if user is already signed in.)
       var user = GoogleAuth.currentUser.get();
       console.log(user);
+      onSignIn(user);
       setSigninStatus();
 
       // Call handleAuthClick function when user clicks on
@@ -70,6 +71,14 @@
       $('#auth-status').html('You have not authorized this app or you are ' +
           'signed out.');
     }
+  }
+
+  function onSignIn(googleUser) {
+      var profile = googleUser.getBasicProfile();
+      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      console.log('Name: ' + profile.getName());
+      console.log('Image URL: ' + profile.getImageUrl());
+      console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
   }
 
   function updateSigninStatus(isSignedIn) {
