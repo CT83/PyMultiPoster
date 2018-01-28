@@ -12,7 +12,8 @@ def main():
         'picture': 'https://www.example.com/thumbnail.jpg'
     }
 
-    graph.put_wall_post(message='Check this out...', attachment=attachment, profile_id='your_page_id')
+    graph.put_wall_post(message='Check this out...', profile_id='your_page_id')
+    # graph.put_wall_post(message='Check this out...', attachment=attachment, profile_id='your_page_id')
 
 
 if __name__ == "__main__":

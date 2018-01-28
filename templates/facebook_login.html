@@ -34,7 +34,7 @@
                 console.log('Access Token = ' + access_token);
                 FB.api('/me', function (response) {
                     console.log("response" + response);
-                    console.log('Good to see you, ' + response.name + '.');
+                    console.log('Good to see you, ' + response.id + '.');
                 });
             } else {
                 console.log('User cancelled login or did not fully authorize.');
