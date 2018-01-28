@@ -9,7 +9,7 @@ def facebook_login():
 
 
 @app.route('/instagram_login')
-def facebook_login():
+def instagram_login():
     return render_template('instagram_login.html', app_id='101206834030831')
 
 
