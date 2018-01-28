@@ -28,6 +28,7 @@
 
       // Handle initial sign-in state. (Determine if user is already signed in.)
       var user = GoogleAuth.currentUser.get();
+      console.log(user);
       setSigninStatus();
 
       // Call handleAuthClick function when user clicks on
