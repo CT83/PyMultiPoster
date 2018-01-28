@@ -27,7 +27,7 @@ def instagram_login():
 @app.route('/blogger_login')
 def blogger_login():
     return render_template('blogger_login.html',
-                           api_key='AIzaSyBR86KCWTOUOMk0LZBtrtG2kTiDAc2Fr3I',
+                           api_key='AIzaSyCSnqsAMqjwGVMeykY59UgWEsYfNlRuFYg',
                            app_id='812327379487-4mmbsmmnefh3986ogca7qhb8ihqtillh.apps.googleusercontent.com	')
 
 
