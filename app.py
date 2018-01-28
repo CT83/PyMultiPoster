@@ -27,7 +27,12 @@ def instagram_login():
 @app.route('/blogger_login')
 def blogger_login():
     return render_template('blogger_login.html',
-                           app_id='812327379487-ufpflghav3471e07q4pje6cg99t1r9bj.apps.googleusercontent.com	')
+                           app_id='812327379487-4mmbsmmnefh3986ogca7qhb8ihqtillh.apps.googleusercontent.com	')
+
+
+@app.route('/blogger_redirect')
+def blogger_redirect():
+    return "Redirected to blogger_redirect"
 
 
 @app.route('/')
@@ -38,8 +43,6 @@ def homepage():
 @app.route('/google91e934bee0a01da8.html')
 def google91e934bee0a01da8():
     return render_template('google91e934bee0a01da8.html')
-
-
 
 
 if __name__ == '__main__':
