@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -34,6 +34,14 @@ def blogger_login():
 @app.route('/blogger_redirect')
 def blogger_redirect():
     return "Redirected to blogger_redirect"
+
+
+@app.route('/twitter_redirect')
+def twitter_redirect():
+    # here we want to get the value of user (i.e. ?user=some-value)
+    user = request.args.get('oauth_token')
+    print("OAuthToken Twitter:" + user)
+    return "Redirected to twitter_redirect"
 
 
 @app.route('/')
