@@ -7,4 +7,4 @@ requests-toolbelt==0.7.0
 moviepy==0.2.2.11
 InstagramApi
 gdata
-python-linkedin
+python3-linkedin
