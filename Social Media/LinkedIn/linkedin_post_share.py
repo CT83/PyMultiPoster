@@ -2,7 +2,7 @@ from linkedin.linkedin import (LinkedInAuthentication, LinkedInApplication)
 from linkedin.linkedin import LinkedInAuthentication, LinkedInApplication
 import sys, os
 
-
+# TODO Refactor to separate class and cleanup
 class LinkedInWrapper(object):
     def __init__(self, id, secret, port, auth_token=None, auth_code=None):
         self.id = id
