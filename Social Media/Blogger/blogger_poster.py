@@ -31,11 +31,11 @@
 
 __author__ = 'lkeppler@google.com (Luke Keppler)'
 
+import atom.data
 import gdata.blogger.client
 import gdata.client
-import gdata.sample_util
 import gdata.data
-import atom.data
+import gdata.sample_util
 
 
 class BloggerExample:

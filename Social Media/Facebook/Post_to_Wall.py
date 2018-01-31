@@ -2,7 +2,8 @@ import facebook
 
 
 def main():
-    graph = facebook.GraphAPI(access_token='EAABcDA1kKO8BAPv5QHb3F3erAjZCZB8PjTQ1uDyjo0fTFELyhpzjTTv4Acczoyh7YdBJr1HFcqecAkK9pfUAy6lCFhWZAJibhoUUdIZCnCBOOKWxlt4KRoA7va8RiJ0m25qsmCKnyy9lMYmgU1FjCuMAL8USRpzH2Y8uXnxjc8ZBEhM90EyZBIZBKxACpLKzrsAKjmJZCksQjwZDZD')
+    graph = facebook.GraphAPI(
+        access_token='EAABcDA1kKO8BAPv5QHb3F3erAjZCZB8PjTQ1uDyjo0fTFELyhpzjTTv4Acczoyh7YdBJr1HFcqecAkK9pfUAy6lCFhWZAJibhoUUdIZCnCBOOKWxlt4KRoA7va8RiJ0m25qsmCKnyy9lMYmgU1FjCuMAL8USRpzH2Y8uXnxjc8ZBEhM90EyZBIZBKxACpLKzrsAKjmJZCksQjwZDZD')
     # if version 2.8 show error use 2.6
     attachment = {
         'name': 'Link name',

@@ -6,7 +6,7 @@ def main():
     cfg = {
         "page_id": "837037163169573",  # Step 1
         "access_token": "EAACTuZBakrZBEBAO2HapKkjpdWwk5goFeqk9OY7sA4n5ZBUX8u5FmQf06oLISOyd7YZAZCWMSRfk3VhUFOtSZCfMwqCLcIEDrKkJNUDGMjPZCzCwv2scjAaGYftLnIBVlhkB4Ggd91eviokaoxeNqh3y9tiPmUayBY3jowXqFUQfVRUKw8yZC1ZA9smpdJmt9jZBLKZATLGhQKitFAbz3stLJIUZCtc1kZBthLPQZD"
-    # Step 3
+        # Step 3
     }
 
     api = get_api(cfg)
