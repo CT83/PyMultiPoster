@@ -1,4 +1,3 @@
-from linkedin.linkedin import (LinkedInAuthentication, LinkedInApplication)
 from linkedin.linkedin import LinkedInAuthentication, LinkedInApplication
 import sys, os
 
@@ -69,37 +68,3 @@ recipient = LinkedInRecipient(None, 'john.doe@python.org', 'John', 'Doe')
 invitation = LinkedInInvitation('Hello John', "What's up? Can I add you as a friend?", (recipient,), 'friend')
 application.send_invitation(invitation)
 '''
-
-
-def main():
-    CLIENT_ID = '81spnwn20ee6ve'
-    CLIENT_SECRET = '0Yg845bXH8Z3K4Sf'
-    RETURN_URL = 'https://pymultiposter.herokuapp.com/'
-
-    authentication = LinkedInAuthentication(
-        CLIENT_ID,
-        CLIENT_SECRET,
-        RETURN_URL,
-        permissions=['r_basicprofile',
-                     'r_emailaddress',
-                     'rw_company_admin',
-                     'w_share']
-    )
-
-    print(authentication.authorization_url)
-    application = LinkedInApplication(authentication)
-
-    authentication.authorization_code = input('Result=')
-    result = authentication.get_access_token()
-
-    print("Access Token:", result.access_token)
-    print("Expires in (seconds):", result.expires_in)
-
-    lkin_api = LinkedInWrapper(CLIENT_ID, CLIENT_SECRET, "", auth_token=result.access_token)
-    print(lkin_api.application.submit_share('Posting from the API using JSON',
-                                            'A title for your share', None,
-                                            'https://www.linkedin.com', 'https://d.pr/3OWS'))
-
-
-if __name__ == '__main__':
-    main()
