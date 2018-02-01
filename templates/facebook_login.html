@@ -10,7 +10,6 @@
         });
     };
 
-    // Load the SDK asynchronously
     (function (d) {
         var js, id = 'facebook-jssdk',
             ref = d.getElementsByTagName('script')[0];
@@ -27,13 +26,10 @@
     function login() {
         FB.login(function (response) {
 
-            // handle the response
-            console.log("Response goes here!");
             if (response.authResponse) {
                 var access_token = FB.getAuthResponse()['accessToken'];
                 console.log('Access Token = ' + access_token);
                 FB.api('/me', function (response) {
-                    console.log("response" + response);
                     console.log('Good to see you, ' + response.id + '.');
                 });
             } else {
@@ -50,10 +46,7 @@
             // user is now logged out
         });
     }
-
     var status = FB.getLoginStatus();
-
-    console.log(status);
 </script>
 
 <button onclick="login();">Login Facebook</button>
