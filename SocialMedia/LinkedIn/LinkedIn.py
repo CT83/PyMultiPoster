@@ -4,50 +4,11 @@ from CONSTANT import LINKEDIN_CLIENT_SECRET, LINKEDIN_CLIENT_ID, LINKEDIN_RETURN
 from SocialMedia.SocialMedia import SocialMedia
 
 
-def get_link():
-    authentication = LinkedInAuthentication(
-        LINKEDIN_CLIENT_ID,
-        LINKEDIN_CLIENT_SECRET,
-        LINKEDIN_RETURN_URL,
-        permissions=['r_basicprofile',
-                     'r_emailaddress',
-                     'rw_company_admin',
-                     'w_share']
-    )
-
-    url = authentication.authorization_url
-    print(authentication.authorization_url)
-    authentication.authorization_code = input('Result=')
-    result = authentication.get_access_token()
-    print("Access Token:", result.access_token)
-    print("Expires in (seconds):", result.expires_in)
-    lkin_api = LinkedInApplication(token=result.access_token)
-    print(lkin_api.submit_share('Posting from the API using JSON2',
-                                'A title for your share', None,
-                                'https://www.linkedin.com'))
-    return url
-
-
-def get_code():
-    authentication = LinkedInAuthentication(
-        LINKEDIN_CLIENT_ID,
-        LINKEDIN_CLIENT_SECRET,
-        LINKEDIN_RETURN_URL,
-        permissions=['r_basicprofile',
-                     'r_emailaddress',
-                     'rw_company_admin',
-                     'w_share']
-    )
-    print(authentication.authorization_url)
-    authentication.authorization_code = input('Result=')
+def get_code(authentication, auth_code):
+    authentication.authorization_code = auth_code
     result = authentication.get_access_token()
     code = result.access_token
     print("Access Token:", result.access_token)
-    print("Expires in (seconds):", result.expires_in)
-    lkin_api = LinkedInApplication(token=result.access_token)
-    print(lkin_api.submit_share('Posting from the API using JSON2',
-                                'A title for your share', None,
-                                'https://www.linkedin.com'))
     return code
 
 
@@ -76,28 +37,31 @@ class LinkedIn(SocialMedia):
 
 
 def main():
-    linkedin_poster = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, get_code())
-    try:
-        linkedin_poster.publish_update("Only Update")
-    except:
-        pass
+    linkedin_auth = LinkedInAuthentication(
+        LINKEDIN_CLIENT_ID,
+        LINKEDIN_CLIENT_SECRET,
+        LINKEDIN_RETURN_URL,
+        permissions=['r_basicprofile',
+                     'r_emailaddress',
+                     'rw_company_admin',
+                     'w_share']
+    )
 
-    try:
-        linkedin_poster.publish_update_with_attachment("Update with Attachment",
-                                                       "name_att", "link_att",
-                                                       "caption_att",
-                                                       "description_att")
-    except:
-        pass
+    print(linkedin_auth.authorization_url)
 
-    try:
-        linkedin_poster.publish_update_with_image_attachment("Update with Image Attachment",
-                                                             "name_att", "link_att",
-                                                             "caption_att",
-                                                             "description_att",
-                                                             "image_url")
-    except:
-        pass
+    get_code(linkedin_auth, input("Enter Code from Link:"))
+
+    linkedin_poster = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, get_code(linkedin_auth))
+    linkedin_poster.publish_update("Only Update")
+    linkedin_poster.publish_update_with_attachment("Update with Attachment",
+                                                   "name_att", "link_att",
+                                                   "caption_att",
+                                                   "description_att")
+    linkedin_poster.publish_update_with_image_attachment("Update with Image Attachment",
+                                                         "name_att", "link_att",
+                                                         "caption_att",
+                                                         "description_att",
+                                                         "image_url")
 
 
 main()
