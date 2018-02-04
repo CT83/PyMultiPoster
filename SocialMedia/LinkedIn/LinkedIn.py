@@ -5,6 +5,7 @@ from SocialMedia.SocialMedia import SocialMedia
 
 
 def get_code(authentication, auth_code):
+    print(auth_code)
     authentication.authorization_code = auth_code
     result = authentication.get_access_token()
     code = result.access_token
@@ -48,10 +49,10 @@ def main():
     )
 
     print(linkedin_auth.authorization_url)
+    link = input("Enter Code from Link:")
+    code = get_code(linkedin_auth, link)
 
-    get_code(linkedin_auth, input("Enter Code from Link:"))
-
-    linkedin_poster = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, get_code(linkedin_auth))
+    linkedin_poster = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, code)
     linkedin_poster.publish_update("Only Update")
     linkedin_poster.publish_update_with_attachment("Update with Attachment",
                                                    "name_att", "link_att",
