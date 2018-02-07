@@ -57,11 +57,15 @@ def get_access_tokens(consumer_key, consumer_secret):
     return tokens
 
 
+# HTML and MD are supported by Tumblr
+
 class Tumblr(SocialMedia):
     request_token_url = 'http://www.tumblr.com/oauth/request_token'
     authorize_url = 'http://www.tumblr.com/oauth/authorize'
     access_token_url = 'http://www.tumblr.com/oauth/access_token'
 
+    # TODO Make all extra function parameters same
+    # TODO Add format to all functions
     def __init__(self, client_id, client_secret, oauth_token, oauth_token_secret):
         self.client_id = client_id
         self.client_secret = client_secret
@@ -75,21 +79,20 @@ class Tumblr(SocialMedia):
             self.oauth_token_secret
         )
 
-    def publish_update(self, body_html_md, title="", blog_name="", state="published"):
-        # HTML and MD are supported by Tumblr
+    def publish_update(self, body, title="", blog_name="", state="published",
+                       slug="testing-text-posts"):
         print(self.tumblr_api.create_text(blog_name,
                                           state=state,
-                                          slug="testing-text-posts",
+                                          slug=slug,
                                           title=title,
-                                          body=body_html_md))
+                                          body=body))
 
-    def publish_update_with_attachment(self, message="", name_att="", link_att="",
-                                       caption_att="",
-                                       description_att="",
-                                       state="published"):
-        pass
+    def publish_update_with_attachment(self, body="", title="", url="",
+                                       blog_name=""):
+        self.tumblr_api.create_link(blog_name, title=title, url=url, description=body)
 
-    def publish_update_with_image_attachment(self, caption="", image_links=None, tags=None, blog_name="",
+    def publish_update_with_image_attachment(self, caption="", image_links=None,
+                                             tags=None, blog_name="",
                                              format="markdown",
                                              state="published"):
         # https://github.com/tumblr/pytumblr#creating-a-photo-post
@@ -113,12 +116,21 @@ if __name__ == '__main__':
         tokens['oauth_token'],
         tokens['oauth_token_secret'],
     )
-    tumblr.publish_update(
-        body_html_md="""###Body Title""",
-        title="Tit1le",
-        blog_name='pymultiposter1')
 
-    tumblr.publish_update_with_image_attachment(
-        caption="""###Body Title""",
-        image_links=["temp1.png", "temp3.png"],
-        blog_name='pymultiposter1')
+    # Post Status working
+    # tumblr.publish_update(
+    #     body="""###Body Title""",
+    #     title="Tit1le",
+    #     blog_name='pymultiposter1')
+
+    # Post Image working
+    # tumblr.publish_update_with_image_attachment(
+    #     caption="""###Body Title""",
+    #     image_links=["temp1.png", "temp3.png"],
+    #     blog_name='pymultiposter1')
+
+    # Post Link
+    # tumblr.publish_update_with_attachment(body="""###Body Title""",
+    #                                       title="#Tile",
+    #                                       url="www.googlel.com",
+    #                                       blog_name="pymultiposter1")
