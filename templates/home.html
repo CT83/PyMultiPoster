@@ -1,3 +1,5 @@
+{% include 'header.html' %}
+
 <button>
     <a href="{{ url_for('facebook_login') }}"> Facebook </a>
 </button>
@@ -7,3 +9,5 @@
 <button>
     <a href="{{ url_for('blogger_login') }}"> Blogger </a>
 </button>
+
+{% include 'footer.html' %}
