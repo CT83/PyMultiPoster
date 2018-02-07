@@ -4,7 +4,7 @@ from CONSTANT import LINKEDIN_CLIENT_SECRET, LINKEDIN_CLIENT_ID, LINKEDIN_RETURN
 from SocialMedia.SocialMedia import SocialMedia
 
 
-def get_code(authentication, auth_code):
+def get_access_token(authentication, auth_code):
     print(auth_code)
     authentication.authorization_code = auth_code
     result = authentication.get_access_token()
@@ -50,7 +50,7 @@ def main():
 
     print(linkedin_auth.authorization_url)
     link = input("Enter Code from Link:")
-    code = get_code(linkedin_auth, link)
+    code = get_access_token(linkedin_auth, link)
 
     linkedin_poster = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, code)
     linkedin_poster.publish_update("Only Update")

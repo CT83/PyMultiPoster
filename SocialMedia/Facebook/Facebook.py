@@ -7,15 +7,16 @@ class Facebook(SocialMedia):
     def __init__(self, client_id, client_secret, oauth=""):
         self.client_id = client_id
         self.client_secret = client_secret
-        self.oauth_token = oauth
+        self.oauth = oauth
 
     def publish_update(self, message):
-        graph = facebook.GraphAPI(self.oauth_token)
+        graph = facebook.GraphAPI(self.oauth)
         graph.put_wall_post(message=message)
 
-    def publish_update_with_attachment(self, message="", name_att="", link_att="", caption_att="",
+    def publish_update_with_attachment(self, message="", name_att="", link_att="",
+                                       caption_att="",
                                        description_att=""):
-        graph = facebook.GraphAPI(self.oauth_token)
+        graph = facebook.GraphAPI(self.oauth)
         attachment = {
             'name': name_att,
             'link': link_att,
@@ -28,7 +29,7 @@ class Facebook(SocialMedia):
                                              caption_att="",
                                              description_att="",
                                              image_url=""):
-        graph = facebook.GraphAPI(self.oauth_token)
+        graph = facebook.GraphAPI(self.oauth)
         attachment = {
             'name': name_att,
             'link': link_att,

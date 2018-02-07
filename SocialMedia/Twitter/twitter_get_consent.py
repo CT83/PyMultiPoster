@@ -22,6 +22,7 @@ auth.request_token = token
 try:
     auth.get_access_token(verifier)
     print('Got access!!')
+    print('Auth' + str(auth))
     api = tweepy.API(auth)
     api.update_status(status="Sent fomre ")
 except tweepy.TweepError:
