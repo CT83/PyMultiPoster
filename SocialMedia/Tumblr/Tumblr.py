@@ -49,11 +49,6 @@ def get_access_tokens(consumer_key, consumer_secret):
         'oauth_token_secret': oauth_tokens.get('oauth_token_secret')
     }
 
-    # tokens['consumer_key']
-    # tokens['consumer_secret']
-    # tokens['oauth_token']
-    # tokens['oauth_token_secret']
-
     return tokens
 
 
