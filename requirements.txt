@@ -8,3 +8,4 @@ moviepy==0.2.2.11
 InstagramApi
 gdata
 python3-linkedin
+pytumblr
