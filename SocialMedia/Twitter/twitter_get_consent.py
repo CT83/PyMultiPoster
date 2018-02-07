@@ -2,8 +2,6 @@ import tweepy
 
 CONSUMER_KEY = 'ecf8Ygwl3Sr9te5dvHoknoq7h'
 CONSUMER_SECRET = 'xM7G3WocNnSYRCsIsJw7yeRDasuJ3QzxdRlS7iLZoVr92gKtAg'
-ACCESS_TOKEN = '957098797791768576-iBgwacSqxbsFM3cah3fndBjndLm8eOO'
-ACCESS_TOKEN_SECRET = '7VNkIwputPvlhWhBnltCJu9Ct9INAN5vOfgtls00YtF8x'
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 try:
@@ -23,6 +21,8 @@ try:
     auth.get_access_token(verifier)
     print('Got access!!')
     print('Auth' + str(auth))
+    print('Auth Token :' + str(auth.access_token))
+    print('Auth Secret:' + str(auth.access_token_secret))
     api = tweepy.API(auth)
     api.update_status(status="Sent fomre ")
 except tweepy.TweepError:
