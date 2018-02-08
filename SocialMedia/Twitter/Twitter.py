@@ -3,22 +3,24 @@ import tweepy
 from SocialMedia.SocialMedia import SocialMedia
 
 
-def get_access_tokens(consumer_key, consumer_secret):
+def get_authorization_url(consumer_key, consumer_secret):
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    try:
-        redirect_url = auth.get_authorization_url()
-        print("Redirect URL", str(redirect_url))
-    except tweepy.TweepError:
-        print('Error! Failed to get request token.')
-    token = auth.request_token
-    verifier = input('Verifier:')
+    redirect_url = auth.get_authorization_url()
+    return str(redirect_url)
+
+
+def get_access_token_from_url(consumer_key, consumer_secret, response_url):
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.request_token = token
+    auth.get_authorization_url()
+
+    from urllib import parse
+    verifier = parse.parse_qs(parse.urlparse(response_url).query)['oauth_verifier'][0]
+    print("Verifier:" + verifier)
+
     auth.get_access_token(verifier)
-    print('Got access!!')
-    print('Auth' + str(auth))
-    print('Auth Token:' + auth.access_token)
-    print('Auth Secret:' + auth.access_token_secret)
+    print('Auth Token :' + str(auth.access_token))
+    print('Auth Secret:' + str(auth.access_token_secret))
+
     return auth.access_token, auth.access_token_secret
 
 
@@ -47,11 +49,9 @@ class Twitter(SocialMedia):
 if __name__ == '__main__':
     client_key = 'ecf8Ygwl3Sr9te5dvHoknoq7h'
     client_secret = 'xM7G3WocNnSYRCsIsJw7yeRDasuJ3QzxdRlS7iLZoVr92gKtAg'
-    # access_token, access_token_secret \
-    #     = get_authorization_url(client_key,
-    #                         client_secret)
-    access_token = "957098797791768576-iBgwacSqxbsFM3cah3fndBjndLm8eOO"
-    access_token_secret = "7VNkIwputPvlhWhBnltCJu9Ct9INAN5vOfgtls00YtF8x"
+    print(get_authorization_url(client_key, client_secret))
+    access_token, access_token_secret \
+        = get_access_token_from_url(client_key, client_secret, input("Response:"))
 
     twitter = Twitter(client_key,
                       client_secret,
