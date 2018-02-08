@@ -1,12 +1,13 @@
 import os
 
-from flask import Flask
-from flask import render_template, request
+from flask import render_template, request, Flask
 
 from Models.SharedModel import db
 from Models.User import User
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
 
 @app.route('/facebook_login')
@@ -61,8 +62,6 @@ def google91e934bee0a01da8():
 
 
 # if __name__ == '__main__':
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 # Models have to be imported to this file before 'db.init_app(app)'
 # db.init_app(app)
 # u = User('John Doe', 'john.doe@example.com')
@@ -83,6 +82,5 @@ def add_user():
     # user = User('John Doe', 'john.doe@example.com')
     # db.session.delete(user)
     # db.session.commit()
-
 
 app.run(debug=True, use_reloader=True)
