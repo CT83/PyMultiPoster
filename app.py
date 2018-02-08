@@ -84,4 +84,4 @@ def add_user():
     # db.session.commit()
 
 
-app.run(debug=True)
+# app.run(debug=True)
