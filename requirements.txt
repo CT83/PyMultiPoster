@@ -9,4 +9,5 @@ InstagramApi
 gdata
 python3-linkedin
 pytumblr
-SQLAlchemy
+flask-sqlalchemy
+psycopg2
