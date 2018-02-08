@@ -6,13 +6,10 @@ from SocialMedia.SocialMedia import SocialMedia
 def get_authorization_url(consumer_key, consumer_secret):
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     redirect_url = auth.get_authorization_url()
-    return str(redirect_url)
+    return str(redirect_url), auth
 
 
-def get_access_token_from_url(consumer_key, consumer_secret, response_url):
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.get_authorization_url()
-
+def get_access_token_from_url(response_url, auth):
     from urllib import parse
     verifier = parse.parse_qs(parse.urlparse(response_url).query)['oauth_verifier'][0]
     print("Verifier:" + verifier)
@@ -49,9 +46,10 @@ class Twitter(SocialMedia):
 if __name__ == '__main__':
     client_key = 'ecf8Ygwl3Sr9te5dvHoknoq7h'
     client_secret = 'xM7G3WocNnSYRCsIsJw7yeRDasuJ3QzxdRlS7iLZoVr92gKtAg'
-    print(get_authorization_url(client_key, client_secret))
+    url, oauth = get_authorization_url(client_key, client_secret)
+    print(url)
     access_token, access_token_secret \
-        = get_access_token_from_url(client_key, client_secret, input("Response:"))
+        = get_access_token_from_url(input("Response:"), oauth)
 
     twitter = Twitter(client_key,
                       client_secret,
