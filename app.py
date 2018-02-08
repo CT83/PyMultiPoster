@@ -75,7 +75,7 @@ class User(db.Model):
         return '<Name %r>' % self.name
 
 
-user = User('John Doe', 'john.doe@example.com')
-db.session.add(user)
-db.session.commit()
-print(User.query.all())
+# user = User('John Doe', 'john.doe@example.com')
+# db.session.add(user)
+# db.session.commit()
+# print(User.query.all())
