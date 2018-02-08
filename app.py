@@ -1,9 +1,7 @@
 import os
 
 from flask import render_template, request, Flask
-
-from Models.SharedModel import db
-from Models.User import User
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -61,24 +59,16 @@ def google91e934bee0a01da8():
     return render_template('google91e934bee0a01da8.html')
 
 
-@app.route('/add_user.html')
-def add_user():
-    user = User('John Doe', 'john.doe@example.com')
-    db.session.add(user)
-    db.session.commit()
-
-    all_users = User.query.all()
-    print(all_users)
-
-    # user = User('John Doe', 'john.doe@example.com')
-    # db.session.delete(user)
-    # db.session.commit()
-
-
-# Models have to be imported to this file before 'db.init_app(app)'
-db.app = app
-db.init_app(app)
-u = User('John 2Doe', 'john.do2e@example.com')
-db.session.add(u)
-db.session.commit()
-print("User Query All"+User.query.all())
+db = SQLAlchemy(app)
+#
+# class User(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(80))
+#     email = db.Column(db.String(120), unique=True)
+#
+#     def __init__(self, name, email):
+#         self.name = name
+#         self.email = email
+#
+#     def __repr__(self):
+#         return '<Name %r>' % self.name
