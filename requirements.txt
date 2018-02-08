@@ -9,3 +9,4 @@ InstagramApi
 gdata
 python3-linkedin
 pytumblr
+SQLAlchemy
