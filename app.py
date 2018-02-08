@@ -62,7 +62,7 @@ def google91e934bee0a01da8():
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
-app.run(debug=True, use_reloader=True)
+# app.run(debug=True, use_reloader=True)
 
 
 class Example(db.Model):
