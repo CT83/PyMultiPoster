@@ -83,4 +83,5 @@ def add_user():
     # db.session.delete(user)
     # db.session.commit()
 
-app.run(debug=True, use_reloader=True)
+
+app.run(debug=True)
