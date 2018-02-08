@@ -58,14 +58,14 @@ def google91e934bee0a01da8():
     return render_template('google91e934bee0a01da8.html')
 
 
-class Example(db.Model):
-    __tablename__ = 'example'
-    id = db.Column('id', db.Integer, primary_key=True)
-    data = db.Column('data', db.Unicode)
-
-
 # if __name__ == '__main__':
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 app.run(debug=True, use_reloader=True)
+
+
+class Example(db.Model):
+    __tablename__ = 'example'
+    id = db.Column('id', db.Integer, primary_key=True)
+    data = db.Column('data', db.Unicode)
