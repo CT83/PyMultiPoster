@@ -78,7 +78,7 @@ def add_user():
 # Models have to be imported to this file before 'db.init_app(app)'
 db.app = app
 db.init_app(app)
-u = User('John 2Doe', 'john.doe@example.com')
+u = User('John 2Doe', 'john.do2e@example.com')
 db.session.add(u)
 db.session.commit()
 print("User Query All"+User.query.all())
