@@ -65,7 +65,6 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 # Models have to be imported to this file before 'db.init_app(app)'
 db.init_app(app)
-db.create_all()
 u = User('John Doe', 'john.doe@example.com')
 db.session.add(u)
 db.session.commit()
