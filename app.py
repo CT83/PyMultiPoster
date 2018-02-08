@@ -61,7 +61,6 @@ def google91e934bee0a01da8():
 
 
 # if __name__ == '__main__':
-app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 # Models have to be imported to this file before 'db.init_app(app)'
