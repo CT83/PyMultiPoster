@@ -53,7 +53,7 @@ if __name__ == '__main__':
     client_key = 'ecf8Ygwl3Sr9te5dvHoknoq7h'
     client_secret = 'xM7G3WocNnSYRCsIsJw7yeRDasuJ3QzxdRlS7iLZoVr92gKtAg'
     # access_token, access_token_secret \
-    #     = get_access_tokens(client_key,
+    #     = get_authorization_url(client_key,
     #                         client_secret)
     access_token = "957098797791768576-iBgwacSqxbsFM3cah3fndBjndLm8eOO"
     access_token_secret = "7VNkIwputPvlhWhBnltCJu9Ct9INAN5vOfgtls00YtF8x"

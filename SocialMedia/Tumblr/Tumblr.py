@@ -9,23 +9,21 @@ import pytumblr
 from requests_oauthlib import OAuth1Session
 
 
-def get_access_tokens(consumer_key, consumer_secret):
-    request_token_url = 'http://www.tumblr.com/oauth/request_token'
+def get_authorization_url(consumer_key, consumer_secret):
     authorize_url = 'http://www.tumblr.com/oauth/authorize'
-    access_token_url = 'http://www.tumblr.com/oauth/access_token'
+    oauth_session = OAuth1Session(consumer_key, client_secret=consumer_secret)
+    full_authorize_url = oauth_session.authorization_url(authorize_url)
+    return full_authorize_url
 
-    # STEP 1: Obtain request token
+
+def get_access_token_from_url(consumer_key, consumer_secret, redirect_response):
+    access_token_url = 'http://www.tumblr.com/oauth/access_token'
+    request_token_url = 'http://www.tumblr.com/oauth/request_token'
+
     oauth_session = OAuth1Session(consumer_key, client_secret=consumer_secret)
     fetch_response = oauth_session.fetch_request_token(request_token_url)
     resource_owner_key = fetch_response.get('oauth_token')
     resource_owner_secret = fetch_response.get('oauth_token_secret')
-
-    # STEP 2: Authorize URL + Rresponse
-    full_authorize_url = oauth_session.authorization_url(authorize_url)
-
-    # Redirect to authentication page
-    print('\nPlease go here and authorize:\n{}'.format(full_authorize_url))
-    redirect_response = input('Allow then paste the full redirect URL here:\n')
 
     # Retrieve oauth verifier
     oauth_response = oauth_session.parse_authorization_response(redirect_response)
@@ -42,14 +40,14 @@ def get_access_tokens(consumer_key, consumer_secret):
     )
     oauth_tokens = oauth_session.fetch_access_token(access_token_url)
 
-    tokens = {
+    token = {
         'consumer_key': consumer_key,
         'consumer_secret': consumer_secret,
         'oauth_token': oauth_tokens.get('oauth_token'),
         'oauth_token_secret': oauth_tokens.get('oauth_token_secret')
     }
 
-    return tokens
+    return token
 
 
 # HTML and MD are supported by Tumblr
@@ -102,9 +100,10 @@ class Tumblr(SocialMedia):
 
 
 if __name__ == '__main__':
-    tokens = get_access_tokens("h8QTvJw4B8xMDo9GAFXC8Ll7xbX99MUhDiIA7AFBIfH2cuNzy3",
-                               "g8Kgg8fIm8W8YadqqJy5mKR0dzUGYQXYwg1GvNHLofpgmohQoe")
-    print(tokens)
+    url = get_authorization_url("h8QTvJw4B8xMDo9GAFXC8Ll7xbX99MUhDiIA7AFBIfH2cuNzy3",
+                                "g8Kgg8fIm8W8YadqqJy5mKR0dzUGYQXYwg1GvNHLofpgmohQoe")
+    print("Visit:" + url)
+    tokens = get_access_token_from_url(input('Allow then paste the full redirect URL here:\n'))
     tumblr = Tumblr(
         tokens['consumer_key'],
         tokens['consumer_secret'],
