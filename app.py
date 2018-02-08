@@ -61,13 +61,14 @@ def google91e934bee0a01da8():
     return render_template('google91e934bee0a01da8.html')
 
 
-# if __name__ == '__main__':
-# Models have to be imported to this file before 'db.init_app(app)'
-# db.init_app(app)
-# u = User('John Doe', 'john.doe@example.com')
-# db.session.add(u)
-# db.session.commit()
-# print(User.query.all())
+if __name__ == '__main__':
+    # Models have to be imported to this file before 'db.init_app(app)'
+    db.init_app(app)
+    db.create_all()
+    u = User('John Doe', 'john.doe@example.com')
+    db.session.add(u)
+    db.session.commit()
+    print(User.query.all())
 
 
 @app.route('/add_user.html')
@@ -82,6 +83,5 @@ def add_user():
     # user = User('John Doe', 'john.doe@example.com')
     # db.session.delete(user)
     # db.session.commit()
-
 
 # app.run(debug=True)
