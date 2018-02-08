@@ -2,7 +2,9 @@ import os
 
 from flask import Flask
 from flask import render_template, request
-from flask_sqlalchemy import SQLAlchemy
+
+from Models.SharedModel import db
+from Models.User import User
 
 app = Flask(__name__)
 
@@ -61,11 +63,26 @@ def google91e934bee0a01da8():
 # if __name__ == '__main__':
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-db = SQLAlchemy(app)
-# app.run(debug=True, use_reloader=True)
+# Models have to be imported to this file before 'db.init_app(app)'
+db.init_app(app)
+u = User('John Doe', 'john.doe@example.com')
+db.session.add(u)
+db.session.commit()
+print(User.query.all())
 
 
-class Example(db.Model):
-    __tablename__ = 'example'
-    id = db.Column('id', db.Integer, primary_key=True)
-    data = db.Column('data', db.Unicode)
+@app.route('/add_user.html')
+def add_user():
+    user = User('John Doe', 'john.doe@example.com')
+    db.session.add(user)
+    db.session.commit()
+
+    all_users = User.query.all()
+    print(all_users)
+
+    # user = User('John Doe', 'john.doe@example.com')
+    # db.session.delete(user)
+    # db.session.commit()
+
+
+app.run(debug=True, use_reloader=True)
