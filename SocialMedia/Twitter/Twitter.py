@@ -14,17 +14,12 @@ def get_access_tokens(consumer_key, consumer_secret):
     verifier = input('Verifier:')
     auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
     auth.request_token = token
-    try:
-        auth.get_access_token(verifier)
-        print('Got access!!')
-        print('Auth' + str(auth))
-        print('Auth Token:' + auth.access_token)
-        print('Auth Secret:' + auth.access_token_secret)
-        return auth.access_token, auth.access_token_secret
-        # api = tweepy.API(auth)
-        # api.update_status(status="Sent fomre ")
-    except tweepy.TweepError:
-        print('Error! Failed to get access token.')
+    auth.get_access_token(verifier)
+    print('Got access!!')
+    print('Auth' + str(auth))
+    print('Auth Token:' + auth.access_token)
+    print('Auth Secret:' + auth.access_token_secret)
+    return auth.access_token, auth.access_token_secret
 
 
 class Twitter(SocialMedia):
@@ -57,12 +52,13 @@ if __name__ == '__main__':
     #                         client_secret)
     access_token = "957098797791768576-iBgwacSqxbsFM3cah3fndBjndLm8eOO"
     access_token_secret = "7VNkIwputPvlhWhBnltCJu9Ct9INAN5vOfgtls00YtF8x"
+
     twitter = Twitter(client_key,
                       client_secret,
                       access_token, access_token_secret)
 
     # Post Status working
-    # twitter.publish_update("Update with Text3!")
+    twitter.publish_update("Update with Text3!")
 
     # Post Image working
-    # twitter.publish_update_with_image_attachment("Update with Text and Image1", 'temp1.png')
+    twitter.publish_update_with_image_attachment("Update with Text and Image1", 'temp1.png')
