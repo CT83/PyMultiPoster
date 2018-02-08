@@ -112,19 +112,19 @@ if __name__ == '__main__':
     )
 
     # Post Status working
-    # tumblr.publish_update(
-    #     body="""###Body Title""",
-    #     title="Tit1le",
-    #     blog_name='pymultiposter1')
+    tumblr.publish_update(
+        body="""###Body Title""",
+        title="Tit1le",
+        blog_name='pymultiposter1')
 
     # Post Image working
-    # tumblr.publish_update_with_image_attachment(
-    #     caption="""###Body Title""",
-    #     image_links=["temp1.png", "temp3.png"],
-    #     blog_name='pymultiposter1')
+    tumblr.publish_update_with_image_attachment(
+        caption="""###Body Title""",
+        image_links=["temp1.png", "temp3.png"],
+        blog_name='pymultiposter1')
 
     # Post Link
-    # tumblr.publish_update_with_attachment(body="""###Body Title""",
-    #                                       title="#Tile",
-    #                                       url="www.googlel.com",
-    #                                       blog_name="pymultiposter1")
+    tumblr.publish_update_with_attachment(body="""###Body Title""",
+                                          title="#Tile",
+                                          url="www.googlel.com",
+                                          blog_name="pymultiposter1")
