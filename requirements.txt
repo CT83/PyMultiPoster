@@ -10,4 +10,4 @@ gdata
 python3-linkedin
 pytumblr
 flask-sqlalchemy
-psycopg2
+psycopg2-binary
