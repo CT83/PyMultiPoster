@@ -75,6 +75,12 @@ class User(db.Model):
         return '<Name %r>' % self.name
 
 
+class Example(db.Model):
+    __tablename__ = 'example'
+    id = db.Column('id', db.Integer, primary_key=True)
+    data = db.Column('data', db.Unicode)
+
+
 user = User('John D2oe', 'john.deoe@example.com')
 db.session.add(user)
 db.session.commit()
