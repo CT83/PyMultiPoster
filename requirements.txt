@@ -1,5 +1,6 @@
 tweepy
 Flask
+flask-migrate
 gunicorn
 facebook-sdk
 requests==2.11.1

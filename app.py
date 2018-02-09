@@ -1,12 +1,16 @@
 import os
 
 from flask import render_template, request, Flask
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
+
+# TODO Split file into multiple BluePrints
 
 @app.route('/facebook_login')
 def facebook_login():
@@ -85,3 +89,10 @@ user = User('John D2oe', 'john.deoe@example.com')
 db.session.add(user)
 db.session.commit()
 print(User.query.all())
+
+migrate = Migrate(app, db)
+manager = Manager(app)
+manager.add_command('db', MigrateCommand)
+
+if __name__ == '__main__':
+    manager.run()
