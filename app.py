@@ -75,6 +75,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     email = db.Column(db.String(120))
+    provider = db.Column(db.String(120))
 
     def __init__(self, name, email):
         self.name = name
@@ -91,7 +92,7 @@ class Example(db.Model):
     test = db.Column('test', db.String)
 
 
-user = User('Jo2hn D2oe', 'john.2deoe@example.com')
+user = User('Jo2hn Doe4', 'john.deoe3@example.com')
 db.session.add(user)
 db.session.commit()
 
@@ -100,5 +101,5 @@ manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
 if __name__ == '__main__':
-    app.run()
+    # app.run()
     manager.run()

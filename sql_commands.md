@@ -3,3 +3,6 @@ heroku pg:backups:download -a pymultiposter
 
 # Restoring Dumped Database
 pg_restore --verbose --clean --no-acl --username=postgres -h localhost -d postgres latest.dump
+
+# Connecting to local PSQL Server
+psql --host=localhost --port=5432 --username postgres --password --dbname=postgres
