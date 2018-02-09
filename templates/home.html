@@ -1,13 +1,23 @@
-{% include 'header.html' %}
+<!DOCTYPE html>
+<html lang="en">
 
-<button>
-    <a href="{{ url_for('facebook_login') }}"> Facebook </a>
-</button>
-<button>
-    <a href="{{ url_for('instagram_login') }}"> Instagram </a>
-</button>
-<button>
-    <a href="{{ url_for('blogger_login') }}"> Blogger </a>
-</button>
+{% include 'header.html' %}
+<body>
+{% include 'nav_bar.html' %}
+
+<a class="btn btn-primary" href="{{ url_for('facebook_login') }}">
+    Facebook
+</a>
+
+<a class="btn btn-info" href="{{ url_for('instagram_login') }}">
+    Instagram
+</a>
+
+<a class="btn btn-warning" href="{{ url_for('blogger_login') }}">
+    Blogger
+</a>
 
 {% include 'footer.html' %}
+</body>
+
+</html>

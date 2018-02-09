@@ -94,11 +94,11 @@ class Example(db.Model):
 user = User('Jo2hn D2oe', 'john.2deoe@example.com')
 db.session.add(user)
 db.session.commit()
-print(User.query.all())
 
 migrate = Migrate(app, db)
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
 if __name__ == '__main__':
+    app.run()
     manager.run()
