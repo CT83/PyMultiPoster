@@ -1,5 +1,4 @@
 import os
-
 from flask import render_template, request, Flask
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
@@ -8,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+# app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:cybertech83@localhost/postgres"
 
 
 # TODO Split file into multiple BluePrints
