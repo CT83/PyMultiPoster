@@ -2,6 +2,7 @@ from __future__ import print_function
 
 from future import standard_library
 
+from CONSTANT import TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID
 from SocialMedia.SocialMedia import SocialMedia
 
 standard_library.install_aliases()
@@ -100,8 +101,8 @@ class Tumblr(SocialMedia):
 
 
 if __name__ == '__main__':
-    url = get_authorization_url("h8QTvJw4B8xMDo9GAFXC8Ll7xbX99MUhDiIA7AFBIfH2cuNzy3",
-                                "g8Kgg8fIm8W8YadqqJy5mKR0dzUGYQXYwg1GvNHLofpgmohQoe")
+    url = get_authorization_url(TUMBLR_CLIENT_ID,
+                                TUMBLR_CLIENT_SECRET)
     print("Visit:" + url)
     tokens = get_access_token_from_url(input('Allow then paste the full redirect URL here:\n'))
     tumblr = Tumblr(

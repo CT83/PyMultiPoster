@@ -1,5 +1,6 @@
 import tweepy
 
+from CONSTANT import TWITTER_CLIENT_SECRET, TWITTER_CLIENT_ID
 from SocialMedia.SocialMedia import SocialMedia
 
 
@@ -44,8 +45,8 @@ class Twitter(SocialMedia):
 
 
 if __name__ == '__main__':
-    client_key = 'ecf8Ygwl3Sr9te5dvHoknoq7h'
-    client_secret = 'xM7G3WocNnSYRCsIsJw7yeRDasuJ3QzxdRlS7iLZoVr92gKtAg'
+    client_key = TWITTER_CLIENT_ID
+    client_secret = TWITTER_CLIENT_SECRET
     url, oauth = get_authorization_url(client_key, client_secret)
     print(url)
     access_token, access_token_secret \

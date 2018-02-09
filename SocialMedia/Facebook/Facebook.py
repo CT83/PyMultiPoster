@@ -1,5 +1,6 @@
 import facebook
 
+from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID
 from SocialMedia.SocialMedia import SocialMedia
 
 
@@ -42,8 +43,8 @@ class Facebook(SocialMedia):
 
 def main():
     # facebook_user = Facebook("101206834030831", "9be8d03bb48f86245d2bad7269831f51")
-    facebook_user = Facebook("101206834030831",
-                             "9be8d03bb48f86245d2bad7269831f51",
+    facebook_user = Facebook(FACEBOOK_CLIENT_ID,
+                             FACEBOOK_CLIENT_SECRET,
                              'EAABcDA1kKO8BAL2UjxRRJoRaX0l8usEKZCZBLxjS5k59LeKyirkfomkqElyqZBJRmWMwYcbjLDSESZB0QsTUZAAoWgwcZBXOnaRTqYZAzRqsAZAmH9g0aYmpYeBSvfjkAaNdZAXvNuzWnVBSBq9cj4xCsz6JHZC3yDrpX6nWQvrlD66ZCmsabAckjMb4vNhpWGvgcRslhHwxYADPAZDZD')
     # facebook_user.get_oauth_token(input("Facebook Code:"))
     # Get the auth token using the JS in the template folder, and input it here.
