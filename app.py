@@ -85,7 +85,7 @@ class Example(db.Model):
     data = db.Column('data', db.Unicode)
 
 
-user = User('John D2oe', 'john.deoe@example.com')
+user = User('Jo2hn D2oe', 'john.2deoe@example.com')
 db.session.add(user)
 db.session.commit()
 print(User.query.all())
