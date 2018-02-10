@@ -2,13 +2,11 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block body %}
-    <form action="{{ url_for('main') }}" method="POST" enctype="multipart/form-data">
-        <legend>Edit Post Template</legend>
+    <form action="{{ url_for('facebook_poster') }}" method="POST" enctype="multipart/form-data">
+        <legend>Edit Facebook Post</legend>
         <br>
         <fieldset>
-
             {{ wtf.quick_form(form) }}
-
         </fieldset>
     </form>
 

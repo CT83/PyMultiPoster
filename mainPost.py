@@ -1,8 +1,10 @@
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename, redirect
 
+from Forms.FacebookPostForm import FacebookPostForm
 from Forms.MainPostForm import MainPostForm
+from SessionManagement import clear_session, save_session, retrieve_session
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -23,15 +25,44 @@ def main():
             form.photo.data.save("tmp/" + filename)
         except AttributeError:
             filename = None
-
+        print("main() Submitted Form...")
         print("Title:", title)
         print("Post:", post)
         print("Social Networks:", social_networks)
         print("Image:", filename)
+        save_session(filename, post, title)
+        return redirect('/facebook_poster')
+        # return render_template('post/main.html', form=form, filename=filename)
+    return render_template('post/main.html', form=form, )
+
+
+@app.route('/facebook_poster', methods=('GET', 'POST'))
+def facebook_poster():
+    print("Facebook Poster...")
+    title, post, image = retrieve_session()
+    form = FacebookPostForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        post = form.post.data
+        image = form.image.data
+
+        print("Posting to Facebook...")
+        print("Title:", title)
+        print("Post:", post)
+        print("Image:", image)
 
     else:
-        filename = None
-    return render_template('post/main.html', form=form, filename=filename)
+        form.title.data = title
+        form.post.data = post
+        form.image.data = image
+        form.image.render_kw = {'disabled': 'disabled'}
+
+    return render_template('post/facebook_post.html', form=form, filename=image)
+
+
+@app.route('/logout')
+def logout():
+    clear_session()
 
 
 if __name__ == '__main__':

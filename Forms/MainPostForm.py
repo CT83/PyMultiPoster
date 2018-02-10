@@ -21,15 +21,3 @@ class MainPostForm(FlaskForm):
     files = [(x, x) for x in list_of_files]
     selected_socialnetworks = MultiCheckboxField('Social Networks', choices=files)
     submit = SubmitField('Proceed')
-
-
-class RegisterForm(FlaskForm):
-    email = StringField('email', validators=[InputRequired(), Email(message='Invalid email'), Length(max=50)])
-    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
-    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
-
-
-class LoginForm(FlaskForm):
-    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
-    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
-    remember = BooleanField('remember me')
