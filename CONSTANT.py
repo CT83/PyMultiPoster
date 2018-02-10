@@ -1,6 +1,4 @@
 # LinkedIn
-import os
-
 LINKEDIN_RETURN_URL = 'https://pymultiposter.herokuapp.com/'
 LINKEDIN_CLIENT_ID = '81spnwn20ee6ve'
 LINKEDIN_CLIENT_SECRET = '0Yg845bXH8Z3K4Sf'
@@ -16,5 +14,8 @@ TWITTER_CLIENT_SECRET = 'xM7G3WocNnSYRCsIsJw7yeRDasuJ3QzxdRlS7iLZoVr92gKtAg'
 # Facebook
 FACEBOOK_CLIENT_ID = "101206834030831"
 FACEBOOK_CLIENT_SECRET = "9be8d03bb48f86245d2bad7269831f51"
+
+# Initializers
+import os
 
 ON_HEROKU = 'ON_HEROKU' in os.environ
