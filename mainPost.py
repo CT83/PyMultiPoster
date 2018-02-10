@@ -35,7 +35,6 @@ def main():
         print("Image:", filename)
         save_session(filename, post, title)
         return redirect('/facebook_poster')
-        # return render_template('post/main.html', form=form, filename=filename)
     return render_template('post/main.html', form=form, )
 
 
