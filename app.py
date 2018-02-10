@@ -9,6 +9,7 @@ from CONSTANT import ON_HEROKU
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
 if ON_HEROKU:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 else:

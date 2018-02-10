@@ -1,5 +1,7 @@
 tweepy
 Flask
+flask-WTF
+flask-bootstrap
 flask-migrate
 Flask-Script
 gunicorn
