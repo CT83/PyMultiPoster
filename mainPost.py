@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename, redirect
 
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.MainPostForm import MainPostForm
+from Forms.TwitterPostForm import TwitterPostForm
 from SessionManagement import clear_session, save_session, retrieve_session
 
 app = Flask(__name__)
@@ -51,6 +52,8 @@ def facebook_poster():
         print("Post:", post)
         print("Image:", image)
 
+        print("Redirecting to Twitter...")
+        return redirect('/twitter_poster')
     else:
         form.title.data = title
         form.post.data = post
@@ -58,6 +61,30 @@ def facebook_poster():
         form.image.render_kw = {'disabled': 'disabled'}
 
     return render_template('post/facebook_post.html', form=form, filename=image)
+
+
+@app.route('/twitter_poster', methods=('GET', 'POST'))
+def twitter_poster():
+    print("Twitter Poster...")
+    title, post, image = retrieve_session()
+    form = TwitterPostForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        post = form.post.data
+        image = form.image.data
+
+        print("Posting to Twitter...")
+        print("Title:", title)
+        print("Post:", post)
+        print("Image:", image)
+
+    else:
+        form.title.data = title
+        form.post.data = post
+        form.image.data = image
+        form.image.render_kw = {'disabled': 'disabled'}
+
+    return render_template('post/twitter_post.html', form=form, filename=image)
 
 
 @app.route('/logout')
