@@ -3,6 +3,7 @@ from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename, redirect
 
 from Forms.FacebookPostForm import FacebookPostForm
+from Forms.InstagramPostForm import InstagramPostForm
 from Forms.MainPostForm import MainPostForm
 from Forms.TwitterPostForm import TwitterPostForm
 from SessionManagement import clear_session, save_session, retrieve_session
@@ -52,6 +53,7 @@ def facebook_poster():
         print("Post:", post)
         print("Image:", image)
 
+        # TODO Add Logic here to redirect to next selected social network in list
         print("Redirecting to Twitter...")
         return redirect('/twitter_poster')
     else:
@@ -78,6 +80,9 @@ def twitter_poster():
         print("Post:", post)
         print("Image:", image)
 
+        # TODO Add Logic here to redirect to next selected social network in list
+        print("Redirecting to Instagram...")
+        return redirect('/instagram_poster')
     else:
         form.title.data = title
         form.post.data = post
@@ -85,6 +90,31 @@ def twitter_poster():
         form.image.render_kw = {'disabled': 'disabled'}
 
     return render_template('post/twitter_post.html', form=form, filename=image)
+
+
+@app.route('/instagram_poster', methods=('GET', 'POST'))
+def instagram_poster():
+    print("Twitter Poster...")
+    title, post, image = retrieve_session()
+    form = InstagramPostForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        post = form.post.data
+        image = form.image.data
+
+        print("Posting to Instagram...")
+        print("Title:", title)
+        print("Post:", post)
+        print("Image:", image)
+        # TODO Add allow uploading if no image is selected
+
+    else:
+        form.title.data = title
+        form.post.data = post
+        form.image.data = image
+        form.image.render_kw = {'disabled': 'disabled'}
+
+    return render_template('post/instagram_post.html', form=form, filename=image)
 
 
 @app.route('/logout')

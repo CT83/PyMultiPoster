@@ -2,17 +2,14 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block body %}
-    <form action="{{ url_for('main') }}" method="POST" enctype="multipart/form-data">
-        <legend>Edit Post Template</legend>
+    <form action="{{ url_for('instagram_poster') }}" method="POST" enctype="multipart/form-data">
+        <legend>Edit Instagram Post</legend>
         <br>
         <fieldset>
-
             {{ wtf.quick_form(form) }}
-
         </fieldset>
     </form>
-{#TODO Add message to disable instagram if no image is added#}
+
     <br>
 
-    {{ filename }}
 {% endblock %}
