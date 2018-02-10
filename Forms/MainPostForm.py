@@ -19,7 +19,7 @@ class MainPostForm(FlaskForm):
     list_of_files = string_of_files[0].split()
     # create a list of value/description tuples
     files = [(x, x) for x in list_of_files]
-    example = MultiCheckboxField('Social Networks', choices=files)
+    selected_socialnetworks = MultiCheckboxField('Social Networks', choices=files)
     submit = SubmitField('Proceed')
 
 
