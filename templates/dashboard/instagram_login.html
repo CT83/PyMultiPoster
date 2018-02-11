@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{#TODO Implement CSRF Tokening#}
+
+{% block body %}
+    <form action="{{ url_for('instagram_login') }}" method="POST">
+        <legend>Instagram Login</legend>
+        <br>
+        <fieldset>
+            {{ wtf.quick_form(form) }}
+        </fieldset>
+    </form>
+
+    <br>
+
+{% endblock %}

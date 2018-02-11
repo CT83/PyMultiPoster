@@ -6,6 +6,7 @@ from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_
     LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID
 from CookieManagement import set_cookie, get_cookie
 from Forms.FacebookPostForm import FacebookPostForm
+from Forms.InstagramLoginForm import InstagramLoginForm
 from Forms.InstagramPostForm import InstagramPostForm
 from Forms.LinkedInPostForm import LinkedInPostForm
 from Forms.MainPostForm import MainPostForm
@@ -260,7 +261,7 @@ def dashboard():
                            facebook_login="facebook_login",
                            linkedin_login="linkedin_login", tumblr_login="tumblr_login",
                            twitter_login="twitter_login",
-                           instagram_login="instagram_login")
+                           instagram_login=url_for('instagram_login'))
 
 
 @app.route('/facebook_redirect')
@@ -271,6 +272,20 @@ def facebook_redirect():
     resp = make_response(redirect(url_for('dashboard')))
     resp = set_cookie(resp=resp, facebook_access_token=access_token)
     return resp
+
+
+@app.route('/instagram_login', methods=('GET', 'POST'))
+def instagram_login():
+    form = InstagramLoginForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+        print("Instagram email:", email)
+        print("Instagram password:", password)
+        resp = make_response(redirect(url_for('dashboard')))
+        resp = set_cookie(resp=resp, instagram_email=email, instagram_password=password)
+        return resp
+    return render_template('dashboard/instagram_login.html', form=form)
 
 
 @app.route('/logout')
