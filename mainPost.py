@@ -250,6 +250,11 @@ def post_status():
     return "Done!"
 
 
+@app.route('/dashboard')
+def dashboard():
+    pass
+
+
 @app.route('/logout')
 def logout():
     clear_session()
