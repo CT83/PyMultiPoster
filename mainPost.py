@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename, redirect
 
@@ -6,8 +6,10 @@ from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramPostForm import InstagramPostForm
 from Forms.LinkedInPostForm import LinkedInPostForm
 from Forms.MainPostForm import MainPostForm
+from Forms.TumblrPostForm import TumblrPostForm
 from Forms.TwitterPostForm import TwitterPostForm
-from SessionManagement import clear_session, save_session, retrieve_session
+from SessionManagement import clear_session, save_session, retrieve_session, remove_session_socialnetwork, \
+    store_list_session, retrieve_session_socialnetworks
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -33,8 +35,9 @@ def main():
         print("Post:", post)
         print("Social Networks:", social_networks)
         print("Image:", filename)
-        save_session(filename, post, title)
-        return redirect('/facebook_poster')
+        save_session(filename, post, title, social_networks)
+        print("Redirecting...")
+        return redirect('/next_poster/main')
     return render_template('post/main.html', form=form, )
 
 
@@ -54,8 +57,8 @@ def facebook_poster():
         print("Image:", image)
 
         # TODO Add Logic here to redirect to next selected social network in list
-        print("Redirecting to Twitter...")
-        return redirect('/twitter_poster')
+        print("Redirecting...")
+        return redirect('/next_poster' + "/facebook")
     else:
         form.title.data = title
         form.post.data = post
@@ -81,8 +84,8 @@ def twitter_poster():
         print("Image:", image)
 
         # TODO Add Logic here to redirect to next selected social network in list
-        print("Redirecting to Instagram...")
-        return redirect('/instagram_poster')
+        print("Redirecting...")
+        return redirect('/next_poster' + "/twitter")
     else:
         form.title.data = title
         form.post.data = post
@@ -107,8 +110,8 @@ def instagram_poster():
         print("Post:", post)
         print("Image:", image)
         # TODO Add allow uploading if no image is selected
-        print("Redirecting to LinkedIn...")
-        return redirect('/linkedin_poster')
+        print("Redirecting...")
+        return redirect('/next_poster' + "/instagram")
     else:
         form.title.data = title
         form.post.data = post
@@ -132,8 +135,8 @@ def linkedin_poster():
         print("Title:", title)
         print("Post:", post)
         print("Image:", image)
-        # TODO Add allow uploading if no image is selected
-
+        print("Redirecting...")
+        return redirect('/next_poster' + "/linkedin")
     else:
         form.title.data = title
         form.post.data = post
@@ -141,6 +144,54 @@ def linkedin_poster():
         form.image.render_kw = {'disabled': 'disabled'}
 
     return render_template('post/linkedin_post.html', form=form, filename=image)
+
+
+@app.route('/tumblr_poster', methods=('GET', 'POST'))
+def tumblr_poster():
+    print("Tumblr Poster...")
+    title, post, image = retrieve_session()
+    form = TumblrPostForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        post = form.post.data
+        image = form.image.data
+
+        print("Posting to Tumblr...")
+        print("Title:", title)
+        print("Post:", post)
+        print("Image:", image)
+
+        print("Redirecting...")
+        return redirect('/next_poster' + "/tumblr")
+    else:
+        form.title.data = title
+        form.post.data = post
+        form.image.data = image
+        form.image.render_kw = {'disabled': 'disabled'}
+
+    return render_template('post/tumblr_post.html', form=form, filename=image)
+
+
+@app.route('/next_poster/<done_soocialnetwork>')
+def next_poster(done_soocialnetwork):
+    done_soocialnetwork = done_soocialnetwork.strip()
+    if str(done_soocialnetwork):
+        print("Called next_poster/", done_soocialnetwork)
+        try:
+            social_networks = remove_session_socialnetwork(str(done_soocialnetwork))
+            store_list_session(social_networks)
+        except:
+            pass
+    social_networks = retrieve_session_socialnetworks()
+    if social_networks:
+        return redirect("/" + social_networks[0].lower() + "_poster")
+    else:
+        return redirect(url_for('post_status'))
+
+
+@app.route('/post_status')
+def post_status():
+    return "Done!"
 
 
 @app.route('/logout')
