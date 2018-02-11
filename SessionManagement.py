@@ -9,6 +9,7 @@ def clear_session():
     session.pop('title', None)
     session.pop('post', None)
     session.pop('image', None)
+    session.pop("selected_socialnetworks", None)
 
 
 def save_session(filename, post, title, social_networks_list=None):
