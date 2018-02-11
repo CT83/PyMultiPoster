@@ -36,8 +36,8 @@
                     {#                        console.log('Good to see you, ' + response.id + '.');#}
                     {#                    });#}
                     var queryString = '?accessToken=' + access_token;
-                    var url = '{{ url_for('facebook_redirect') }}' +queryString;
-                    window.location.replace('"' + url + '"');
+                    var url = "{{ url_for('facebook_redirect') }}" +queryString;
+                    window.location.replace(url);
                 } else {
                     console.log('User cancelled login or did not fully authorize.');
                 }

@@ -12,25 +12,37 @@ def get_cookie(req):
     tumblr_access_token = req.cookies.get('TUMBLR_ACCESS_TOKEN')
     tumblr_access_secret = req.cookies.get('TUMBLR_ACCESS_SECRET')
 
-    return facebook_access_token, twitter_access_token, \
-           twitter_access_secret, instagram_email, \
-           instagram_password, linkedin_access_token, \
-           tumblr_access_token, tumblr_access_secret
+    stored_cookies = {'facebook_access_token': facebook_access_token,
+                      'twitter_access_token': twitter_access_token,
+                      'twitter_access_secret': twitter_access_secret,
+                      'instagram_email': instagram_email,
+                      'instagram_password': instagram_password,
+                      'linkedin_access_token': linkedin_access_token,
+                      'tumblr_access_token': tumblr_access_token,
+                      'tumblr_access_secret': tumblr_access_secret}
+
+    return stored_cookies
 
 
-def set_cookie(resp, facebook_access_token, twitter_access_token,
-               twitter_access_secret, instagram_email, instagram_password,
-               linkedin_access_token, tumblr_access_token,
-               tumblr_access_secret):
-    resp.set_cookie('FACEBOOK_ACCESS_TOKEN', facebook_access_token)
+def set_cookie(resp, facebook_access_token="", twitter_access_token="",
+               twitter_access_secret="", instagram_email="", instagram_password="",
+               linkedin_access_token="", tumblr_access_token="",
+               tumblr_access_secret=""):
+    if facebook_access_token:
+        resp.set_cookie('FACEBOOK_ACCESS_TOKEN', facebook_access_token)
 
-    resp.set_cookie('TWITTER_ACCESS_TOKEN', twitter_access_token)
-    resp.set_cookie('TWITTER_ACCESS_SECRET', twitter_access_secret)
+    if twitter_access_token and twitter_access_secret:
+        resp.set_cookie('TWITTER_ACCESS_TOKEN', twitter_access_token)
+        resp.set_cookie('TWITTER_ACCESS_SECRET', twitter_access_secret)
 
-    resp.set_cookie('INSTAGRAM_EMAIL', instagram_email)
-    resp.set_cookie('INSTAGRAM_PASSWORD', instagram_password)
+    if instagram_email and instagram_password:
+        resp.set_cookie('INSTAGRAM_EMAIL', instagram_email)
+        resp.set_cookie('INSTAGRAM_PASSWORD', instagram_password)
 
-    resp.set_cookie('LINKEDIN_ACCESS_TOKEN', linkedin_access_token)
+    if linkedin_access_token:
+        resp.set_cookie('LINKEDIN_ACCESS_TOKEN', linkedin_access_token)
 
-    resp.set_cookie('TUMBLR_ACCESS_TOKEN', tumblr_access_token)
-    resp.set_cookie('TUMBLR_ACCESS_SECRET', tumblr_access_secret)
+    if tumblr_access_token and tumblr_access_secret:
+        resp.set_cookie('TUMBLR_ACCESS_TOKEN', tumblr_access_token)
+        resp.set_cookie('TUMBLR_ACCESS_SECRET', tumblr_access_secret)
+    return resp

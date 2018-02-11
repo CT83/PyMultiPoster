@@ -1,3 +1,8 @@
+# Initializers
+import os
+
+ON_HEROKU = 'ON_HEROKU' in os.environ
+
 # LinkedIn
 LINKEDIN_RETURN_URL = 'https://pymultiposter.herokuapp.com/'
 LINKEDIN_CLIENT_ID = '81spnwn20ee6ve'
@@ -11,15 +16,16 @@ TUMBLR_CLIENT_SECRET = "g8Kgg8fIm8W8YadqqJy5mKR0dzUGYQXYwg1GvNHLofpgmohQoe"
 TWITTER_CLIENT_ID = "g8Kgg8fIm8W8YadqqJy5mKR0dzUGYQXYwg1GvNHLofpgmohQoe"
 TWITTER_CLIENT_SECRET = 'xM7G3WocNnSYRCsIsJw7yeRDasuJ3QzxdRlS7iLZoVr92gKtAg'
 
-# Facebook
-FACEBOOK_CLIENT_ID = "2061306277447865"
-FACEBOOK_CLIENT_SECRET = "965931cb788a2268bd5c2545335042a0"
-
 # Facebook App pymultiposter
 # FACEBOOK_CLIENT_ID = "101206834030831"
 # FACEBOOK_CLIENT_SECRET = "9be8d03bb48f86245d2bad7269831f51"
 
-# Initializers
-import os
 
-ON_HEROKU = 'ON_HEROKU' in os.environ
+if ON_HEROKU:
+    # # Facebook App pymultiposter-2
+    FACEBOOK_CLIENT_ID = "2061306277447865"
+    FACEBOOK_CLIENT_SECRET = "965931cb788a2268bd5c2545335042a0"
+else:
+    # Facebook App pymultiposter-local
+    FACEBOOK_CLIENT_ID = "1817601901640361"
+    FACEBOOK_CLIENT_SECRET = "ee3029327b955fac864c7d3eb1c139ae"

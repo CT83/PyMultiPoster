@@ -1,9 +1,10 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, make_response
 from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename, redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
     LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID
+from CookieManagement import set_cookie, get_cookie
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramPostForm import InstagramPostForm
 from Forms.LinkedInPostForm import LinkedInPostForm
@@ -252,6 +253,8 @@ def post_status():
 
 @app.route('/dashboard')
 def dashboard():
+    stored_cookie = get_cookie(request)
+    print("Stored Cookies:", stored_cookie)
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
                            facebook_login="facebook_login",
@@ -262,8 +265,12 @@ def dashboard():
 
 @app.route('/facebook_redirect')
 def facebook_redirect():
-    access_token = request.args.get('accessToken')  # We get this from dashboard.html as querystring
+    # We get this from dashboard.html as querystring
+    access_token = request.args.get('accessToken')
     print("Facebook Access Token:", access_token)
+    resp = make_response(redirect(url_for('dashboard')))
+    resp = set_cookie(resp=resp, facebook_access_token=access_token)
+    return resp
 
 
 @app.route('/logout')
