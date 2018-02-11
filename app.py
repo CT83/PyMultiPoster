@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename, redirect
 
@@ -258,6 +258,11 @@ def dashboard():
                            linkedin_login="linkedin_login", tumblr_login="tumblr_login",
                            twitter_login="twitter_login",
                            instagram_login="instagram_login")
+
+
+@app.route('/facebook_redirect')
+def facebook_redirect():
+    user = request.args.get('user')
 
 
 @app.route('/logout')
