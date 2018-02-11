@@ -16,3 +16,5 @@ class Instagram(SocialMedia):
                                              description_att,
                                              image_url):
         self.instagrammer.uploadPhoto(image_url, caption=message)
+
+# Add Main method here

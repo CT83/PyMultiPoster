@@ -101,10 +101,13 @@ class Tumblr(SocialMedia):
 
 
 if __name__ == '__main__':
+    # TODO This needs to be tested
     url = get_authorization_url(TUMBLR_CLIENT_ID,
                                 TUMBLR_CLIENT_SECRET)
     print("Visit:" + url)
-    tokens = get_access_token_from_url(input('Allow then paste the full redirect URL here:\n'))
+    tokens = get_access_token_from_url(TUMBLR_CLIENT_ID,
+                                       TUMBLR_CLIENT_SECRET,
+                                       input('Allow then paste the full redirect URL here:\n'))
     tumblr = Tumblr(
         tokens['consumer_key'],
         tokens['consumer_secret'],
