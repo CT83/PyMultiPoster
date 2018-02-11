@@ -262,7 +262,8 @@ def dashboard():
 
 @app.route('/facebook_redirect')
 def facebook_redirect():
-    user = request.args.get('user')
+    access_token = request.args.get('accessToken')  # We get this from dashboard.html as querystring
+    print("Facebook Access Token:", access_token)
 
 
 @app.route('/logout')
