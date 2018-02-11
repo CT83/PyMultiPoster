@@ -252,9 +252,12 @@ def post_status():
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard/dashboard.html', facebook_login="facebook_login",
+    return render_template('dashboard/dashboard.html',
+                           facebook_client_id=FACEBOOK_CLIENT_ID,
+                           facebook_login="facebook_login",
                            linkedin_login="linkedin_login", tumblr_login="tumblr_login",
-                           twitter_login="twitter_login", instagram_login="instagram_login")
+                           twitter_login="twitter_login",
+                           instagram_login="instagram_login")
 
 
 @app.route('/logout')
