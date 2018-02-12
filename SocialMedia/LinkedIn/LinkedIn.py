@@ -1,41 +1,45 @@
 from linkedin.linkedin import LinkedInApplication, LinkedInAuthentication
 
-from CONSTANT import LINKEDIN_CLIENT_SECRET, LINKEDIN_CLIENT_ID, LINKEDIN_RETURN_URL
+from CONSTANT import LINKEDIN_CLIENT_SECRET, LINKEDIN_CLIENT_ID
 from SocialMedia.SocialMedia import SocialMedia
 
 
-def get_authorization_url(consumer_key, consumer_secret, return_url=LINKEDIN_RETURN_URL):
-    linkedin_auth = LinkedInAuthentication(
-        consumer_key,
-        consumer_secret,
-        return_url,
-        permissions=['r_basicprofile',
-                     'r_emailaddress',
-                     'rw_company_admin',
-                     'w_share']
-    )
+class LinkedInAuth:
+    def __init__(self, consumer_key, consumer_secret, return_url):
+        self.return_url = return_url
+        self.consumer_secret = consumer_secret
+        self.consumer_key = consumer_key
 
-    return linkedin_auth.authorization_url
+    def get_authorization_url(self):
+        linkedin_auth = LinkedInAuthentication(
+            self.consumer_key,
+            self.consumer_secret,
+            self.return_url,
+            permissions=['r_basicprofile',
+                         'r_emailaddress',
+                         'rw_company_admin',
+                         'w_share']
+        )
 
+        return linkedin_auth.authorization_url
 
-def get_access_token_from_url(consumer_key, consumer_secret, response_url, return_url=LINKEDIN_RETURN_URL):
-    linkedin_auth = LinkedInAuthentication(
-        consumer_key,
-        consumer_secret,
-        return_url,
-        permissions=['r_basicprofile',
-                     'r_emailaddress',
-                     'rw_company_admin',
-                     'w_share']
-    )
+    def get_access_token_from_url(self, response_url):
+        linkedin_auth = LinkedInAuthentication(
+            self.consumer_key,
+            self.consumer_secret,
+            self.return_url,
+            permissions=['r_basicprofile',
+                         'r_emailaddress',
+                         'rw_company_admin',
+                         'w_share']
+        )
 
-    # TODO Use url query string parser everywhere
-    from urllib import parse
-    v_code = parse.parse_qs(parse.urlparse(response_url).query)['code'][0]
+        from urllib import parse
+        v_code = parse.parse_qs(parse.urlparse(response_url).query)['code'][0]
 
-    linkedin_auth.authorization_code = v_code
-    result = linkedin_auth.get_access_token()
-    return result.access_token
+        linkedin_auth.authorization_code = v_code
+        result = linkedin_auth.get_access_token()
+        return result.access_token
 
 
 class LinkedIn(SocialMedia):
@@ -63,12 +67,12 @@ class LinkedIn(SocialMedia):
 
 
 def main():
-    url = get_authorization_url(LINKEDIN_CLIENT_ID,
-                                LINKEDIN_CLIENT_SECRET)
+    url = LinkedInAuth.get_authorization_url(LINKEDIN_CLIENT_ID,
+                                             LINKEDIN_CLIENT_SECRET)
     print(url)
     link = input("Enter Link:")
-    auth_token = get_access_token_from_url(LINKEDIN_CLIENT_ID,
-                                           LINKEDIN_CLIENT_SECRET, link)
+    auth_token = LinkedInAuth.get_access_token_from_url(LINKEDIN_CLIENT_ID,
+                                                        LINKEDIN_CLIENT_SECRET, link)
 
     linkedin_poster = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, auth_token)
 

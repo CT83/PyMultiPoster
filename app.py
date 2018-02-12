@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename, redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
-    LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID
+    LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL
 from CookieManagement import set_cookie, get_cookie
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramLoginForm import InstagramLoginForm
@@ -15,7 +15,7 @@ from Forms.TwitterPostForm import TwitterPostForm
 from SessionManagement import clear_session, save_session, retrieve_session, remove_session_socialnetwork, \
     store_list_session, retrieve_session_socialnetworks
 from SocialMedia.Facebook.Facebook import Facebook
-from SocialMedia.LinkedIn.LinkedIn import LinkedIn
+from SocialMedia.LinkedIn.LinkedIn import LinkedIn, LinkedInAuth
 from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
 
@@ -256,10 +256,14 @@ def post_status():
 def dashboard():
     stored_cookie = get_cookie(request)
     print("Stored Cookies:", stored_cookie)
+    linkedin_auth = LinkedInAuth(LINKEDIN_CLIENT_ID,
+                                 LINKEDIN_CLIENT_SECRET, LINKEDIN_RETURN_URL)
+    print(linkedin_auth.get_authorization_url())
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
                            facebook_login="facebook_login",
-                           linkedin_login="linkedin_login", tumblr_login="tumblr_login",
+                           linkedin_login=linkedin_auth.get_authorization_url(),
+                           tumblr_login="tumblr_login",
                            twitter_login="twitter_login",
                            instagram_login=url_for('instagram_login'))
 
@@ -271,6 +275,20 @@ def facebook_redirect():
     print("Facebook Access Token:", access_token)
     resp = make_response(redirect(url_for('dashboard')))
     resp = set_cookie(resp=resp, facebook_access_token=access_token)
+    return resp
+
+
+@app.route('/linkedin_redirect', methods=('GET', 'POST'))
+def linkedin_redirect():
+    # We get this from dashboard.html as querystring
+    linkedin_auth = LinkedInAuth(LINKEDIN_CLIENT_ID,
+                                 LINKEDIN_CLIENT_SECRET,
+                                 LINKEDIN_RETURN_URL
+                                 )
+    access_token = linkedin_auth.get_access_token_from_url(request.base_url)
+    print("LinkedIn Access Token:", access_token)
+    resp = make_response(redirect(url_for('dashboard')))
+    resp = set_cookie(resp=resp, linkedin_access_token=access_token)
     return resp
 
 

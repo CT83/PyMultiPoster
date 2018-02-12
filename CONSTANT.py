@@ -3,10 +3,7 @@ import os
 
 ON_HEROKU = 'ON_HEROKU' in os.environ
 
-# LinkedIn
-LINKEDIN_RETURN_URL = 'https://pymultiposter.herokuapp.com/'
-LINKEDIN_CLIENT_ID = '81spnwn20ee6ve'
-LINKEDIN_CLIENT_SECRET = '0Yg845bXH8Z3K4Sf'
+
 
 # Tumblr
 TUMBLR_CLIENT_ID = "h8QTvJw4B8xMDo9GAFXC8Ll7xbX99MUhDiIA7AFBIfH2cuNzy3"
@@ -25,7 +22,19 @@ if ON_HEROKU:
     # # Facebook App pymultiposter-2
     FACEBOOK_CLIENT_ID = "2061306277447865"
     FACEBOOK_CLIENT_SECRET = "965931cb788a2268bd5c2545335042a0"
+
+
+    # LinkedIn
+    LINKEDIN_RETURN_URL = 'https://pymultiposter.herokuapp.com/linkedin_redirect'
+    LINKEDIN_CLIENT_ID = '81spnwn20ee6ve'
+    LINKEDIN_CLIENT_SECRET = '0Yg845bXH8Z3K4Sf'
+
 else:
     # Facebook App pymultiposter-local
     FACEBOOK_CLIENT_ID = "1817601901640361"
     FACEBOOK_CLIENT_SECRET = "ee3029327b955fac864c7d3eb1c139ae"
+
+    # LinkedIn
+    LINKEDIN_RETURN_URL = 'https://localhost:5000/linkedin_redirect'
+    LINKEDIN_CLIENT_ID = '81spnwn20ee6ve'
+    LINKEDIN_CLIENT_SECRET = '0Yg845bXH8Z3K4Sf'
