@@ -6,7 +6,7 @@ ON_HEROKU = 'ON_HEROKU' in os.environ
 # Tumblr
 TUMBLR_CLIENT_ID = "h8QTvJw4B8xMDo9GAFXC8Ll7xbX99MUhDiIA7AFBIfH2cuNzy3"
 TUMBLR_CLIENT_SECRET = "g8Kgg8fIm8W8YadqqJy5mKR0dzUGYQXYwg1GvNHLofpgmohQoe"
-
+TUMBLR_REDIRECT_URL='http://localhost:5000/tumblr_redirect'
 
 # Facebook App pymultiposter
 # FACEBOOK_CLIENT_ID = "101206834030831"

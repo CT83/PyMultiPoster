@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename, redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
     LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL, \
-    TWITTER_REDIRECT_URL
+    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL
 from CookieManagement import set_cookie, get_cookie
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramLoginForm import InstagramLoginForm
@@ -266,10 +266,15 @@ def dashboard():
                                                                            TWITTER_CLIENT_SECRET,
                                                                            TWITTER_REDIRECT_URL)
     session['twitter_request_token'] = (key, secret)
+
+    from SocialMedia.Tumblr.TumblrAuth import get_authorization_url
+    tumblr_url = get_authorization_url(TUMBLR_CLIENT_ID,
+                                       TUMBLR_CLIENT_SECRET)
+
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
                            linkedin_login=linkedin_auth.get_authorization_url(),
-                           tumblr_login="tumblr_login",
+                           tumblr_login=tumblr_url,
                            twitter_login=twitter_auth_url,
                            instagram_login=url_for('instagram_login'))
 
@@ -328,6 +333,21 @@ def twitter_redirect():
     resp = make_response(redirect(url_for('dashboard')))
     resp = set_cookie(resp=resp, twitter_access_token=access_token,
                       twitter_access_secret=access_token_secret)
+    return resp
+
+
+@app.route('/tumblr_redirect', methods=('GET', 'POST'))
+def tumblr_redirect():
+    from SocialMedia.Tumblr.TumblrAuth import get_access_token_from_url
+    tokens = get_access_token_from_url(consumer_key=TUMBLR_CLIENT_ID,
+                                       consumer_secret=TUMBLR_CLIENT_SECRET,
+                                       callback_url=TUMBLR_REDIRECT_URL,
+                                       redirect_response=request.url)
+
+    resp = make_response(redirect(url_for('dashboard')))
+    resp = set_cookie(resp=resp, tumblr_access_token=tokens['oauth_token'],
+                      tumblr_access_secret=tokens['oauth_token_secret'])
+
     return resp
 
 
