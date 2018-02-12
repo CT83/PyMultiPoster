@@ -344,6 +344,7 @@ def tumblr_redirect():
                                        callback_url=TUMBLR_REDIRECT_URL,
                                        redirect_response=request.url)
 
+    print(tokens)
     resp = make_response(redirect(url_for('dashboard')))
     resp = set_cookie(resp=resp, tumblr_access_token=tokens['oauth_token'],
                       tumblr_access_secret=tokens['oauth_token_secret'])

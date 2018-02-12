@@ -70,12 +70,7 @@ def new_oauth(yaml_path):
 if __name__ == '__main__':
     yaml_path = os.path.expanduser('~') + '/.tumblr'
 
-    if not os.path.exists(yaml_path):
-        tokens = new_oauth(yaml_path)
-    else:
-        yaml_file = open(yaml_path, "r")
-        tokens = yaml.safe_load(yaml_file)
-        yaml_file.close()
+    tokens = new_oauth(yaml_path)
 
     client = pytumblr.TumblrRestClient(
         tokens['consumer_key'],
