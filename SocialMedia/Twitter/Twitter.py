@@ -4,24 +4,6 @@ from CONSTANT import TWITTER_CLIENT_SECRET, TWITTER_CLIENT_ID
 from SocialMedia.SocialMedia import SocialMedia
 
 
-def get_authorization_url(consumer_key, consumer_secret):
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    redirect_url = auth.get_authorization_url()
-    return str(redirect_url), auth
-
-
-def get_access_token_from_url(response_url, auth):
-    from urllib import parse
-    verifier = parse.parse_qs(parse.urlparse(response_url).query)['oauth_verifier'][0]
-    print("Verifier:" + verifier)
-
-    auth.get_access_token(verifier)
-    print('Auth Token :' + str(auth.access_token))
-    print('Auth Secret:' + str(auth.access_token_secret))
-
-    return auth.access_token, auth.access_token_secret
-
-
 class Twitter(SocialMedia):
     def __init__(self, client_id, client_secret, oauth_token, oauth_token_secret):
         self.client_id = client_id
@@ -47,10 +29,12 @@ class Twitter(SocialMedia):
 if __name__ == '__main__':
     client_key = TWITTER_CLIENT_ID
     client_secret = TWITTER_CLIENT_SECRET
-    url, oauth = get_authorization_url(client_key, client_secret)
+    # TODO Fix This
+    twitter_auth = TwitterAuth(TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET)
+    url, oauth = twitter_auth.get_authorization_url()
     print(url)
     access_token, access_token_secret \
-        = get_access_token_from_url(input("Response:"), oauth)
+        = twitter_auth.get_access_token_from_url(input("Response:"))
 
     twitter = Twitter(client_key,
                       client_secret,

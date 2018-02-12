@@ -7,9 +7,6 @@ ON_HEROKU = 'ON_HEROKU' in os.environ
 TUMBLR_CLIENT_ID = "h8QTvJw4B8xMDo9GAFXC8Ll7xbX99MUhDiIA7AFBIfH2cuNzy3"
 TUMBLR_CLIENT_SECRET = "g8Kgg8fIm8W8YadqqJy5mKR0dzUGYQXYwg1GvNHLofpgmohQoe"
 
-# Twitter
-TWITTER_CLIENT_ID = "g8Kgg8fIm8W8YadqqJy5mKR0dzUGYQXYwg1GvNHLofpgmohQoe"
-TWITTER_CLIENT_SECRET = 'xM7G3WocNnSYRCsIsJw7yeRDasuJ3QzxdRlS7iLZoVr92gKtAg'
 
 # Facebook App pymultiposter
 # FACEBOOK_CLIENT_ID = "101206834030831"
@@ -35,3 +32,8 @@ else:
     LINKEDIN_RETURN_URL = 'http://localhost:5000/linkedin_redirect'
     LINKEDIN_CLIENT_ID = '81spnwn20ee6ve'
     LINKEDIN_CLIENT_SECRET = '0Yg845bXH8Z3K4Sf'
+
+    # Twitter
+    TWITTER_CLIENT_ID = "ecf8Ygwl3Sr9te5dvHoknoq7h"
+    TWITTER_CLIENT_SECRET = 'xM7G3WocNnSYRCsIsJw7yeRDasuJ3QzxdRlS7iLZoVr92gKtAg'
+    TWITTER_REDIRECT_URL='http://localhost:5000/twitter_redirect'

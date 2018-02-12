@@ -3,7 +3,8 @@ from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename, redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
-    LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL
+    LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL, \
+    TWITTER_REDIRECT_URL
 from CookieManagement import set_cookie, get_cookie
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramLoginForm import InstagramLoginForm
@@ -258,12 +259,19 @@ def dashboard():
     print("Stored Cookies:", stored_cookie)
     linkedin_auth = LinkedInAuth(LINKEDIN_CLIENT_ID,
                                  LINKEDIN_CLIENT_SECRET, LINKEDIN_RETURN_URL)
+
+    from flask import session
+    from SocialMedia.Twitter import TwitterAuth
+    twitter_auth_url, key, secret = TwitterAuth.get_authorization_url_auth(TWITTER_CLIENT_ID,
+                                                                           TWITTER_CLIENT_SECRET,
+                                                                           TWITTER_REDIRECT_URL)
+    session['twitter_request_token'] = (key, secret)
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
                            facebook_login="facebook_login",
                            linkedin_login=linkedin_auth.get_authorization_url(),
                            tumblr_login="tumblr_login",
-                           twitter_login="twitter_login",
+                           twitter_login=twitter_auth_url,
                            instagram_login=url_for('instagram_login'))
 
 
@@ -282,8 +290,7 @@ def linkedin_redirect():
     # We get this from dashboard.html as querystring
     linkedin_auth = LinkedInAuth(LINKEDIN_CLIENT_ID,
                                  LINKEDIN_CLIENT_SECRET,
-                                 LINKEDIN_RETURN_URL
-                                 )
+                                 LINKEDIN_RETURN_URL)
     access_token = linkedin_auth.get_access_token_from_url(request.url)
     print("LinkedIn Access Token:", access_token)
     resp = make_response(redirect(url_for('dashboard')))
@@ -303,6 +310,26 @@ def instagram_login():
         resp = set_cookie(resp=resp, instagram_email=email, instagram_password=password)
         return resp
     return render_template('dashboard/instagram_login.html', form=form)
+
+
+@app.route('/twitter_redirect', methods=('GET', 'POST'))
+def twitter_redirect():
+    from flask import session
+    from SocialMedia.Twitter.TwitterAuth import get_access_token_from_url
+
+    token = session['twitter_request_token']
+    del session['twitter_request_token']
+
+    access_token, access_token_secret = \
+        get_access_token_from_url(response_url=request.url,
+                                  consumer_key=TWITTER_CLIENT_ID,
+                                  consumer_secret=TWITTER_CLIENT_SECRET,
+                                  token=token)
+
+    resp = make_response(redirect(url_for('dashboard')))
+    resp = set_cookie(resp=resp, twitter_access_token=access_token,
+                      twitter_access_secret=access_token_secret)
+    return resp
 
 
 @app.route('/logout')
