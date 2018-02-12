@@ -258,7 +258,6 @@ def dashboard():
     print("Stored Cookies:", stored_cookie)
     linkedin_auth = LinkedInAuth(LINKEDIN_CLIENT_ID,
                                  LINKEDIN_CLIENT_SECRET, LINKEDIN_RETURN_URL)
-    print(linkedin_auth.get_authorization_url())
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
                            facebook_login="facebook_login",
@@ -285,7 +284,7 @@ def linkedin_redirect():
                                  LINKEDIN_CLIENT_SECRET,
                                  LINKEDIN_RETURN_URL
                                  )
-    access_token = linkedin_auth.get_access_token_from_url(request.base_url)
+    access_token = linkedin_auth.get_access_token_from_url(request.url)
     print("LinkedIn Access Token:", access_token)
     resp = make_response(redirect(url_for('dashboard')))
     resp = set_cookie(resp=resp, linkedin_access_token=access_token)
