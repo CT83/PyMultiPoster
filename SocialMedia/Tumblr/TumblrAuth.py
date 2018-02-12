@@ -3,13 +3,13 @@ from requests_oauthlib import OAuth1Session
 
 def get_authorization_url(consumer_key, consumer_secret, callback_url=""):
     authorize_url = 'http://www.tumblr.com/oauth/authorize'
-    oauth_session = OAuth1Session(consumer_key, client_secret=consumer_secret,
+    oauth_session = OAuth1Session(client_key=consumer_key, client_secret=consumer_secret,
                                   callback_uri=callback_url)
     full_authorize_url = oauth_session.authorization_url(authorize_url)
     return full_authorize_url
 
 
-def get_access_token_from_url(consumer_key, consumer_secret, redirect_response, callback_url=""):
+def get_access_token_from_url(consumer_key, consumer_secret, redirect_response, callback_url=None):
     access_token_url = 'http://www.tumblr.com/oauth/access_token'
     request_token_url = 'http://www.tumblr.com/oauth/request_token'
 

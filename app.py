@@ -269,7 +269,7 @@ def dashboard():
 
     from SocialMedia.Tumblr.TumblrAuth import get_authorization_url
     tumblr_url = get_authorization_url(TUMBLR_CLIENT_ID,
-                                       TUMBLR_CLIENT_SECRET)
+                                       TUMBLR_CLIENT_SECRET, callback_url=TUMBLR_REDIRECT_URL)
 
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
