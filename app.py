@@ -268,7 +268,6 @@ def dashboard():
     session['twitter_request_token'] = (key, secret)
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
-                           facebook_login="facebook_login",
                            linkedin_login=linkedin_auth.get_authorization_url(),
                            tumblr_login="tumblr_login",
                            twitter_login=twitter_auth_url,
