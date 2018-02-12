@@ -22,7 +22,7 @@ if ON_HEROKU:
     FACEBOOK_CLIENT_SECRET = "965931cb788a2268bd5c2545335042a0"
 
     # LinkedIn
-    LINKEDIN_RETURN_URL = 'https://pymultiposter.herokuapp.com/linkedin_redirect'
+    LINKEDIN_RETURN_URL = 'https://pymultiposter-2.herokuapp.com/linkedin_redirect'
     LINKEDIN_CLIENT_ID = '81spnwn20ee6ve'
     LINKEDIN_CLIENT_SECRET = '0Yg845bXH8Z3K4Sf'
 
