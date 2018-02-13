@@ -1,10 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, SubmitField
-from wtforms.fields.html5 import EmailField
-from wtforms.validators import Email, DataRequired
+from wtforms import PasswordField, SubmitField, StringField
+from wtforms.validators import DataRequired, Length
 
 
 class InstagramLoginForm(FlaskForm):
-    email = EmailField('Email:', [DataRequired(), Email()])
+    username = StringField('Instagram Username', validators=[DataRequired(),
+                                                             Length(min=6, max=20)])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Save')

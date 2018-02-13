@@ -156,10 +156,11 @@ def instagram_poster():
 
         stored_cookie = get_cookie(request)
 
-        instagram_api = Instagram(stored_cookie['twitter_access_token'],
-                                  stored_cookie['twitter_access_secret'])
-
-        instagram_api.publish_update_with_image_attachment(post, image)
+        instagram_api = Instagram(stored_cookie['instagram_email'],
+                                  stored_cookie['instagram_password'])
+        jpg_image = instagram_api.convert_image_to_compatible_format(image)
+        instagram_api.publish_update_with_image_attachment(post, jpg_image)
+        instagram_api.cleanup()
 
         print("Redirecting...")
         return redirect('/next_poster' + "/instagram")
@@ -335,12 +336,12 @@ def linkedin_redirect():
 def instagram_login():
     form = InstagramLoginForm()
     if form.validate_on_submit():
-        email = form.email.data
+        username = form.username.data
         password = form.password.data
-        print("Instagram email:", email)
-        print("Instagram password:", password)
+        print("Instagram Username:", username)
+        print("Instagram Password:", password)
         resp = make_response(redirect(url_for('dashboard')))
-        resp = set_cookie(resp=resp, instagram_email=email, instagram_password=password)
+        resp = set_cookie(resp=resp, instagram_email=username, instagram_password=password)
         return resp
     return render_template('dashboard/instagram_login.html', form=form)
 
