@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename, redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
     LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL, \
-    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL
+    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, IMGUR_CLIENT_ID
 from CookieManagement import set_cookie, get_cookie
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramLoginForm import InstagramLoginForm
@@ -16,6 +16,7 @@ from Forms.LinkedInPostForm import LinkedInPostForm
 from Forms.MainPostForm import MainPostForm
 from Forms.TumblrPostForm import TumblrPostForm
 from Forms.TwitterPostForm import TwitterPostForm
+from Imgur.Imgur import upload_to_imgur
 from SessionManagement import clear_session, save_session, retrieve_session, remove_session_socialnetwork, \
     store_list_session, retrieve_session_socialnetworks
 from SocialMedia.Facebook.Facebook import Facebook
@@ -33,7 +34,7 @@ os.chdir(sys.path[0])
 
 
 def is_string_empty(s):
-    return s not in 'None' and s not in ""
+    return str(s) in 'None' or str(s) in "" or s is None
 
 
 @app.route('/main', methods=('GET', 'POST'))
@@ -79,12 +80,14 @@ def facebook_poster():
                                  FACEBOOK_CLIENT_SECRET,
                                  stored_cookie['facebook_access_token'])
         if is_string_empty(image):
-            print(facebook_user.publish_update(title + "\n" + post))
+            print("Facebook Update", facebook_user.publish_update(title + "\n" + post))
         else:
             # TODO Make this work
-            print(facebook_user.
+            image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
+            print("Facebook Update with image", facebook_user.
                   publish_update_with_image_attachment(message=title + "\n" + post,
-                                                       image_url=image))
+                                                       image_url=image_url,
+                                                       link_att=image_url))
 
         print("Redirecting...")
         return redirect('/next_poster' + "/facebook")
@@ -187,7 +190,7 @@ def linkedin_poster():
 
         else:
             print(linkedin_api.publish_update_with_image_attachment(title + "\n" + post,
-                                                                     "", "",
+                                                                    "", "",
                                                                     "",
                                                                     "",
                                                                     image))
