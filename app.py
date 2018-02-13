@@ -230,13 +230,13 @@ def tumblr_poster():
     return render_template('post/tumblr_post.html', form=form, filename=image)
 
 
-@app.route('/next_poster/<done_soocialnetwork>')
-def next_poster(done_soocialnetwork):
-    done_soocialnetwork = done_soocialnetwork.strip()
-    if str(done_soocialnetwork):
-        print("Called next_poster/", done_soocialnetwork)
+@app.route('/next_poster/<done_socialnetwork>')
+def next_poster(done_socialnetwork):
+    done_socialnetwork = done_socialnetwork.strip()
+    if str(done_socialnetwork):
+        print("Called next_poster/", done_socialnetwork)
         try:
-            social_networks = remove_session_socialnetwork(str(done_soocialnetwork))
+            social_networks = remove_session_socialnetwork(str(done_socialnetwork))
             store_list_session(social_networks)
         except LookupError:
             pass
@@ -269,10 +269,6 @@ def dashboard():
     session['twitter_request_token'] = (key, secret)
 
     from SocialMedia.Tumblr.TumblrAuth import get_authorization_url
-    tumblr_url = get_authorization_url(TUMBLR_CLIENT_ID,
-                                       TUMBLR_CLIENT_SECRET,
-                                       callback_url=TUMBLR_REDIRECT_URL)
-
     tum_url, tum_key, tum_sec = get_authorization_url(TUMBLR_CLIENT_ID,
                                                       TUMBLR_CLIENT_SECRET,
                                                       TUMBLR_REDIRECT_URL)
@@ -281,7 +277,7 @@ def dashboard():
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
                            linkedin_login=linkedin_auth.get_authorization_url(),
-                           tumblr_login=tumblr_url,
+                           tumblr_login=tum_url,
                            twitter_login=twitter_auth_url,
                            instagram_login=url_for('instagram_login'))
 
