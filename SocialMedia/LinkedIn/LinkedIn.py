@@ -1,6 +1,7 @@
 from linkedin.linkedin import LinkedInApplication, LinkedInAuthentication
 
-from CONSTANT import LINKEDIN_CLIENT_SECRET, LINKEDIN_CLIENT_ID, LINKEDIN_RETURN_URL
+from CONSTANT import LINKEDIN_CLIENT_SECRET, LINKEDIN_CLIENT_ID, LINKEDIN_RETURN_URL, IMGUR_CLIENT_ID
+from Imgur.Imgur import upload_to_imgur
 from SocialMedia.SocialMedia import SocialMedia
 
 
@@ -83,12 +84,12 @@ def main():
                                                    "name_att", "link_att",
                                                    "caption_att",
                                                    "description_att")
-
+    image_url = upload_to_imgur(IMGUR_CLIENT_ID, 'temp.jpg')
     linkedin_poster.publish_update_with_image_attachment("Update with Image Attachment",
-                                                         "name_att", "link_att",
+                                                         "name_att", image_url,
                                                          "caption_att",
                                                          "description_att",
-                                                         "image_url")
+                                                         image_url=image_url)
 
 
 if __name__ == '__main__':

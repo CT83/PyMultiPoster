@@ -183,7 +183,7 @@ def linkedin_poster():
     if form.validate_on_submit():
         title = form.title.data
         post = form.post.data
-        image = form.image.data
+        # image = form.image.data
 
         print("Posting to LinkedIn...")
         print("Title:", title)
@@ -198,11 +198,10 @@ def linkedin_poster():
             print(linkedin_api.publish_update(title + "\n" + post))
 
         else:
+            image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
             print(linkedin_api.publish_update_with_image_attachment(title + "\n" + post,
-                                                                    "", "",
-                                                                    "",
-                                                                    "",
-                                                                    image))
+                                                                    link_att=image_url,
+                                                                    image_url=image_url))
 
         print("Redirecting...")
         return redirect('/next_poster' + "/linkedin")
