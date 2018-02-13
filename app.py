@@ -34,6 +34,8 @@ bootstrap = Bootstrap(app)
 os.chdir(sys.path[0])
 
 
+# TODO Investigate Facebook token keeps expiring
+# TODO Change image Aspect Ratio to fit instagram
 def is_string_empty(s):
     return str(s) in 'None' or str(s) in "" or s is None
 

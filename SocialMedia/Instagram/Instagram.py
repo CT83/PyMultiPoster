@@ -24,7 +24,6 @@ class Instagram(SocialMedia):
         # Convert Image to JPG
         im = Image.open(image)
         rgb_im = im.convert('RGB')
-        remove_file(image)
 
         converted_image = Path(image).stem + compatible_format
         remove_file(converted_image)
