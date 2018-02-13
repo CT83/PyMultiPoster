@@ -51,6 +51,7 @@ class Tumblr(SocialMedia):
         # https://github.com/tumblr/pytumblr#creating-a-photo-post
         if tags is None:
             tags = [""]
+        print("Tumblr Posting Update with Image:", image_links)
         self.tumblr_api.create_photo(blog_name,
                                      state=state, tags=tags, format=format,
                                      data=image_links,

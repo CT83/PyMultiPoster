@@ -1,3 +1,6 @@
+import os
+import sys
+
 from flask import Flask, render_template, url_for, request, make_response
 from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename, redirect
@@ -26,6 +29,8 @@ app.config['SECRET_KEY'] = "powerful secretkey"
 app.config['WTF_CSRF_SECRET_KEY'] = "powerful secretkey"
 bootstrap = Bootstrap(app)
 
+os.chdir(sys.path[0])
+
 
 @app.route('/main', methods=('GET', 'POST'))
 def main():
@@ -36,7 +41,8 @@ def main():
         social_networks = form.selected_socialnetworks.data
         try:
             filename = secure_filename(form.photo.data.filename)
-            form.photo.data.save("tmp/" + filename)
+            form.photo.data.save("uploads/" + filename)
+            filename = "uploads/" + filename
         except AttributeError:
             filename = None
         print("main() Submitted Form...")
@@ -201,33 +207,29 @@ def tumblr_poster():
     if form.validate_on_submit():
         title = form.title.data
         post = form.post.data
-        image = form.image.data
+        # image = form.image.data
 
         print("Posting to Tumblr...")
         print("Title:", title)
         print("Post:", post)
-        print("Image:", image)
+        # print("Image:", image)
         stored_cookie = get_cookie(request)
         tumblr_api = Tumblr(TUMBLR_CLIENT_ID,
                             TUMBLR_CLIENT_SECRET,
                             stored_cookie['tumblr_access_token'],
                             stored_cookie['tumblr_access_secret'])
 
-        if image not in 'None' and image not in '' and image is not None:
+        if image in 'None' or image in '' or image is None:
             tumblr_api.publish_update(
                 body=post,
                 title=title,
                 blog_name="pymultiposter1")
 
         else:
-            tumblr_api.publish_update(
-                body=post,
-                title=title,
+            tumblr_api.publish_update_with_image_attachment(
+                caption=post,
+                image_links=image,
                 blog_name="pymultiposter1")
-            # tumblr_api.publish_update_with_image_attachment(
-            #     caption=post,
-            #     image_links=image,
-            #     blog_name="BlogName")
 
         print("Redirecting...")
         return redirect('/next_poster' + "/tumblr")
