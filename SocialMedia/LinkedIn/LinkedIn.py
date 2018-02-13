@@ -1,6 +1,6 @@
 from linkedin.linkedin import LinkedInApplication, LinkedInAuthentication
 
-from CONSTANT import LINKEDIN_CLIENT_SECRET, LINKEDIN_CLIENT_ID
+from CONSTANT import LINKEDIN_CLIENT_SECRET, LINKEDIN_CLIENT_ID, LINKEDIN_RETURN_URL
 from SocialMedia.SocialMedia import SocialMedia
 
 
@@ -67,12 +67,13 @@ class LinkedIn(SocialMedia):
 
 
 def main():
-    url = LinkedInAuth.get_authorization_url(LINKEDIN_CLIENT_ID,
-                                             LINKEDIN_CLIENT_SECRET)
-    print(url)
+    linkedin_auth = LinkedInAuth(LINKEDIN_CLIENT_ID,
+                                 LINKEDIN_CLIENT_SECRET,
+                                 LINKEDIN_RETURN_URL)
+
+    print(linkedin_auth.get_authorization_url())
     link = input("Enter Link:")
-    auth_token = LinkedInAuth.get_access_token_from_url(LINKEDIN_CLIENT_ID,
-                                                        LINKEDIN_CLIENT_SECRET, link)
+    auth_token = linkedin_auth.get_access_token_from_url(link)
 
     linkedin_poster = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, auth_token)
 
