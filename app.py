@@ -65,8 +65,10 @@ def facebook_poster():
         print("Post:", post)
         print("Image:", image)
 
+        stored_cookie = get_cookie(request)
         facebook_user = Facebook(FACEBOOK_CLIENT_ID,
-                                 FACEBOOK_CLIENT_SECRET, 'AccessTokenSecret')
+                                 FACEBOOK_CLIENT_SECRET,
+                                 stored_cookie['facebook_access_token'])
         if image not in 'None':
             print(facebook_user.publish_update(title + "\n" + post))
         else:
@@ -100,9 +102,11 @@ def twitter_poster():
         print("Post:", post)
         print("Image:", image)
 
+        stored_cookie = get_cookie(request)
         twitter_api = Twitter(TWITTER_CLIENT_ID,
                               TWITTER_CLIENT_SECRET,
-                              "AccessToken", "AccessTokenSecret")
+                              stored_cookie['twitter_access_token'],
+                              stored_cookie['twitter_access_secret'])
 
         if image not in 'None' and image not in "":
             print(twitter_api.publish_update(post))
@@ -164,7 +168,9 @@ def linkedin_poster():
         print("Post:", post)
         print("Image:", image)
 
-        linkedin_api = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, "AccessToken")
+        stored_cookie = get_cookie(request)
+        linkedin_api = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET,
+                                stored_cookie['linkedin_access_token'])
         # TODO Extract this another method
         if image not in 'None':
             print(linkedin_api.publish_update(title + "\n" + post))
@@ -201,23 +207,27 @@ def tumblr_poster():
         print("Title:", title)
         print("Post:", post)
         print("Image:", image)
-
+        stored_cookie = get_cookie(request)
         tumblr_api = Tumblr(TUMBLR_CLIENT_ID,
                             TUMBLR_CLIENT_SECRET,
-                            "AccessToken",
-                            "AccessTokenSecret")
+                            stored_cookie['tumblr_access_token'],
+                            stored_cookie['tumblr_access_secret'])
 
-        if image not in 'None':
+        if image not in 'None' and image not in '' and image is not None:
             tumblr_api.publish_update(
                 body=post,
                 title=title,
-                blog_name="BlogName")
+                blog_name="pymultiposter1")
 
         else:
-            tumblr_api.publish_update_with_image_attachment(
-                caption=post,
-                image_links=image,
-                blog_name="BlogName")
+            tumblr_api.publish_update(
+                body=post,
+                title=title,
+                blog_name="pymultiposter1")
+            # tumblr_api.publish_update_with_image_attachment(
+            #     caption=post,
+            #     image_links=image,
+            #     blog_name="BlogName")
 
         print("Redirecting...")
         return redirect('/next_poster' + "/tumblr")
