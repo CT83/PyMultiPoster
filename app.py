@@ -207,6 +207,7 @@ def tumblr_poster():
     if form.validate_on_submit():
         title = form.title.data
         post = form.post.data
+        blog_name = form.blog_name.data
         # image = form.image.data
 
         print("Posting to Tumblr...")
@@ -219,19 +220,18 @@ def tumblr_poster():
                             stored_cookie['tumblr_access_token'],
                             stored_cookie['tumblr_access_secret'])
 
-        if image in 'None' or image in '' or image is None:
+        if str(image) in 'None' or str(image) in '' or image is None:
             tumblr_api.publish_update(
                 body=post,
                 title=title,
-                blog_name="pymultiposter1")
+                blog_name=blog_name)
 
         else:
             tumblr_api.publish_update_with_image_attachment(
                 caption=post,
                 image_links=image,
-                blog_name="pymultiposter1")
+                blog_name=blog_name)
 
-        print("Redirecting...")
         return redirect('/next_poster' + "/tumblr")
     else:
         form.title.data = title
