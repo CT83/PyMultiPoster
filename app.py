@@ -262,14 +262,21 @@ def dashboard():
 
     from flask import session
     from SocialMedia.Twitter import TwitterAuth
-    twitter_auth_url, key, secret = TwitterAuth.get_authorization_url_auth(TWITTER_CLIENT_ID,
-                                                                           TWITTER_CLIENT_SECRET,
-                                                                           TWITTER_REDIRECT_URL)
+    twitter_auth_url, key, secret \
+        = TwitterAuth.get_authorization_url_auth(TWITTER_CLIENT_ID,
+                                                 TWITTER_CLIENT_SECRET,
+                                                 TWITTER_REDIRECT_URL)
     session['twitter_request_token'] = (key, secret)
 
     from SocialMedia.Tumblr.TumblrAuth import get_authorization_url
     tumblr_url = get_authorization_url(TUMBLR_CLIENT_ID,
-                                       TUMBLR_CLIENT_SECRET, callback_url=TUMBLR_REDIRECT_URL)
+                                       TUMBLR_CLIENT_SECRET,
+                                       callback_url=TUMBLR_REDIRECT_URL)
+
+    tum_url, tum_key, tum_sec = get_authorization_url(TUMBLR_CLIENT_ID,
+                                                      TUMBLR_CLIENT_SECRET,
+                                                      TUMBLR_REDIRECT_URL)
+    session['tumblr_request_token'] = (tum_key, tum_sec)
 
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
@@ -338,11 +345,18 @@ def twitter_redirect():
 
 @app.route('/tumblr_redirect', methods=('GET', 'POST'))
 def tumblr_redirect():
+    from flask import session
+
+    sess = session['tumblr_request_token']
+    res_key = sess[0]
+    res_sec = sess[1]
+    del session['tumblr_request_token']
+
     from SocialMedia.Tumblr.TumblrAuth import get_access_token_from_url
-    tokens = get_access_token_from_url(consumer_key=TUMBLR_CLIENT_ID,
-                                       consumer_secret=TUMBLR_CLIENT_SECRET,
-                                       callback_url=TUMBLR_REDIRECT_URL,
-                                       redirect_response=request.url)
+    tokens = get_access_token_from_url(TUMBLR_CLIENT_ID, TUMBLR_CLIENT_SECRET,
+                                       res_key, res_sec,
+                                       request.url,
+                                       callback_url=TUMBLR_REDIRECT_URL)
 
     print(tokens)
     resp = make_response(redirect(url_for('dashboard')))
