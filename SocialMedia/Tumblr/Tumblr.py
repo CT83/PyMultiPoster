@@ -2,7 +2,7 @@ from __future__ import print_function
 
 from future import standard_library
 
-from CONSTANT import TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID
+from CONSTANT import TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, TUMBLR_REDIRECT_URL
 from SocialMedia.SocialMedia import SocialMedia
 from SocialMedia.Tumblr.TumblrAuth import get_authorization_url, get_access_token_from_url
 
@@ -61,12 +61,14 @@ class Tumblr(SocialMedia):
 
 if __name__ == '__main__':
     # TODO This needs to be tested
-    url = get_authorization_url(TUMBLR_CLIENT_ID,
-                                TUMBLR_CLIENT_SECRET)
-    print("Visit:" + url)
-    tokens = get_access_token_from_url(TUMBLR_CLIENT_ID,
-                                       TUMBLR_CLIENT_SECRET,
-                                       input('Allow then paste the full redirect URL here:\n'))
+    url, res_key, res_sec = get_authorization_url(TUMBLR_CLIENT_ID,
+                                                  TUMBLR_CLIENT_SECRET,
+                                                  TUMBLR_REDIRECT_URL)
+    print(url)
+    tokens = get_access_token_from_url(TUMBLR_CLIENT_ID, TUMBLR_CLIENT_SECRET,
+                                       res_key, res_sec,
+                                       input('Allow then paste the full redirect URL here:\n'),
+                                       callback_url=TUMBLR_REDIRECT_URL)
     tumblr = Tumblr(
         tokens['consumer_key'],
         tokens['consumer_secret'],
