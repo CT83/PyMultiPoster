@@ -15,7 +15,7 @@ class MainPostForm(FlaskForm):
                          validators=[InputRequired(), Length(min=4, max=80)])
     photo = FileField('Photo (Optional)')
 
-    string_of_files = ['Facebook\r\nInstagram\r\nTumblr\r\nLinkedIn\r\n']
+    string_of_files = ['Facebook\r\nInstagram\r\nTumblr\r\nLinkedIn\r\nTwitter\r\n']
     list_of_files = string_of_files[0].split()
     # create a list of value/description tuples
     files = [(x, x) for x in list_of_files]

@@ -108,7 +108,6 @@ def twitter_poster():
     if form.validate_on_submit():
         title = form.title.data
         post = form.post.data
-        image = form.image.data
 
         print("Posting to Twitter...")
         print("Title:", title)
