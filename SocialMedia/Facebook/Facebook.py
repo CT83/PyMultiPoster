@@ -45,7 +45,14 @@ def main():
     # facebook_user = Facebook("101206834030831", "9be8d03bb48f86245d2bad7269831f51")
     facebook_user = Facebook(FACEBOOK_CLIENT_ID,
                              FACEBOOK_CLIENT_SECRET,
-                             'EAABcDA1kKO8BAL2UjxRRJoRaX0l8usEKZCZBLxjS5k59LeKyirkfomkqElyqZBJRmWMwYcbjLDSESZB0QsTUZAAoWgwcZBXOnaRTqYZAzRqsAZAmH9g0aYmpYeBSvfjkAaNdZAXvNuzWnVBSBq9cj4xCsz6JHZC3yDrpX6nWQvrlD66ZCmsabAckjMb4vNhpWGvgcRslhHwxYADPAZDZD')
+                             'EAAZA1GWuwuqkBAKuldzi4z96nxPALqsNojP2IZAHWDrkRUZCKxpddjsp2eu2JSu7yov7e9nkJzAnQvfBMfwN74m7hlLpa55FlrNhwZAvFiiJeguHzSkqpp5q3pmi4Dby8RHALZB2NxTzYyUBCVEtrKgc6PIwO4L6jFCqDzukOpovqVZCNes9E1OA3DvwHA25ZAMlZBhoSwnhkwZDZD')
     # facebook_user.get_oauth_token(input("Facebook Code:"))
     # Get the auth token using the JS in the template folder, and input it here.
-    facebook_user.publish_update("Post 1")
+    # facebook_user.publish_update("Post 1")
+    facebook_user.publish_update_with_image_attachment(message="Posst 1sa",
+                                                       link_att='temp1.png',
+                                                       image_url='temp1.png')
+
+
+if __name__ == '__main__':
+    main()

@@ -32,6 +32,10 @@ bootstrap = Bootstrap(app)
 os.chdir(sys.path[0])
 
 
+def is_string_empty(s):
+    return s not in 'None' and s not in ""
+
+
 @app.route('/main', methods=('GET', 'POST'))
 def main():
     form = MainPostForm()
@@ -64,7 +68,6 @@ def facebook_poster():
     if form.validate_on_submit():
         title = form.title.data
         post = form.post.data
-        image = form.image.data
 
         print("Posting to Facebook...")
         print("Title:", title)
@@ -75,12 +78,13 @@ def facebook_poster():
         facebook_user = Facebook(FACEBOOK_CLIENT_ID,
                                  FACEBOOK_CLIENT_SECRET,
                                  stored_cookie['facebook_access_token'])
-        if image not in 'None':
+        if is_string_empty(image):
             print(facebook_user.publish_update(title + "\n" + post))
         else:
             # TODO Make this work
-            print(facebook_user.publish_update_with_image_attachment(title + "\n" + post,
-                                                                     image_url=image))
+            print(facebook_user.
+                  publish_update_with_image_attachment(message=title + "\n" + post,
+                                                       image_url=image))
 
         print("Redirecting...")
         return redirect('/next_poster' + "/facebook")
@@ -114,7 +118,7 @@ def twitter_poster():
                               stored_cookie['twitter_access_token'],
                               stored_cookie['twitter_access_secret'])
 
-        if image not in 'None' and image not in "":
+        if is_string_empty(image):
             print(twitter_api.publish_update(post))
 
         else:
@@ -178,12 +182,12 @@ def linkedin_poster():
         linkedin_api = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET,
                                 stored_cookie['linkedin_access_token'])
         # TODO Extract this another method
-        if image not in 'None':
+        if is_string_empty(image):
             print(linkedin_api.publish_update(title + "\n" + post))
 
         else:
             print(linkedin_api.publish_update_with_image_attachment(title + "\n" + post,
-                                                                    "", "",
+                                                                     "", "",
                                                                     "",
                                                                     "",
                                                                     image))
@@ -213,6 +217,7 @@ def tumblr_poster():
         print("Posting to Tumblr...")
         print("Title:", title)
         print("Post:", post)
+        # TODO Look into how titles and hastags are managed for all social network posters
         # print("Image:", image)
         stored_cookie = get_cookie(request)
         tumblr_api = Tumblr(TUMBLR_CLIENT_ID,
