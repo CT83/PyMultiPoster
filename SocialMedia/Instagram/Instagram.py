@@ -11,10 +11,14 @@ class Instagram(SocialMedia):
         self.instagrammer = InstagramAPI(self.email_address, self.password)
         self.instagrammer.login()
 
-    def publish_update_with_image_attachment(self, message, name_att, link_att,
-                                             caption_att,
-                                             description_att,
-                                             image_url):
+    def publish_update_with_image_attachment(self, message, image_url):
         self.instagrammer.uploadPhoto(image_url, caption=message)
 
-# Add Main method here
+
+def main():
+    instagram_api = Instagram("PyMultiPoster_Bot_2", "cybertech83")
+    instagram_api.publish_update_with_image_attachment("Message", 'temp.jpg')
+
+
+if __name__ == '__main__':
+    main()

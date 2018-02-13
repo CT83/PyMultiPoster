@@ -20,6 +20,7 @@ from Imgur.Imgur import upload_to_imgur
 from SessionManagement import clear_session, save_session, retrieve_session, remove_session_socialnetwork, \
     store_list_session, retrieve_session_socialnetworks
 from SocialMedia.Facebook.Facebook import Facebook
+from SocialMedia.Instagram.Instagram import Instagram
 from SocialMedia.LinkedIn.LinkedIn import LinkedIn, LinkedInAuth
 from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
@@ -145,14 +146,20 @@ def instagram_poster():
     if form.validate_on_submit():
         title = form.title.data
         post = form.post.data
-        image = form.image.data
+        # image = form.image.data
 
         print("Posting to Instagram...")
         print("Title:", title)
         print("Post:", post)
         print("Image:", image)
         # TODO Add allow uploading if no image is selected
-        # TODO Add upload to instagram logic here
+
+        stored_cookie = get_cookie(request)
+
+        instagram_api = Instagram(stored_cookie['twitter_access_token'],
+                                  stored_cookie['twitter_access_secret'])
+
+        instagram_api.publish_update_with_image_attachment(post, image)
 
         print("Redirecting...")
         return redirect('/next_poster' + "/instagram")
