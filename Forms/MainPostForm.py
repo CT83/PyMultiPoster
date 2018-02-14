@@ -3,6 +3,8 @@ from wtforms import StringField, FileField, SubmitField, TextAreaField, SelectMu
 from wtforms import widgets
 from wtforms.validators import InputRequired, Length
 
+from Forms.custom_validators.ImageFileRequired import ImageFileRequired
+
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
@@ -13,7 +15,7 @@ class MainPostForm(FlaskForm):
     title = StringField('Title', validators=[Length(min=1, max=100)])
     post = TextAreaField('Post', render_kw={"rows": 10, "cols": 70},
                          validators=[InputRequired(), Length(min=4, max=80)])
-    photo = FileField('Photo (Optional)')
+    photo = FileField('Photo (Optional)', validators=[ImageFileRequired()])
 
     string_of_files = ['Facebook\r\nInstagram\r\nTumblr\r\nLinkedIn\r\nTwitter\r\n']
     list_of_files = string_of_files[0].split()
