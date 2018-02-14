@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename, redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
     LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL, \
-    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, IMGUR_CLIENT_ID, ON_HEROKU
+    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, IMGUR_CLIENT_ID, ON_HEROKU, UPLOAD_PATH
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramLoginForm import InstagramLoginForm
 from Forms.InstagramPostForm import InstagramPostForm
@@ -51,8 +51,8 @@ def main():
         social_networks = form.selected_socialnetworks.data
         try:
             filename = secure_filename(form.photo.data.filename)
-            form.photo.data.save("/tmp/" + filename)
-            filename = "/tmp/" + filename
+            form.photo.data.save(UPLOAD_PATH + filename)
+            filename = UPLOAD_PATH + filename
         except AttributeError:
             filename = None
         print("main() Submitted Form...")
@@ -107,14 +107,12 @@ def facebook_poster():
 @app.route('/twitter_poster', methods=('GET', 'POST'))
 def twitter_poster():
     print("Twitter Poster...")
-    title, post, image = retrieve_session()
+    _, post, image = retrieve_session()
     form = TwitterPostForm()
     if form.validate_on_submit():
-        title = form.title.data
         post = form.post.data
 
         print("Posting to Twitter...")
-        print("Title:", title)
         print("Post:", post)
         print("Image:", image)
 
@@ -133,7 +131,6 @@ def twitter_poster():
         print("Redirecting...")
         return redirect('/next_poster' + "/twitter")
     else:
-        form.title.data = title
         form.post.data = post
         form.image.data = image
         form.image.render_kw = {'disabled': 'disabled'}
@@ -144,15 +141,13 @@ def twitter_poster():
 @app.route('/instagram_poster', methods=('GET', 'POST'))
 def instagram_poster():
     print("Instagram Poster...")
-    title, post, image = retrieve_session()
+    _, post, image = retrieve_session()
     form = InstagramPostForm()
     if form.validate_on_submit():
-        title = form.title.data
         post = form.post.data
         # image = form.image.data
 
         print("Posting to Instagram...")
-        print("Title:", title)
         print("Post:", post)
         print("Image:", image)
         # TODO Add allow uploading if no image is selected
@@ -168,7 +163,6 @@ def instagram_poster():
         print("Redirecting...")
         return redirect('/next_poster' + "/instagram")
     else:
-        form.title.data = title
         form.post.data = post
         form.image.data = image
         form.image.render_kw = {'disabled': 'disabled'}
