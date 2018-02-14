@@ -21,7 +21,6 @@ def main():
     result = authentication.get_access_token()
     print("Access Token:", result.access_token)
     print("Expires in (seconds):", result.expires_in)
-    # TODO Refactor this to something better
     lkin_api = LinkedInApplication(token=result.access_token)
     # submit_share(self, comment=None, title=None, description=None,submitted_url=None,submitted_image_url=None,visibility_code='anyone'):
     print(lkin_api.submit_share('Posting from the API using JSON2',

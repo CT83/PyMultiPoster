@@ -8,7 +8,6 @@ from werkzeug.utils import secure_filename, redirect
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
     LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL, \
     TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, IMGUR_CLIENT_ID
-from CookieManagement import set_cookie, get_cookie
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramLoginForm import InstagramLoginForm
 from Forms.InstagramPostForm import InstagramPostForm
@@ -17,13 +16,14 @@ from Forms.MainPostForm import MainPostForm
 from Forms.TumblrPostForm import TumblrPostForm
 from Forms.TwitterPostForm import TwitterPostForm
 from Imgur.Imgur import upload_to_imgur
-from SessionManagement import clear_session, save_session, retrieve_session, remove_session_socialnetwork, \
-    store_list_session, retrieve_session_socialnetworks
 from SocialMedia.Facebook.Facebook import Facebook
 from SocialMedia.Instagram.Instagram import Instagram
 from SocialMedia.LinkedIn.LinkedIn import LinkedIn, LinkedInAuth
 from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
+from cookie_management import set_cookie, get_cookie
+from session_management import clear_session, save_session, retrieve_session, remove_session_socialnetwork, \
+    store_list_session, retrieve_session_socialnetworks
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -34,8 +34,9 @@ bootstrap = Bootstrap(app)
 os.chdir(sys.path[0])
 
 
-# TODO Investigate Facebook token keeps expiring
+# TODO Generate Facebook Long lived token
 # TODO Change image Aspect Ratio to fit instagram
+
 def is_string_empty(s):
     return str(s) in 'None' or str(s) in "" or s is None
 
@@ -85,7 +86,6 @@ def facebook_poster():
         if is_string_empty(image):
             print("Facebook Update", facebook_user.publish_update(title + "\n" + post))
         else:
-            # TODO Make this work
             image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
             print("Facebook Update with image", facebook_user.
                   publish_update_with_image_attachment(message=title + "\n" + post,
@@ -193,7 +193,6 @@ def linkedin_poster():
         stored_cookie = get_cookie(request)
         linkedin_api = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET,
                                 stored_cookie['linkedin_access_token'])
-        # TODO Extract this another method
         if is_string_empty(image):
             print(linkedin_api.publish_update(title + "\n" + post))
 

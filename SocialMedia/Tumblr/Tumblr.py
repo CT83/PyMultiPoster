@@ -18,7 +18,6 @@ class Tumblr(SocialMedia):
     access_token_url = 'http://www.tumblr.com/oauth/access_token'
 
     # TODO Make all extra function parameters same
-    # TODO Add format to all functions
     def __init__(self, client_id, client_secret, oauth_token, oauth_token_secret):
         self.client_id = client_id
         self.client_secret = client_secret
@@ -59,7 +58,6 @@ class Tumblr(SocialMedia):
 
 
 if __name__ == '__main__':
-    # TODO This needs to be tested
     url, res_key, res_sec = get_authorization_url(TUMBLR_CLIENT_ID,
                                                   TUMBLR_CLIENT_SECRET,
                                                   TUMBLR_REDIRECT_URL)

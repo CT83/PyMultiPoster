@@ -3,8 +3,6 @@ from flask import session
 from json_management import list_to_json, json_to_list
 
 
-# TODO Extract all session names to variables
-
 def clear_session():
     session.pop('title', None)
     session.pop('post', None)
