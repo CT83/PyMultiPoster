@@ -50,8 +50,8 @@ def main():
         social_networks = form.selected_socialnetworks.data
         try:
             filename = secure_filename(form.photo.data.filename)
-            form.photo.data.save("uploads/" + filename)
-            filename = "uploads/" + filename
+            form.photo.data.save("tmp/" + filename)
+            filename = "tmp/" + filename
         except AttributeError:
             filename = None
         print("main() Submitted Form...")
