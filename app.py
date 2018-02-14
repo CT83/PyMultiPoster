@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename, redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
     LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL, \
-    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, IMGUR_CLIENT_ID
+    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, IMGUR_CLIENT_ID, ON_HEROKU
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramLoginForm import InstagramLoginForm
 from Forms.InstagramPostForm import InstagramPostForm
@@ -31,7 +31,8 @@ app.config['SECRET_KEY'] = "powerful secretkey"
 app.config['WTF_CSRF_SECRET_KEY'] = "powerful secretkey"
 bootstrap = Bootstrap(app)
 
-os.chdir(sys.path[0])
+if not ON_HEROKU:
+    os.chdir(sys.path[0])
 
 
 # TODO Generate Facebook Long lived token
