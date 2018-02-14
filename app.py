@@ -230,6 +230,9 @@ def tumblr_poster():
                             stored_cookie['tumblr_access_token'],
                             stored_cookie['tumblr_access_secret'])
 
+        if is_string_empty(title):
+            title = 'PyMultiPoster'
+
         if str(image) in 'None' or str(image) in '' or image is None:
             tumblr_api.publish_update(
                 body=post,
