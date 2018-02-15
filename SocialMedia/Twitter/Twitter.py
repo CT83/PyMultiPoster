@@ -22,8 +22,8 @@ class Twitter(SocialMedia):
                                        blog_name=""):
         pass
 
-    def publish_update_with_image_attachment(self, message, image_path, url=""):
-        self.twitter_api.update_with_media(filename=image_path, status=message)
+    def publish_update_with_image_attachment(self, message, image_url, url=""):
+        self.twitter_api.update_with_media(filename=image_url, status=message)
 
 
 if __name__ == '__main__':
