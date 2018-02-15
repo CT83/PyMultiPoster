@@ -8,11 +8,11 @@ class SocialMedia:
     def get_oauth_token(self, authorization_code):
         pass
 
-    def publish_update(self, **kwargs):
+    def publish_update(self, message, **kwargs):
         pass
 
     def publish_update_with_attachment(self, **kwargs):
         pass
 
-    def publish_update_with_image_attachment(self, **kwargs):
+    def publish_update_with_image_attachment(self, message, image_url, **kwargs):
         pass

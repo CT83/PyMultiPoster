@@ -50,8 +50,8 @@ class LinkedIn(SocialMedia):
         self.oauth_token = oauth
         self.linkedin_api = LinkedInApplication(token=self.oauth_token)
 
-    def publish_update(self, message):
-        self.linkedin_api.submit_share(message)
+    def publish_update(self, message, title=""):
+        self.linkedin_api.submit_share(title, message)
 
     def publish_update_with_attachment(self, message="", name_att="", link_att="",
                                        caption_att="",
@@ -59,11 +59,12 @@ class LinkedIn(SocialMedia):
         self.linkedin_api.submit_share(message, name_att, description_att,
                                        link_att)
 
-    def publish_update_with_image_attachment(self, message="", name_att="", link_att="",
-                                             caption_att="",
-                                             description_att="",
-                                             image_url=""):
-        self.linkedin_api.submit_share(message, name_att, description_att,
+    def publish_update_with_image_attachment(self, message="", image_url="", link_att="",
+                                             caption_att="", description_att="",
+                                             title=""):
+        if link_att in "":
+            link_att = image_url
+        self.linkedin_api.submit_share(message, title, description_att,
                                        link_att, image_url)
 
 
@@ -85,11 +86,8 @@ def main():
                                                    "caption_att",
                                                    "description_att")
     image_url = upload_to_imgur(IMGUR_CLIENT_ID, 'temp.jpg')
-    linkedin_poster.publish_update_with_image_attachment("Update with Image Attachment",
-                                                         "name_att", image_url,
-                                                         "caption_att",
-                                                         "description_att",
-                                                         image_url=image_url)
+    linkedin_poster.publish_update_with_image_attachment(
+        title="Title", image_url=image_url, message="Update with Image Attachment")
 
 
 if __name__ == '__main__':

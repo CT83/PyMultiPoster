@@ -31,16 +31,14 @@ class Tumblr(SocialMedia):
             self.oauth_token_secret
         )
 
-    def publish_update(self, body, title="", blog_name="", state="published",
-                       slug="testing-text-posts"):
+    def publish_update(self, message, blog_name="", title=""):
         print(self.tumblr_api.create_text(blog_name,
-                                          state=state,
-                                          slug=slug,
+                                          state="published",
+                                          slug="testing-text-posts",
                                           title=title,
-                                          body=body))
+                                          body=message))
 
-    def publish_update_with_attachment(self, body="", title="", url="",
-                                       blog_name=""):
+    def publish_update_with_attachment(self, body="", title="", url="", blog_name=""):
         self.tumblr_api.create_link(blog_name, title=title, url=url, description=body)
 
     def publish_update_with_image_attachment(self, caption="", image_links=None,
@@ -48,9 +46,9 @@ class Tumblr(SocialMedia):
                                              format="markdown",
                                              state="published"):
         # https://github.com/tumblr/pytumblr#creating-a-photo-post
+        # image_links here is a list of all the images to be posted
         if tags is None:
             tags = [""]
-        print("Tumblr Posting Update with Image:", image_links)
         self.tumblr_api.create_photo(blog_name,
                                      state=state, tags=tags, format=format,
                                      data=image_links,
@@ -75,7 +73,7 @@ if __name__ == '__main__':
 
     # Post Status working
     tumblr.publish_update(
-        body="""###Body Title""",
+        message="""###Body Title""",
         title="Tit1le",
         blog_name='pymultiposter1')
 

@@ -14,11 +14,12 @@ class Instagram(SocialMedia):
         self.email_address = e
         self.password = p
         self.instagrammer = InstagramAPI(self.email_address, self.password)
-        self.instagrammer.login()
         self.converted_image = None
 
-    def publish_update_with_image_attachment(self, message, image_url):
+    def publish_update_with_image_attachment(self, message, image_url, **kwargs):
+        self.instagrammer.login()
         self.instagrammer.uploadPhoto(image_url, caption=message)
+        self.instagrammer.logout()
 
     def convert_image_to_compatible_format(self, image, compatible_format=".jpg"):
         # Convert Image to JPG

@@ -36,6 +36,7 @@ if not ON_HEROKU:
 
 
 # TODO Change image Aspect Ratio to fit instagram
+# TODO Implement Polymorphism perfectly for Social Media Networks
 # TODO Add Posters to their own independent threads
 def is_string_empty(s):
     return str(s) in 'None' or str(s) in "" or s is None
@@ -84,13 +85,12 @@ def facebook_poster():
                                  FACEBOOK_CLIENT_SECRET,
                                  stored_cookie['facebook_access_token'])
         if is_string_empty(image):
-            print("Facebook Update", facebook_user.publish_update(title + "\n" + post))
+            facebook_user.publish_update(title + "\n" + post)
         else:
             image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
-            print("Facebook Update with image", facebook_user.
-                  publish_update_with_image_attachment(message=title + "\n" + post,
-                                                       image_url=image_url,
-                                                       link_att=image_url))
+            facebook_user.publish_update_with_image_attachment(message=title + "\n" + post,
+                                                               image_url=image_url,
+                                                               link_att=image_url)
 
         print("Redirecting...")
         return redirect('/next_poster' + "/facebook")
@@ -188,13 +188,13 @@ def linkedin_poster():
         linkedin_api = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET,
                                 stored_cookie['linkedin_access_token'])
         if is_string_empty(image):
-            print(linkedin_api.publish_update(title + "\n" + post))
-
+            print(linkedin_api.publish_update(title=title, message=post))
         else:
             image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
-            print(linkedin_api.publish_update_with_image_attachment(title + "\n" + post,
-                                                                    link_att=image_url,
-                                                                    image_url=image_url))
+            print(
+                linkedin_api.publish_update_with_image_attachment(title=title,
+                                                                  message=post,
+                                                                  image_url=image_url))
 
         print("Redirecting...")
         return redirect('/next_poster' + "/linkedin")
@@ -234,7 +234,7 @@ def tumblr_poster():
 
         if str(image) in 'None' or str(image) in '' or image is None:
             tumblr_api.publish_update(
-                body=post,
+                message=post,
                 title=title,
                 blog_name=blog_name)
 
