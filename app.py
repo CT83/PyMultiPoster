@@ -312,6 +312,12 @@ def facebook_redirect():
     # We get this from dashboard.html as querystring
     access_token = request.args.get('accessToken')
     print("Facebook Access Token:", access_token)
+    facebook_api = Facebook(FACEBOOK_CLIENT_ID,
+                            FACEBOOK_CLIENT_SECRET,
+                            access_token)
+    access_token = facebook_api.generate_long_lived_token()
+    print("Facebook Long Lived Access Token:", facebook_api.generate_long_lived_token())
+
     resp = make_response(redirect(url_for('dashboard')))
     resp = set_cookie(resp=resp, facebook_access_token=access_token)
     return resp
