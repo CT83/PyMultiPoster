@@ -35,9 +35,8 @@ if not ON_HEROKU:
     os.chdir(sys.path[0])
 
 
-# TODO Generate Facebook Long lived token
 # TODO Change image Aspect Ratio to fit instagram
-
+# TODO Add Posters to their own independent threads
 def is_string_empty(s):
     return str(s) in 'None' or str(s) in "" or s is None
 
