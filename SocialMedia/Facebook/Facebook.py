@@ -44,8 +44,9 @@ class Facebook(SocialMedia):
         graph = facebook.GraphAPI(self.access_token)
 
         extended_token = graph.extend_access_token(self.client_id, self.client_secret)
-        print(extended_token)
-        return extended_token
+        access_token = extended_token['access_token']
+        print(access_token)
+        return access_token
 
 
 def main():
