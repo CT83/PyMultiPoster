@@ -67,6 +67,12 @@ class LinkedIn(SocialMedia):
         self.linkedin_api.submit_share(message, title, description_att,
                                        link_att, image_url)
 
+    def convert_publish_update_with_image_attachment(self, message="", image_url="",
+                                                     title=""):
+        self.linkedin_api.submit_share(comment=message, title=title,
+                                       submitted_image_url=upload_to_imgur(
+                                           IMGUR_CLIENT_ID, image_url))
+
 
 def main():
     linkedin_auth = LinkedInAuth(LINKEDIN_CLIENT_ID,

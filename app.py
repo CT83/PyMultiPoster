@@ -125,11 +125,14 @@ def twitter_poster():
                               stored_cookie['twitter_access_secret'])
 
         if is_string_empty(image):
-            print(twitter_api.publish_update(post))
-
+            # print(twitter_api.publish_update(post))
+            Thread(target=twitter_api.publish_update,
+                   kwargs=dict(message=post)).start()
         else:
-            print(twitter_api.publish_update_with_image_attachment(post, image))
-
+            # print(twitter_api.publish_update_with_image_attachment(post, image))
+            Thread(target=twitter_api.publish_update_with_image_attachment,
+                   kwargs=dict(message=post,
+                               image_url=image)).start()
         print("Redirecting...")
         return redirect('/next_poster' + "/twitter")
     else:
@@ -158,9 +161,12 @@ def instagram_poster():
 
         instagram_api = Instagram(stored_cookie['instagram_email'],
                                   stored_cookie['instagram_password'])
-        jpg_image = instagram_api.convert_image_to_compatible_format(image)
-        instagram_api.publish_update_with_image_attachment(post, jpg_image)
-        instagram_api.cleanup()
+        # jpg_image = instagram_api.convert_image_to_compatible_format(image)
+        Thread(target=instagram_api.convert_publish_update_with_image_attachment,
+               kwargs=dict(message=post,
+                           image_url=image)).start()
+
+        # instagram_api.cleanup()
 
         print("Redirecting...")
         return redirect('/next_poster' + "/instagram")
@@ -191,15 +197,21 @@ def linkedin_poster():
         linkedin_api = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET,
                                 stored_cookie['linkedin_access_token'])
         if is_string_empty(image):
-            print(linkedin_api.publish_update(title=title, message=post))
+            # print(linkedin_api.publish_update(title=title, message=post))
+            Thread(target=linkedin_api.publish_update,
+                   kwargs=dict(title=title, message=post)).start()
         else:
-            image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
-            print(
-                linkedin_api.publish_update_with_image_attachment(title=title,
-                                                                  message=post,
-                                                                  image_url=image_url))
+            # image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
+            # print(
+            #     linkedin_api.publish_update_with_image_attachment(title=title,
+            #                                                       message=post,
+            #                                                       image_url=image_url))
+            Thread(target=linkedin_api.convert_publish_update_with_image_attachment,
+                   kwargs=dict(title=title,
+                               message=post,
+                               image_url=image)).start()
 
-        print("Redirecting...")
+            print("Redirecting...")
         return redirect('/next_poster' + "/linkedin")
     else:
         form.title.data = title
@@ -224,7 +236,7 @@ def tumblr_poster():
         print("Posting to Tumblr...")
         print("Title:", title)
         print("Post:", post)
-        # TODO Look into how titles and hastags are managed for all social network posters
+        # TODO Look into how titles and hashtags are managed for all social network posters
         # print("Image:", image)
         stored_cookie = get_cookie(request)
         tumblr_api = Tumblr(TUMBLR_CLIENT_ID,
@@ -236,16 +248,20 @@ def tumblr_poster():
             title = 'PyMultiPoster'
 
         if str(image) in 'None' or str(image) in '' or image is None:
-            tumblr_api.publish_update(
-                message=post,
-                title=title,
-                blog_name=blog_name)
-
+            # tumblr_api.publish_update(
+            #     message=post,
+            #     title=title,
+            #     blog_name=blog_name)
+            Thread(target=tumblr_api.publish_update,
+                   kwargs=dict(message=post, title=title, blog_name=blog_name)).start()
         else:
-            tumblr_api.publish_update_with_image_attachment(
-                caption=post,
-                image_links=image,
-                blog_name=blog_name)
+            # tumblr_api.publish_update_with_image_attachment(
+            #     caption=post,
+            #     image_links=image,
+            #     blog_name=blog_name)
+            Thread(target=tumblr_api.publish_update_with_image_attachment,
+                   kwargs=dict(caption=post, image_links=image,
+                               blog_name=blog_name)).start()
 
         return redirect('/next_poster' + "/tumblr")
     else:

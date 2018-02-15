@@ -32,6 +32,22 @@ class Instagram(SocialMedia):
         self.converted_image = converted_image
         return converted_image
 
+    # TODO Fix this hacky method
+    def convert_publish_update_with_image_attachment(self, message, image_url,
+                                                     compatible_format=".jpg", **kwargs):
+        im = Image.open(image_url)
+        rgb_im = im.convert('RGB')
+
+        converted_image = Path(image_url).stem + compatible_format
+        remove_file(converted_image)
+        rgb_im.save(converted_image)
+        self.converted_image = converted_image
+
+        self.instagrammer.login()
+        self.instagrammer.uploadPhoto(converted_image, caption=message)
+        self.instagrammer.logout()
+        remove_file(self.converted_image)
+
     def cleanup(self):
         remove_file(self.converted_image)
 
