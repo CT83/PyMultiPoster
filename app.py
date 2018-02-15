@@ -316,7 +316,7 @@ def facebook_redirect():
                             FACEBOOK_CLIENT_SECRET,
                             access_token)
     access_token = facebook_api.generate_long_lived_token()
-    print("Facebook Long Lived Access Token:", facebook_api.generate_long_lived_token())
+    print("Facebook Long Lived Access Token:", access_token)
 
     resp = make_response(redirect(url_for('dashboard')))
     resp = set_cookie(resp=resp, facebook_access_token=access_token)
