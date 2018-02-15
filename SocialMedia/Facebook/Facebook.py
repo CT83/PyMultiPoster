@@ -1,6 +1,6 @@
 import facebook
 
-from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID
+from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, IMGUR_CLIENT_ID
 from SocialMedia.SocialMedia import SocialMedia
 
 
@@ -38,6 +38,20 @@ class Facebook(SocialMedia):
             'link': link_att,
             'caption': caption_att,
             'description': description_att,
+            'picture': image_url
+        }
+        graph.put_wall_post(message=message, attachment=attachment)
+
+    # TODO Fix this hacky method
+    def convert_publish_update_with_image_attachment(self, message="", image_url=""):
+        graph = facebook.GraphAPI(self.access_token)
+        from Imgur.Imgur import upload_to_imgur
+        image_url = upload_to_imgur(IMGUR_CLIENT_ID, image_url)
+        attachment = {
+            'name': "",
+            'link': image_url,
+            'caption': "",
+            'description': "",
             'picture': image_url
         }
         graph.put_wall_post(message=message, attachment=attachment)

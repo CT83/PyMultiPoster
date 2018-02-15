@@ -1,5 +1,6 @@
 import os
 import sys
+from threading import Thread
 
 from flask import Flask, render_template, url_for, request, make_response
 from flask_bootstrap import Bootstrap
@@ -85,12 +86,14 @@ def facebook_poster():
                                  FACEBOOK_CLIENT_SECRET,
                                  stored_cookie['facebook_access_token'])
         if is_string_empty(image):
-            facebook_user.publish_update(title + "\n" + post)
+            Thread(target=facebook_user.publish_update, args=(title + "\n" + post)).start()
         else:
-            image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
-            facebook_user.publish_update_with_image_attachment(message=title + "\n" + post,
-                                                               image_url=image_url,
-                                                               link_att=image_url)
+            # image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
+            # facebook_user.publish_update_with_image_attachment(message=title + "\n" + post,
+            #                                                    image_url=image_url)
+            Thread(target=facebook_user.convert_publish_update_with_image_attachment,
+                   kwargs=dict(message=title + "\n" + post,
+                               image_url=image)).start()
 
         print("Redirecting...")
         return redirect('/next_poster' + "/facebook")
