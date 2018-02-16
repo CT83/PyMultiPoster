@@ -70,6 +70,7 @@ class LinkedIn(SocialMedia):
     def convert_publish_update_with_image_attachment(self, message="", image_url="",
                                                      title=""):
         image_url = upload_to_imgur(IMGUR_CLIENT_ID, image_url)
+        print("Linkedin Uploaded Image:", image_url)
         self.linkedin_api.submit_share(message, title, "", image_url, image_url)
 
 
