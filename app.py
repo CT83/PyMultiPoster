@@ -53,7 +53,7 @@ def main():
             form.photo.data.save(UPLOAD_PATH + filename)
             filename = UPLOAD_PATH + filename
         except AttributeError:
-            filename = None
+            filename = ""
         print("main() Submitted Form...")
         print("Title:", title)
         print("Post:", post)
@@ -84,7 +84,8 @@ def facebook_poster():
                                  FACEBOOK_CLIENT_SECRET,
                                  stored_cookie['facebook_access_token'])
         if is_string_empty(image):
-            Thread(target=facebook_user.publish_update, args=(title + "\n" + post)).start()
+            Thread(target=facebook_user.publish_update,
+                   kwargs=dict(message=title + "\n" + post)).start()
         else:
             # image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
             # facebook_user.publish_update_with_image_attachment(message=title + "\n" + post,

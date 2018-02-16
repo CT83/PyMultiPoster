@@ -1,7 +1,5 @@
 import imghdr
 
-from flask_wtf import Form
-from flask_wtf.file import FileField
 # https://gist.github.com/msukmanowsky/8086892
 from wtforms import ValidationError
 
@@ -17,12 +15,10 @@ class ImageFileRequired(object):
         self.message = message
 
     def __call__(self, form, field):
-        if field.data is None or imghdr.what('unused', field.data.read()) is None:
-            message = self.message or 'An image file is required'
-            raise ValidationError(message)
-
-        field.data.seek(0)
-
-
-class MyForm(Form):
-    photo = FileField('Photo', validators=[ImageFileRequired()])
+        try:
+            if field.data is None or imghdr.what('unused', field.data.read()) is None:
+                message = self.message or 'An image file is required'
+                raise ValidationError(message)
+            field.data.seek(0)
+        except AttributeError as e:
+            print(e)
