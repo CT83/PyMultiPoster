@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename, redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
     LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL, \
-    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, ON_HEROKU, UPLOAD_PATH
+    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, ON_HEROKU, UPLOAD_PATH, IMGUR_CLIENT_ID
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramLoginForm import InstagramLoginForm
 from Forms.InstagramPostForm import InstagramPostForm
@@ -16,6 +16,7 @@ from Forms.LinkedInPostForm import LinkedInPostForm
 from Forms.MainPostForm import MainPostForm
 from Forms.TumblrPostForm import TumblrPostForm
 from Forms.TwitterPostForm import TwitterPostForm
+from Imgur.Imgur import upload_to_imgur
 from SocialMedia.Facebook.Facebook import Facebook
 from SocialMedia.Instagram.Instagram import Instagram
 from SocialMedia.LinkedIn.LinkedIn import LinkedIn, LinkedInAuth
@@ -73,26 +74,47 @@ def facebook_poster():
     if form.validate_on_submit():
         title = form.title.data
         post = form.post.data
+        page_id = form.page_id.data
 
         print("Posting to Facebook...")
         print("Title:", title)
         print("Post:", post)
         print("Image:", image)
+        print("Page ID:", page_id)
 
         stored_cookie = get_cookie(request)
         facebook_user = Facebook(FACEBOOK_CLIENT_ID,
                                  FACEBOOK_CLIENT_SECRET,
                                  stored_cookie['facebook_access_token'])
-        if is_string_empty(image):
+        if is_string_empty(image) and is_string_empty(page_id):
+            print("Posting to Wall...")
             Thread(target=facebook_user.publish_update,
                    kwargs=dict(message=title + "\n" + post)).start()
-        else:
+
+        if is_string_empty(image) and not is_string_empty(page_id):
+            print("Posting to Page...")
+            Thread(target=facebook_user.publish_update_page,
+                   kwargs=dict(message=title + "\n" + post,
+                               page_id=page_id)).start()
+
+        if not is_string_empty(image) and is_string_empty(page_id):
+            print("Posting to Wall with Image...")
             # image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
-            # facebook_user.publish_update_with_image_attachment(message=title + "\n" + post,
-            #                                                    image_url=image_url)
-            Thread(target=facebook_user.convert_publish_update_with_image_attachment,
+            # Thread(target=facebook_user.publish_update_with_image_attachment,
+            #        kwargs=dict(message=title + "\n" + post,
+            #                    image_url=image_url)).start()
+
+            Thread(target=facebook_user.publish_update_image,
                    kwargs=dict(message=title + "\n" + post,
                                image_url=image)).start()
+
+        if not is_string_empty(image) and not is_string_empty(page_id):
+            print("Posting to Page with Image...")
+            image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
+            Thread(target=facebook_user.publish_update_with_image_attachment_page,
+                   kwargs=dict(message=title + "\n" + post,
+                               page_id=page_id,
+                               image_url=image_url)).start()
 
         print("Redirecting...")
         return redirect('/next_poster' + "/facebook")
@@ -413,6 +435,11 @@ def tumblr_redirect():
 @app.route('/logout')
 def logout():
     clear_session()
+
+
+@app.route('/')
+def redirect_root():
+    return redirect('/main')
 
 
 if __name__ == '__main__':

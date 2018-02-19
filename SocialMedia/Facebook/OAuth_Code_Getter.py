@@ -10,4 +10,4 @@ def get_fb_token(app_id, app_secret):
     return file
 
 
-print(get_fb_token("101206834030831", "9be8d03bb48f86245d2bad7269831f51"))
+print(get_fb_token("1817601901640361", "ee3029327b955fac864c7d3eb1c139ae"))
