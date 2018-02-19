@@ -8,7 +8,7 @@ from werkzeug.utils import secure_filename, redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
     LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL, \
-    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, ON_HEROKU, UPLOAD_PATH, IMGUR_CLIENT_ID
+    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, ON_HEROKU, UPLOAD_PATH
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramLoginForm import InstagramLoginForm
 from Forms.InstagramPostForm import InstagramPostForm
@@ -16,7 +16,6 @@ from Forms.LinkedInPostForm import LinkedInPostForm
 from Forms.MainPostForm import MainPostForm
 from Forms.TumblrPostForm import TumblrPostForm
 from Forms.TwitterPostForm import TwitterPostForm
-from Imgur.Imgur import upload_to_imgur
 from SocialMedia.Facebook.Facebook import Facebook
 from SocialMedia.Instagram.Instagram import Instagram
 from SocialMedia.LinkedIn.LinkedIn import LinkedIn, LinkedInAuth
@@ -105,11 +104,10 @@ def facebook_poster():
 
         if not is_string_empty(image) and not is_string_empty(page_id):
             print("Posting to Page with Image...")
-            image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
-            Thread(target=facebook_user.publish_update_with_image_attachment_page,
+            Thread(target=facebook_user.publish_update_image_page,
                    kwargs=dict(message=title + "\n" + post,
                                page_id=page_id,
-                               image_url=image_url)).start()
+                               image=image)).start()
 
         print("Redirecting...")
         return redirect('/next_poster' + "/facebook")

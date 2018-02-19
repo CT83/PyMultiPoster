@@ -28,7 +28,24 @@ class Facebook(SocialMedia):
         import requests
         url = "https://graph.facebook.com/me/photos?access_token=" + self.access_token + "&message=" + message
         files = {'source': open(image, 'rb')}
-        requests.post(url, files=files)
+        status = requests.post(url, files=files)
+        print(status)
+
+    def publish_update_image_page(self, message, image, page_id):
+
+        graph = facebook.GraphAPI(self.access_token)
+        resp = graph.get_object('me/accounts')
+        page_access_token = None
+        for page in resp['data']:
+            if page['id'] == page_id:
+                page_access_token = page['access_token']
+
+        import requests
+        url = "https://graph.facebook.com/" + page_id + "/photos?access_token=" \
+              + page_access_token + "&message=" + message
+        files = {'source': open(image, 'rb')}
+        status = requests.post(url, files=files)
+        print(status)
 
     def publish_update_with_attachment(self, message="", name_att="", link_att="",
                                        caption_att="",
@@ -58,25 +75,6 @@ class Facebook(SocialMedia):
         }
         graph.put_wall_post(message=message, attachment=attachment)
 
-    def publish_update_with_image_attachment_page(self, message, image_url, page_id,
-                                                  link_att=""):
-        if link_att in "":
-            link_att = image_url
-
-        graph = facebook.GraphAPI(self.access_token)
-        attachment = {
-            'link': link_att,
-            'picture': image_url
-        }
-
-        resp = graph.get_object('me/accounts')
-        page_access_token = None
-        for page in resp['data']:
-            if page['id'] == page_id:
-                page_access_token = page['access_token']
-        graph = facebook.GraphAPI(page_access_token)
-        print(graph.put_wall_post(message=message, attachment=attachment))
-
     def generate_long_lived_token(self):
         graph = facebook.GraphAPI(self.access_token)
 
@@ -89,13 +87,16 @@ class Facebook(SocialMedia):
 def main():
     facebook_user = Facebook(FACEBOOK_CLIENT_ID,
                              FACEBOOK_CLIENT_SECRET,
-                             'EAAZA1GWuwuqkBAKuldzi4z96nxPALqsNojP2IZAHWDrkRUZCKxpddjsp2eu2JSu7yov7e9nkJzAnQvfBMfwN74m7hlLpa55FlrNhwZAvFiiJeguHzSkqpp5q3pmi4Dby8RHALZB2NxTzYyUBCVEtrKgc6PIwO4L6jFCqDzukOpovqVZCNes9E1OA3DvwHA25ZAMlZBhoSwnhkwZDZD')
+                             'EAAZA1GWuwuqkBAC6UCUUCHla86ZBJ3DOby12s6W7QefTjuETwQvVtrVmT5Vxis5ipTZConkZA9tTSu5WFiF4pTROAamN1POaL4wyvftn6h6aVg1ZAnEyD5ds7QEBL2Inkn9joufrzTS5yHVkZAPA3p5VArOa7ks9wZD')
     # Get the auth token using the JS in the template folder, and input it here.
-    facebook_user.publish_update("Post 1", page_id="328045644353380")
+    # facebook_user.publish_update("Post 1", page_id="328045644353380")
     # facebook_user.publish_update_with_image_attachment(message="Posst 1sa",
     #                                                    page_id="328045644353380",
     #                                                    link_att='temp1.png',
     #                                                    image_url='temp1.png')
+    facebook_user.publish_update_image_page(message="Posst 1sa",
+                                            page_id="328045644353380",
+                                            image='temp1.png')
 
 
 if __name__ == '__main__':
