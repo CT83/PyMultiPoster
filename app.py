@@ -99,14 +99,9 @@ def facebook_poster():
 
         if not is_string_empty(image) and is_string_empty(page_id):
             print("Posting to Wall with Image...")
-            # image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
-            # Thread(target=facebook_user.publish_update_with_image_attachment,
-            #        kwargs=dict(message=title + "\n" + post,
-            #                    image_url=image_url)).start()
-
             Thread(target=facebook_user.publish_update_image,
                    kwargs=dict(message=title + "\n" + post,
-                               image_url=image)).start()
+                               image=image)).start()
 
         if not is_string_empty(image) and not is_string_empty(page_id):
             print("Posting to Page with Image...")

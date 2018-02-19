@@ -24,6 +24,12 @@ class Facebook(SocialMedia):
         graph = facebook.GraphAPI(page_access_token)
         print(graph.put_wall_post(message=message))
 
+    def publish_update_image(self, message, image):
+        import requests
+        url = "https://graph.facebook.com/me/photos?access_token=" + self.access_token + "&message=" + message
+        files = {'source': open(image, 'rb')}
+        requests.post(url, files=files)
+
     def publish_update_with_attachment(self, message="", name_att="", link_att="",
                                        caption_att="",
                                        description_att=""):
@@ -70,15 +76,6 @@ class Facebook(SocialMedia):
                 page_access_token = page['access_token']
         graph = facebook.GraphAPI(page_access_token)
         print(graph.put_wall_post(message=message, attachment=attachment))
-
-    def publish_update_image(self, message, image):
-        # print(
-        #     "curl - F 'source=@ar-11.jpg' 'https://graph.facebook.com/me/photos?access_token=" + self.access_token + "&message=" + message + "'")
-
-        import requests
-        url = "https://graph.facebook.com/me/photos?access_token=" + self.access_token + "&message=" + message
-        files = {'source': open(image, 'rb')}
-        print(requests.post(url, files=files))
 
     def generate_long_lived_token(self):
         graph = facebook.GraphAPI(self.access_token)

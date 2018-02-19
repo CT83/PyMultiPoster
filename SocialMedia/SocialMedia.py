@@ -11,6 +11,9 @@ class SocialMedia:
     def publish_update(self, message, **kwargs):
         pass
 
+    def publish_update_image(self, message, image):
+        pass
+
     def publish_update_with_attachment(self, **kwargs):
         pass
 
