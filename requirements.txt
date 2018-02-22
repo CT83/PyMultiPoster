@@ -5,6 +5,7 @@ flask-WTF
 flask-bootstrap
 flask-migrate
 Flask-Script
+flask-login
 gunicorn
 facebook-sdk
 requests==2.11.1

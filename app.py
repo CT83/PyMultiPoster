@@ -4,6 +4,9 @@ from threading import Thread
 
 from flask import Flask, render_template, url_for, request, make_response
 from flask_bootstrap import Bootstrap
+from flask_login import LoginManager, login_required, login_user, logout_user
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
 from werkzeug.utils import secure_filename, redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
@@ -14,6 +17,7 @@ from Forms.InstagramLoginForm import InstagramLoginForm
 from Forms.InstagramPostForm import InstagramPostForm
 from Forms.LinkedInPostForm import LinkedInPostForm
 from Forms.MainPostForm import MainPostForm
+from Forms.SignupForm import SignupForm
 from Forms.TumblrPostForm import TumblrPostForm
 from Forms.TwitterPostForm import TwitterPostForm
 from SocialMedia.Facebook.Facebook import Facebook
@@ -22,23 +26,122 @@ from SocialMedia.LinkedIn.LinkedIn import LinkedIn, LinkedInAuth
 from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
 from cookie_management import set_cookie, get_cookie
-from session_management import clear_session, save_session, retrieve_session, remove_session_socialnetwork, \
-    store_list_session, retrieve_session_socialnetworks
+from session_management import save_session, retrieve_session, remove_session_socialnetwork, \
+    store_list_session, retrieve_session_socialnetworks, clear_session
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SECRET_KEY'] = "powerful secretkey"
 app.config['WTF_CSRF_SECRET_KEY'] = "powerful secretkey"
+app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+login_manager = LoginManager()
+login_manager.init_app(app)
 bootstrap = Bootstrap(app)
 
 if not ON_HEROKU:
+    print("Running on Local Environment...")
     os.chdir(sys.path[0])
+    engine = create_engine('sqlite:///db\\database.db', echo=True)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/database.db'
+else:
+    print("Running on Heroku...")
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+
+db = SQLAlchemy(app)
+
+
+class User(db.Model):
+    email = db.Column(db.String(80), primary_key=True, unique=True)
+    password = db.Column(db.String(80))
+
+    def __init__(self, email, password):
+        self.email = email
+        self.password = password
+
+    def __repr__(self):
+        return '<User %r>' % self.email
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.email)
 
 
 # TODO Change image Aspect Ratio to fit instagram
 # TODO Add Quick Post button
 def is_string_empty(s):
     return str(s) in 'None' or str(s) in "" or s is None
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = SignupForm()
+    if request.method == 'GET':
+        return render_template('signup.html', form=form)
+    elif request.method == 'POST':
+        if form.validate_on_submit():
+            if User.query.filter_by(email=form.email.data).first():
+                return "Email address already exists"
+            else:
+                newuser = User(form.email.data, form.password.data)
+                db.session.add(newuser)
+                db.session.commit()
+                login_user(newuser)
+                return "User created!!!"
+        else:
+            return "Form didn't validate"
+
+
+def init_db():
+    db.init_app(app)
+    db.app = app
+    db.create_all()
+
+
+@app.route('/protected')
+@login_required
+def protected():
+    return "protected area"
+
+
+@login_manager.user_loader
+def load_user(email):
+    return User.query.filter_by(email=email).first()
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = SignupForm()
+    if request.method == 'GET':
+        return render_template('login.html', form=form)
+    elif request.method == 'POST':
+        if form.validate_on_submit():
+            user = User.query.filter_by(email=form.email.data).first()
+            if user:
+                if user.password == form.password.data:
+                    login_user(user)
+                    return "User logged in"
+                else:
+                    return "Wrong password"
+            else:
+                return "user doesn't exist"
+    else:
+        return "form not validated"
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    clear_session()
+    return "Logged out"
 
 
 @app.route('/main', methods=('GET', 'POST'))
@@ -425,15 +528,11 @@ def tumblr_redirect():
     return resp
 
 
-@app.route('/logout')
-def logout():
-    clear_session()
-
-
 @app.route('/')
 def redirect_root():
     return redirect('/main')
 
 
 if __name__ == '__main__':
+    init_db()
     app.run(debug=True)
