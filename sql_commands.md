@@ -6,3 +6,7 @@ pg_restore --verbose --clean --no-acl --username=postgres -h localhost -d postgr
 
 # Connecting to local PSQL Server
 psql --host=localhost --port=5432 --username postgres --password --dbname=postgres
+
+# Delete all Tables in Database [PG Commands]
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
