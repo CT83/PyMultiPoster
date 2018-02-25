@@ -53,10 +53,13 @@ db = SQLAlchemy(app)
 class User(db.Model):
     email = db.Column(db.String(80), primary_key=True, unique=True)
     password = db.Column(db.String(80))
+    name = db.Column(db.Text)
+    articles = db.relationship('posts', backref='user')
 
-    def __init__(self, email, password):
+    def __init__(self, email, password, name):
         self.email = email
         self.password = password
+        self.name = name
 
     def __repr__(self):
         return '<User %r>' % self.email
@@ -72,6 +75,18 @@ class User(db.Model):
 
     def get_id(self):
         return str(self.email)
+
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Text)
+    content = db.Column(db.Text)
+    user_email = db.Column(db.String(80), db.ForeignKey('user.email'))
+
+    # def __init__(self,title,content,):
+
+    def __repr__(self):
+        return '<Post:{} {} {}>'.format(self.id, self.user_email, self.title, self.content)
 
 
 # TODO Change image Aspect Ratio to fit instagram
@@ -144,6 +159,7 @@ def logout():
     return "Logged out"
 
 
+@login_required
 @app.route('/main', methods=('GET', 'POST'))
 def main():
     form = MainPostForm()
@@ -168,9 +184,20 @@ def main():
     return render_template('post/main.html', form=form, )
 
 
+@login_required
 @app.route('/facebook_poster', methods=('GET', 'POST'))
 def facebook_poster():
     print("Facebook Poster...")
+    print("Logged in as", get_current_user())
+
+    user = load_user(get_current_user())
+    post_1 = Post(title='Ring World', content="Sample Content")
+
+    user.books = [post_1]
+
+    db.session.add(user)
+    db.session.commit()
+
     title, post, image = retrieve_session()
     form = FacebookPostForm()
     if form.validate_on_submit():
@@ -223,6 +250,15 @@ def facebook_poster():
     return render_template('post/facebook_post.html', form=form, filename=image)
 
 
+def get_current_user():
+    from flask_login import current_user
+    if current_user.is_authenticated():
+        return current_user.email
+    else:
+        return None
+
+
+@login_required
 @app.route('/twitter_poster', methods=('GET', 'POST'))
 def twitter_poster():
     print("Twitter Poster...")
@@ -260,6 +296,7 @@ def twitter_poster():
     return render_template('post/twitter_post.html', form=form, filename=image)
 
 
+@login_required
 @app.route('/instagram_poster', methods=('GET', 'POST'))
 def instagram_poster():
     print("Instagram Poster...")
@@ -295,6 +332,7 @@ def instagram_poster():
     return render_template('post/instagram_post.html', form=form, filename=image)
 
 
+@login_required
 @app.route('/linkedin_poster', methods=('GET', 'POST'))
 def linkedin_poster():
     print("LinkedIn Poster...")
@@ -339,6 +377,7 @@ def linkedin_poster():
     return render_template('post/linkedin_post.html', form=form, filename=image)
 
 
+@login_required
 @app.route('/tumblr_poster', methods=('GET', 'POST'))
 def tumblr_poster():
     print("Tumblr Poster...")
