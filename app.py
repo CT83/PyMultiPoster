@@ -1,4 +1,6 @@
+import datetime
 import os
+import sys
 from threading import Thread
 
 from flask import Flask, render_template, url_for, request, make_response
@@ -39,7 +41,7 @@ bootstrap = Bootstrap(app)
 
 if not ON_HEROKU:
     print("Running on Local Environment...")
-    # os.chdir(sys.path[0])
+    os.chdir(sys.path[0])
     app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:cybertech83@localhost/postgres"
 else:
     print("Running on Heroku...")
@@ -60,7 +62,7 @@ class User(db.Model):
         self.name = name
 
     def __repr__(self):
-        return '<User %r>' % self.email
+        return '<User {} {} {} {}>'.format(self.email, self.password, self.name, self.articles)
 
     def is_authenticated(self):
         return True
@@ -81,10 +83,14 @@ class Post(db.Model):
     content = db.Column(db.Text)
     image = db.Column(db.Text)
     social_network = db.Column(db.Text)
+    date_posted = db.Column(db.DateTime(), default=datetime.datetime.now())
     user_email = db.Column(db.String(80), db.ForeignKey('user.email'))
 
     def __repr__(self):
-        return '<Post:{} {} {}>'.format(self.id, self.user_email, self.title, self.content)
+        return '<Post:{} {} {} {} {} {} {}>' \
+            .format(self.id, self.title, self.content, self.image,
+                    self.social_network, self.user_email,
+                    self.date_posted)
 
 
 # TODO Change image Aspect Ratio to fit instagram
@@ -582,9 +588,12 @@ def redirect_root():
 
 @app.route('/temp')
 def temp():
-    print(User.query.all())
-    print(Post.query.all())
-    return "Temp"
+    for user in User.query.all():
+        print(user)
+
+    for post in Post.query.all():
+        print(post)
+    return "Check IO Console"
 
 
 if __name__ == '__main__':
