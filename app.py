@@ -147,8 +147,9 @@ def insert_post_current_user(content, social_network, db, image="", title="",
                              user=None):
     if user is None:
         user = load_user(get_current_user())
-    post_1 = Post(title=title, content=content, social_network=social_network, image=image, user=user)
-    db.session.add(post_1)
+    post = Post(title=title, content=content, social_network=social_network, image=image,
+                user=user, date_posted=datetime.datetime.now())
+    db.session.add(post)
     db.session.commit()
 
 
@@ -443,6 +444,7 @@ def tumblr_poster():
     return render_template('post/tumblr_post.html', form=form, filename=image)
 
 
+@login_required
 @app.route('/next_poster/<done_socialnetwork>')
 def next_poster(done_socialnetwork):
     done_socialnetwork = done_socialnetwork.strip()
@@ -460,12 +462,14 @@ def next_poster(done_socialnetwork):
         return redirect(url_for('post_status'))
 
 
+@login_required
 @app.route('/post_status')
 def post_status():
     # TODO Create separate page and display links to posted stuff or simply display success
     return "Done!"
 
 
+@login_required
 @app.route('/dashboard')
 def dashboard():
     stored_cookie = get_cookie(request)
@@ -495,6 +499,7 @@ def dashboard():
                            instagram_login=url_for('instagram_login'))
 
 
+@login_required
 @app.route('/facebook_redirect')
 def facebook_redirect():
     # We get this from dashboard.html as querystring
@@ -511,6 +516,7 @@ def facebook_redirect():
     return resp
 
 
+@login_required
 @app.route('/linkedin_redirect', methods=('GET', 'POST'))
 def linkedin_redirect():
     # We get this from dashboard.html as querystring
@@ -524,6 +530,7 @@ def linkedin_redirect():
     return resp
 
 
+@login_required
 @app.route('/instagram_login', methods=('GET', 'POST'))
 def instagram_login():
     form = InstagramLoginForm()
@@ -586,11 +593,11 @@ def redirect_root():
     return redirect('/main')
 
 
+@login_required
 @app.route('/temp')
 def temp():
     for user in User.query.all():
         print(user)
-
     for post in Post.query.all():
         print(post)
     return "Check IO Console"
