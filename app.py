@@ -29,6 +29,7 @@ from SocialMedia.Twitter.Twitter import Twitter
 from cookie_management import set_cookie, get_cookie
 from session_management import save_session, retrieve_session, remove_session_socialnetwork, \
     store_list_session, retrieve_session_socialnetworks, clear_session
+from table.models import PostTable
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -601,6 +602,19 @@ def temp():
     for post in Post.query.all():
         print(post)
     return "Check IO Console"
+
+
+@login_required
+@app.route('/user_posts')
+def user_posts():
+    for post in Post.query.all():
+        print(post)
+
+    items = Post.query.all()
+    print(Post.query.filter_by(user_email=get_current_user()).all())
+    table = PostTable(items)
+
+    return render_template('post/user_posts.html', table=table)
 
 
 if __name__ == '__main__':
