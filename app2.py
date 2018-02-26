@@ -1,8 +1,6 @@
 import os
 
 from flask import render_template, Flask
-from flask_migrate import Migrate, MigrateCommand
-from flask_script import Manager
 from flask_sqlalchemy import SQLAlchemy
 
 from CONSTANT import ON_HEROKU
@@ -40,10 +38,11 @@ class Pet(db.Model):
     name = db.Column(db.String(20))
     owner_id = db.Column(db.Integer, db.ForeignKey('person.id'))
 
+
 person_one = Person(name='Test1')
 person_two = Person(name='Test2')
 
-pet_one = Pet(name='Spotty',owner=person_one)
+pet_one = Pet(name='Spotty', owner=person_one)
 
 db.session.add(person_one)
 db.session.add(pet_one)
