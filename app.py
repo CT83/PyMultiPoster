@@ -146,7 +146,7 @@ def get_current_user():
 def insert_post_current_user(content, social_network, db, image="", title="",
                              user=None):
     if user is None:
-        load_user(get_current_user())
+        user = load_user(get_current_user())
     post_1 = Post(title=title, content=content, social_network=social_network, image=image, user=user)
     db.session.add(post_1)
     db.session.commit()
