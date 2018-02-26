@@ -1,17 +1,16 @@
 import os
-import sys
 from threading import Thread
 
 from flask import Flask, render_template, url_for, request, make_response
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, login_required, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
 from werkzeug.utils import secure_filename, redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
     LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL, \
-    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, ON_HEROKU, UPLOAD_PATH
+    TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, ON_HEROKU, UPLOAD_PATH, TWITTER_NAME, FACEBOOK_NAME, LINKEDIN_NAME, \
+    TUMBLR_NAME
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramLoginForm import InstagramLoginForm
 from Forms.InstagramPostForm import InstagramPostForm
@@ -40,9 +39,8 @@ bootstrap = Bootstrap(app)
 
 if not ON_HEROKU:
     print("Running on Local Environment...")
-    os.chdir(sys.path[0])
-    engine = create_engine('sqlite:///db\\database.db', echo=True)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/database.db'
+    # os.chdir(sys.path[0])
+    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:cybertech83@localhost/postgres"
 else:
     print("Running on Heroku...")
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
@@ -51,7 +49,7 @@ db = SQLAlchemy(app)
 
 
 class User(db.Model):
-    email = db.Column(db.String(80), primary_key=True, unique=True)
+    email = db.Column(db.String(80), primary_key=True)
     password = db.Column(db.String(80))
     name = db.Column(db.Text)
     articles = db.relationship('Post', backref='user')
@@ -81,9 +79,9 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.Text)
     content = db.Column(db.Text)
+    image = db.Column(db.Text)
+    social_network = db.Column(db.Text)
     user_email = db.Column(db.String(80), db.ForeignKey('user.email'))
-
-    # def __init__(self,title,content,):
 
     def __repr__(self):
         return '<Post:{} {} {}>'.format(self.id, self.user_email, self.title, self.content)
@@ -105,7 +103,7 @@ def signup():
             if User.query.filter_by(email=form.email.data).first():
                 return "Email address already exists"
             else:
-                newuser = User(form.email.data, form.password.data)
+                newuser = User(form.email.data, form.password.data, "temp")
                 db.session.add(newuser)
                 db.session.commit()
                 login_user(newuser)
@@ -129,6 +127,23 @@ def protected():
 @login_manager.user_loader
 def load_user(email):
     return User.query.filter_by(email=email).first()
+
+
+def get_current_user():
+    from flask_login import current_user
+    if current_user.is_authenticated():
+        return current_user.email
+    else:
+        return None
+
+
+def insert_post_current_user(content, social_network, db, image="", title="",
+                             user=None):
+    if user is None:
+        load_user(get_current_user())
+    post_1 = Post(title=title, content=content, social_network=social_network, image=image, user=user)
+    db.session.add(post_1)
+    db.session.commit()
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -190,14 +205,6 @@ def facebook_poster():
     print("Facebook Poster...")
     print("Logged in as", get_current_user())
 
-    user = load_user(get_current_user())
-    post_1 = Post(title='Ring World', content="Sample Content")
-
-    user.books = [post_1]
-
-    db.session.add(user)
-    db.session.commit()
-
     title, post, image = retrieve_session()
     form = FacebookPostForm()
     if form.validate_on_submit():
@@ -239,6 +246,9 @@ def facebook_poster():
                                page_id=page_id,
                                image=image)).start()
 
+        insert_post_current_user(title=title, content=post, image=image,
+                                 social_network=FACEBOOK_NAME, db=db)
+
         print("Redirecting...")
         return redirect('/next_poster' + "/facebook")
     else:
@@ -248,14 +258,6 @@ def facebook_poster():
         form.image.render_kw = {'disabled': 'disabled'}
 
     return render_template('post/facebook_post.html', form=form, filename=image)
-
-
-def get_current_user():
-    from flask_login import current_user
-    if current_user.is_authenticated():
-        return current_user.email
-    else:
-        return None
 
 
 @login_required
@@ -286,6 +288,8 @@ def twitter_poster():
             Thread(target=twitter_api.publish_update_with_image_attachment,
                    kwargs=dict(message=post,
                                image_url=image)).start()
+
+        insert_post_current_user(content=post, image=image, social_network=TWITTER_NAME, db=db)
         print("Redirecting...")
         return redirect('/next_poster' + "/twitter")
     else:
@@ -321,6 +325,8 @@ def instagram_poster():
                            image_url=image)).start()
 
         # instagram_api.cleanup()
+
+        insert_post_current_user(content=post, image=image, social_network=TWITTER_NAME, db=db)
 
         print("Redirecting...")
         return redirect('/next_poster' + "/instagram")
@@ -366,6 +372,7 @@ def linkedin_poster():
                                message=post,
                                image_url=image)).start()
 
+            insert_post_current_user(title=title, content=post, image=image, social_network=LINKEDIN_NAME, db=db)
             print("Redirecting...")
         return redirect('/next_poster' + "/linkedin")
     else:
@@ -419,6 +426,7 @@ def tumblr_poster():
                    kwargs=dict(caption=post, image_links=image,
                                blog_name=blog_name)).start()
 
+        insert_post_current_user(title=title, content=post, image=image, social_network=TUMBLR_NAME, db=db)
         return redirect('/next_poster' + "/tumblr")
     else:
         form.title.data = title
@@ -570,6 +578,13 @@ def tumblr_redirect():
 @app.route('/')
 def redirect_root():
     return redirect('/main')
+
+
+@app.route('/temp')
+def temp():
+    print(User.query.all())
+    print(Post.query.all())
+    return "Temp"
 
 
 if __name__ == '__main__':

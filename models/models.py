@@ -2,12 +2,12 @@
 #
 # from app import app
 #
-# db = SQLAlchemy(app)
+# database = SQLAlchemy(app)
 #
 #
-# class User(db.Model):
-#     email = db.Column(db.String(80), primary_key=True, unique=True)
-#     password = db.Column(db.String(80))
+# class User(database.Model):
+#     email = database.Column(database.String(80), primary_key=True, unique=True)
+#     password = database.Column(database.String(80))
 #
 #     def __init__(self, email, password):
 #         self.email = email

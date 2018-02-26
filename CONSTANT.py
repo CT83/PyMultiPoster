@@ -52,3 +52,9 @@ else:
     TUMBLR_REDIRECT_URL = 'http://localhost:5000/tumblr_redirect'
 
     UPLOAD_PATH = "uploads/"
+
+TWITTER_NAME = 'Twitter'
+FACEBOOK_NAME = 'Facebook'
+TUMBLR_NAME = 'Tumblr'
+INSTAGRAM_NAME = 'Instagram'
+LINKEDIN_NAME = 'Linkedin'
