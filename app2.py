@@ -29,35 +29,26 @@ def google91e934bee0a01da8():
 db = SQLAlchemy(app)
 
 
-class User(db.Model):
+class Person(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
-    email = db.Column(db.String(120))
-    provider = db.Column(db.String(120))
-
-    def __init__(self, name, email):
-        self.name = name
-        self.email = email
-
-    def __repr__(self):
-        return '<Name %r>' % self.name
+    name = db.Column(db.String(20))
+    pets = db.relationship('Pet', backref='owner', lazy='dynamic')
 
 
-class Example(db.Model):
-    __tablename__ = 'example'
-    id = db.Column('id', db.Integer, primary_key=True)
-    data = db.Column('data', db.Unicode)
-    test = db.Column('test', db.String)
+class Pet(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+    owner_id = db.Column(db.Integer, db.ForeignKey('person.id'))
 
+person_one = Person(name='Test1')
+person_two = Person(name='Test2')
 
-user = User('Jo2hn Doe4', 'john.deoe3@example.com')
-db.session.add(user)
+pet_one = Pet(name='Spotty',owner=person_one)
+
+db.session.add(person_one)
+db.session.add(pet_one)
+db.session.add(person_two)
 db.session.commit()
 
-migrate = Migrate(app, db)
-manager = Manager(app)
-manager.add_command('db', MigrateCommand)
-
 if __name__ == '__main__':
-    # app.run()
-    manager.run()
+    app.run()
