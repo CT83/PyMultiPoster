@@ -12,7 +12,7 @@ class Facebook(SocialMedia):
 
     def publish_update(self, message, **kwargs):
         graph = facebook.GraphAPI(self.access_token)
-        graph.put_wall_post(message=message)
+        print(graph.put_wall_post(message=message))
 
     def publish_update_page(self, message, page_id=None):
         graph = facebook.GraphAPI(self.access_token)
@@ -29,7 +29,7 @@ class Facebook(SocialMedia):
         url = "https://graph.facebook.com/me/photos?access_token=" + self.access_token + "&message=" + message
         files = {'source': open(image, 'rb')}
         status = requests.post(url, files=files)
-        print(status)
+        print(status.json())
 
     def publish_update_image_page(self, message, image, page_id):
 
@@ -45,7 +45,7 @@ class Facebook(SocialMedia):
               + page_access_token + "&message=" + message
         files = {'source': open(image, 'rb')}
         status = requests.post(url, files=files)
-        print(status)
+        print(status.json())
 
     def publish_update_with_attachment(self, message="", name_att="", link_att="",
                                        caption_att="",
@@ -57,7 +57,7 @@ class Facebook(SocialMedia):
             'caption': caption_att,
             'description': description_att,
         }
-        graph.put_wall_post(message=message, attachment=attachment)
+        print(graph.put_wall_post(message=message, attachment=attachment))
 
     def publish_update_with_image_attachment(self, message, image_url,
                                              name_att="", link_att="", caption_att="",
@@ -73,7 +73,7 @@ class Facebook(SocialMedia):
             'description': description_att,
             'picture': image_url
         }
-        graph.put_wall_post(message=message, attachment=attachment)
+        print(graph.put_wall_post(message=message, attachment=attachment))
 
     def generate_long_lived_token(self):
         graph = facebook.GraphAPI(self.access_token)
