@@ -426,22 +426,15 @@ def tumblr_poster():
             title = 'PyMultiPoster'
 
         if str(image) in 'None' or str(image) in '' or image is None:
-            # tumblr_api.publish_update(
-            #     message=post,
-            #     title=title,
-            #     blog_name=blog_name)
             Thread(target=tumblr_api.publish_update,
                    kwargs=dict(message=post, title=title, blog_name=blog_name)).start()
         else:
-            # tumblr_api.publish_update_with_image_attachment(
-            #     caption=post,
-            #     image_links=image,
-            #     blog_name=blog_name)
             Thread(target=tumblr_api.publish_update_with_image_attachment,
                    kwargs=dict(caption=post, image_links=image,
                                blog_name=blog_name)).start()
 
-        insert_post_current_user(title=title, content=post, image=image, social_network=TUMBLR_NAME, db=db)
+        insert_post_current_user(title=title, content=post, image=image,
+                                 social_network=TUMBLR_NAME, db=db)
         return redirect('/next_poster' + "/tumblr")
     else:
         form.title.data = title
