@@ -17,6 +17,7 @@ from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramLoginForm import InstagramLoginForm
 from Forms.InstagramPostForm import InstagramPostForm
 from Forms.LinkedInPostForm import LinkedInPostForm
+from Forms.LoginForm import LoginForm
 from Forms.MainPostForm import MainPostForm
 from Forms.SignupForm import SignupForm
 from Forms.TumblrPostForm import TumblrPostForm
@@ -51,7 +52,7 @@ else:
 db = SQLAlchemy(app)
 
 
-class User(db.Model):
+class Users(db.Model):
     email = db.Column(db.String(80), primary_key=True)
     password = db.Column(db.String(80))
     name = db.Column(db.Text)
@@ -85,7 +86,7 @@ class Post(db.Model):
     image = db.Column(db.Text)
     social_network = db.Column(db.Text)
     date_posted = db.Column(db.DateTime(), default=datetime.datetime.now())
-    user_email = db.Column(db.String(80), db.ForeignKey('user.email'))
+    user_email = db.Column(db.String(80), db.ForeignKey('users.email'))
 
     def __repr__(self):
         return '<Post:{} {} {} {} {} {} {}>' \
@@ -107,14 +108,14 @@ def signup():
         return render_template('signup.html', form=form)
     elif request.method == 'POST':
         if form.validate_on_submit():
-            if User.query.filter_by(email=form.email.data).first():
+            if Users.query.filter_by(email=form.email.data).first():
                 return "Email address already exists"
             else:
-                newuser = User(form.email.data, form.password.data, "temp")
+                newuser = Users(form.email.data, form.password.data, form.name.data)
                 db.session.add(newuser)
                 db.session.commit()
                 login_user(newuser)
-                return "User created!!!"
+                return redirect(url_for('login'))
         else:
             return "Form didn't validate"
 
@@ -133,7 +134,7 @@ def protected():
 
 @login_manager.user_loader
 def load_user(email):
-    return User.query.filter_by(email=email).first()
+    return Users.query.filter_by(email=email).first()
 
 
 def get_current_user():
@@ -148,28 +149,34 @@ def insert_post_current_user(content, social_network, db, image="", title="",
                              user=None):
     if user is None:
         user = load_user(get_current_user())
+
+    import datetime
+    time_indian = datetime.datetime.utcnow()
+    time_indian = time_indian + datetime.timedelta(hours=5, minutes=30)
+
     post = Post(title=title, content=content, social_network=social_network, image=image,
-                user=user, date_posted=datetime.datetime.now())
+                user=user, date_posted=time_indian)
     db.session.add(post)
     db.session.commit()
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = SignupForm()
+    form = LoginForm()
+    # TODO Change to validate_on_submit
     if request.method == 'GET':
         return render_template('login.html', form=form)
     elif request.method == 'POST':
         if form.validate_on_submit():
-            user = User.query.filter_by(email=form.email.data).first()
+            user = Users.query.filter_by(email=form.email.data).first()
             if user:
                 if user.password == form.password.data:
                     login_user(user)
-                    return "User logged in"
+                    return redirect(url_for('main'))
                 else:
-                    return "Wrong password"
+                    return "Wrong password!"
             else:
-                return "user doesn't exist"
+                return "user doesn't exist!"
     else:
         return "form not validated"
 
@@ -597,7 +604,7 @@ def redirect_root():
 @login_required
 @app.route('/temp')
 def temp():
-    for user in User.query.all():
+    for user in Users.query.all():
         print(user)
     for post in Post.query.all():
         print(post)
