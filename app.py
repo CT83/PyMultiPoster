@@ -172,7 +172,7 @@ def login():
             if user:
                 if user.password == form.password.data:
                     login_user(user)
-                    return redirect(url_for('main'))
+                    return redirect(url_for('home'))
                 else:
                     return "Wrong password!"
             else:
