@@ -601,7 +601,7 @@ def temp():
         print(user)
     for post in Post.query.all():
         print(post)
-    return "Check IO Console"
+    return render_template('temp.html')
 
 
 @login_required
