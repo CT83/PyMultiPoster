@@ -591,7 +591,7 @@ def tumblr_redirect():
 
 @app.route('/')
 def redirect_root():
-    return redirect('/main')
+    return redirect('/home')
 
 
 @login_required
@@ -602,6 +602,12 @@ def temp():
     for post in Post.query.all():
         print(post)
     return "Check IO Console"
+
+
+@login_required
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
 
 @login_required

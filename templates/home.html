@@ -1,23 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-{% include 'header.html' %}
-<body>
-{% include 'nav_bar.html' %}
+{% block body %}
 
-<a class="btn btn-primary" href="{{ url_for('facebook_login') }}">
-    Facebook
-</a>
+    <div class="jumbotron">
+        <h1 class="display-3">PyMultiPoster!</h1>
+        <p class="lead">PyMultiPoster allows users to post to multiple Social Networks with a single click.</p>
+        <hr class="my-4">
+        <p>Link all your Social Network accounts and post from our simple console.</p>
+        <p class="lead">
+            <a href="{{ url_for('signup') }}" class="btn-lg btn-primary">
+                <span class="fa fa-eye cye-lm-tag"></span> Sign Up!
+            </a>
+        </p>
+    </div>
 
-<a class="btn btn-info" href="{{ url_for('instagram_login') }}">
-    Instagram
-</a>
+    <a href="{{ url_for('main') }}" class="btn-lg btn-primary btn-danger">
+        <span class="fa fa-plus-circle cye-lm-tag"></span> Create New Posts
+    </a>
 
-<a class="btn btn-warning" href="{{ url_for('blogger_login') }}">
-    Blogger
-</a>
-
-{% include 'footer.html' %}
-</body>
-
-</html>
+{% endblock %}
