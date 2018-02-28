@@ -593,7 +593,6 @@ def tumblr_redirect():
 def redirect_root():
     return redirect('/home')
 
-
 @login_required
 @app.route('/temp')
 def temp():
