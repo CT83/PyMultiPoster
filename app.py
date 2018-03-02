@@ -189,8 +189,8 @@ def logout():
     return "Logged out"
 
 
-@login_required
 @app.route('/main', methods=('GET', 'POST'))
+@login_required
 def main():
     # TODO Determine which social networks are linked and display checkboxes only for them.
 
@@ -219,8 +219,8 @@ def main():
     return render_template('post/main.html', form=form, )
 
 
-@login_required
 @app.route('/facebook_poster', methods=('GET', 'POST'))
+@login_required
 def facebook_poster():
     print("Facebook Poster...")
     print("Logged in as", get_current_user())
@@ -280,8 +280,8 @@ def facebook_poster():
     return render_template('post/facebook_post.html', form=form, filename=image)
 
 
-@login_required
 @app.route('/twitter_poster', methods=('GET', 'POST'))
+@login_required
 def twitter_poster():
     print("Twitter Poster...")
     _, post, image = retrieve_session()
@@ -320,8 +320,8 @@ def twitter_poster():
     return render_template('post/twitter_post.html', form=form, filename=image)
 
 
-@login_required
 @app.route('/instagram_poster', methods=('GET', 'POST'))
+@login_required
 def instagram_poster():
     print("Instagram Poster...")
     _, post, image = retrieve_session()
@@ -358,8 +358,8 @@ def instagram_poster():
     return render_template('post/instagram_post.html', form=form, filename=image)
 
 
-@login_required
 @app.route('/linkedin_poster', methods=('GET', 'POST'))
+@login_required
 def linkedin_poster():
     print("LinkedIn Poster...")
     title, post, image = retrieve_session()
@@ -404,8 +404,8 @@ def linkedin_poster():
     return render_template('post/linkedin_post.html', form=form, filename=image)
 
 
-@login_required
 @app.route('/tumblr_poster', methods=('GET', 'POST'))
+@login_required
 def tumblr_poster():
     print("Tumblr Poster...")
     title, post, image = retrieve_session()
@@ -450,8 +450,8 @@ def tumblr_poster():
     return render_template('post/tumblr_post.html', form=form, filename=image)
 
 
-@login_required
 @app.route('/next_poster/<done_socialnetwork>')
+@login_required
 def next_poster(done_socialnetwork):
     done_socialnetwork = done_socialnetwork.strip()
     if str(done_socialnetwork):
@@ -468,15 +468,15 @@ def next_poster(done_socialnetwork):
         return redirect(url_for('post_status'))
 
 
-@login_required
 @app.route('/post_status')
+@login_required
 def post_status():
     # TODO Create separate page and display links to posted stuff or simply display success
     return "Done!"
 
 
-@login_required
 @app.route('/dashboard')
+@login_required
 def dashboard():
     stored_cookie = get_cookie(request)
     print("Stored Cookies:", stored_cookie)
@@ -505,8 +505,8 @@ def dashboard():
                            instagram_login=url_for('instagram_login'))
 
 
-@login_required
 @app.route('/facebook_redirect')
+@login_required
 def facebook_redirect():
     # We get this from dashboard.html as querystring
     access_token = request.args.get('accessToken')
@@ -522,8 +522,8 @@ def facebook_redirect():
     return resp
 
 
-@login_required
 @app.route('/linkedin_redirect', methods=('GET', 'POST'))
+@login_required
 def linkedin_redirect():
     # We get this from dashboard.html as querystring
     linkedin_auth = LinkedInAuth(LINKEDIN_CLIENT_ID,
@@ -536,8 +536,8 @@ def linkedin_redirect():
     return resp
 
 
-@login_required
 @app.route('/instagram_login', methods=('GET', 'POST'))
+@login_required
 def instagram_login():
     # TODO Check instagram password on the server
     form = InstagramLoginForm()
@@ -553,6 +553,7 @@ def instagram_login():
 
 
 @app.route('/twitter_redirect', methods=('GET', 'POST'))
+@login_required
 def twitter_redirect():
     from flask import session
     from SocialMedia.Twitter.TwitterAuth import get_access_token_from_url
@@ -573,6 +574,7 @@ def twitter_redirect():
 
 
 @app.route('/tumblr_redirect', methods=('GET', 'POST'))
+@login_required
 def tumblr_redirect():
     from flask import session
 
@@ -600,8 +602,8 @@ def redirect_root():
     return redirect('/home')
 
 
-@login_required
 @app.route('/temp')
+@login_required
 def temp():
     for user in Users.query.all():
         print(user)
@@ -610,8 +612,8 @@ def temp():
     return render_template('temp.html')
 
 
-@login_required
 @app.route('/home')
+@login_required
 def home():
     return render_template('home.html')
 

@@ -58,9 +58,8 @@ def get_signed_social(req):
     returned dict. keys and the returns a list of found items."""
     signed_social = []
     cookies = get_cookie(req)
-    print("Searching in", cookies.keys())
+    cookies = {k: v for k, v in cookies.items() if v is not None}
     for key in cookies.keys():
-        print("Searching in", key.lower())
         if FACEBOOK_NAME.lower() in key.lower():
             signed_social.append(FACEBOOK_NAME)
         if INSTAGRAM_NAME.lower() in key.lower():
