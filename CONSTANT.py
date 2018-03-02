@@ -58,3 +58,9 @@ FACEBOOK_NAME = 'Facebook'
 TUMBLR_NAME = 'Tumblr'
 INSTAGRAM_NAME = 'Instagram'
 LINKEDIN_NAME = 'Linkedin'
+
+SUPPORTED_SOCIAL_NETWORKS = [FACEBOOK_NAME,
+                             INSTAGRAM_NAME,
+                             TUMBLR_NAME,
+                             LINKEDIN_NAME,
+                             TWITTER_NAME]

@@ -44,6 +44,7 @@ class LinkedInAuth:
 
 
 class LinkedIn(SocialMedia):
+    # TODO Fix Linkedin .submit_share(comment, description) confusion
     def __init__(self, client_id, client_secret, oauth=""):
         self.client_id = client_id
         self.client_secret = client_secret
@@ -51,7 +52,7 @@ class LinkedIn(SocialMedia):
         self.linkedin_api = LinkedInApplication(token=self.oauth_token)
 
     def publish_update(self, message, title=""):
-        self.linkedin_api.submit_share(title, message)
+        self.linkedin_api.submit_share(title=title, description=message)
 
     def publish_update_with_attachment(self, message="", name_att="", link_att="",
                                        caption_att="",

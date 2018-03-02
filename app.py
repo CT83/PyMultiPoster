@@ -27,7 +27,7 @@ from SocialMedia.Instagram.Instagram import Instagram
 from SocialMedia.LinkedIn.LinkedIn import LinkedIn, LinkedInAuth
 from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
-from cookie_management import set_cookie, get_cookie
+from cookie_management import set_cookie, get_cookie, get_signed_social
 from session_management import save_session, retrieve_session, remove_session_socialnetwork, \
     store_list_session, retrieve_session_socialnetworks, clear_session
 from table.models import PostTable
@@ -193,7 +193,11 @@ def logout():
 @app.route('/main', methods=('GET', 'POST'))
 def main():
     # TODO Determine which social networks are linked and display checkboxes only for them.
+
     form = MainPostForm()
+    signed_social = get_signed_social(request)
+    form.selected_socialnetworks.choices = [(x, x) for x in signed_social]
+
     if form.validate_on_submit():
         title = form.title.data
         post = form.post.data

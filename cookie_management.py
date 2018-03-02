@@ -1,3 +1,6 @@
+from CONSTANT import FACEBOOK_NAME, LINKEDIN_NAME, TUMBLR_NAME, TWITTER_NAME, INSTAGRAM_NAME
+
+
 def get_cookie(req):
     facebook_access_token = req.cookies.get('FACEBOOK_ACCESS_TOKEN')
 
@@ -46,3 +49,28 @@ def set_cookie(resp, facebook_access_token="", twitter_access_token="",
         resp.set_cookie('TUMBLR_ACCESS_TOKEN', tumblr_access_token)
         resp.set_cookie('TUMBLR_ACCESS_SECRET', tumblr_access_secret)
     return resp
+
+
+def get_signed_social(req):
+    """This function searches for the name of the social network in stored
+    cookies, the get_cookie() function returns a dict. of cookies. This
+    function check the names of soical networks again the names of the
+    returned dict. keys and the returns a list of found items."""
+    signed_social = []
+    cookies = get_cookie(req)
+    print("Searching in", cookies.keys())
+    for key in cookies.keys():
+        print("Searching in", key.lower())
+        if FACEBOOK_NAME.lower() in key.lower():
+            signed_social.append(FACEBOOK_NAME)
+        if INSTAGRAM_NAME.lower() in key.lower():
+            signed_social.append(INSTAGRAM_NAME)
+        if TWITTER_NAME.lower() in key.lower():
+            signed_social.append(TWITTER_NAME)
+        if TUMBLR_NAME.lower() in key.lower():
+            signed_social.append(TUMBLR_NAME)
+        if LINKEDIN_NAME.lower() in key.lower():
+            signed_social.append(LINKEDIN_NAME)
+    signed_social = list(set(signed_social))
+    print("Signed in Social Networks:", signed_social)
+    return signed_social
