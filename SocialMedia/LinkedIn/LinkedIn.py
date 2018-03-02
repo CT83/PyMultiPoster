@@ -52,7 +52,7 @@ class LinkedIn(SocialMedia):
         self.linkedin_api = LinkedInApplication(token=self.oauth_token)
 
     def publish_update(self, message, title=""):
-        self.linkedin_api.submit_share(title=title, description=message)
+        self.linkedin_api.submit_share(title=title, comment=title + " " + message)
 
     def publish_update_with_attachment(self, message="", name_att="", link_att="",
                                        caption_att="",
