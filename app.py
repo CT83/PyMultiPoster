@@ -192,6 +192,7 @@ def logout():
 @login_required
 @app.route('/main', methods=('GET', 'POST'))
 def main():
+    # TODO Determine which social networks are linked and display checkboxes only for them.
     form = MainPostForm()
     if form.validate_on_submit():
         title = form.title.data
@@ -534,6 +535,7 @@ def linkedin_redirect():
 @login_required
 @app.route('/instagram_login', methods=('GET', 'POST'))
 def instagram_login():
+    # TODO Check instagram password on the server
     form = InstagramLoginForm()
     if form.validate_on_submit():
         username = form.username.data
