@@ -615,13 +615,8 @@ def home():
 @login_required
 @app.route('/user_posts')
 def user_posts():
-    for post in Post.query.all():
-        print(post)
-
-    items = Post.query.all()
-    print(Post.query.filter_by(user_email=get_current_user()).all())
-    table = PostTable(items)
-
+    posts = Post.query.all()
+    table = PostTable(posts)
     return render_template('post/user_posts.html', table=table)
 
 
