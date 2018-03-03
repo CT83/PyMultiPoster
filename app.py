@@ -392,8 +392,9 @@ def linkedin_poster():
                                message=post,
                                image_url=image)).start()
 
-            insert_post_current_user(title=title, content=post, image=image, social_network=LINKEDIN_NAME, db=db)
-            print("Redirecting...")
+        insert_post_current_user(title=title, content=post, image=image,
+                                 social_network=LINKEDIN_NAME, db=db)
+        print("Redirecting...")
         return redirect('/next_poster' + "/linkedin")
     else:
         form.title.data = title
@@ -626,7 +627,8 @@ def home():
 @login_required
 @app.route('/user_posts')
 def user_posts():
-    posts = Post.query.all()
+    posts = Post.query.filter_by(user_email=get_current_user()).all()
+    print(Post.query.filter_by(user_email=get_current_user()).all())
     table = PostTable(posts)
     return render_template('post/user_posts.html', table=table)
 
