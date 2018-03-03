@@ -5,7 +5,7 @@ from threading import Thread
 
 from flask import Flask, render_template, url_for, request, make_response
 from flask_bootstrap import Bootstrap
-from flask_login import LoginManager, login_required, login_user, logout_user
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename, redirect
 
@@ -599,7 +599,10 @@ def tumblr_redirect():
 
 @app.route('/')
 def redirect_root():
-    return redirect('/home')
+    if current_user.is_authenticated:
+        return redirect('/home')
+    else:
+        return render_template('/home_page.html')
 
 
 @app.route('/temp')
@@ -613,9 +616,11 @@ def temp():
 
 
 @app.route('/home')
-@login_required
 def home():
-    return render_template('home.html')
+    if current_user.is_authenticated:
+        return render_template('home.html')
+    else:
+        return redirect(url_for('redirect_root'))
 
 
 @login_required
