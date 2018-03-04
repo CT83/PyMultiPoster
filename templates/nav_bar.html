@@ -65,7 +65,7 @@
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                        data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
-                        Signed in as {{ username }}
+                        Signed in as {{ current_user.name }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
