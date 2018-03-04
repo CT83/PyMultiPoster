@@ -2,6 +2,12 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block body %}
+    <script>
+        function openInNewTab(url) {
+            var win = window.open(url, '_blank');
+            win.focus();
+        }
+    </script>
 
     <h3>Posts Successful</h3>
     <p class="lead">Recent posts are shown below.</p>
@@ -9,7 +15,8 @@
         {% for item in data %}
             <tr>
                 <td>{{ item[0] }}</td>
-                <td><a href="{{ item[1] }}"> View</a></td>
+                <td><a href="#" onclick="openInNewTab('{{ item[1] }}');" target="_blank">
+                    View </a></td>
             </tr>
         {% endfor %}
     </table>

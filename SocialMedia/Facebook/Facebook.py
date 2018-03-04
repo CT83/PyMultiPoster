@@ -10,9 +10,13 @@ class Facebook(SocialMedia):
         self.client_secret = client_secret
         self.access_token = oauth
 
+        self.post_id = None
+
     def publish_update(self, message, **kwargs):
         graph = facebook.GraphAPI(self.access_token)
-        print(graph.put_wall_post(message=message))
+        status = graph.put_wall_post(message=message)
+
+        self.post_id = status['id']
 
     def publish_update_page(self, message, page_id=None):
         graph = facebook.GraphAPI(self.access_token)
@@ -22,14 +26,16 @@ class Facebook(SocialMedia):
             if page['id'] == page_id:
                 page_access_token = page['access_token']
         graph = facebook.GraphAPI(page_access_token)
-        print(graph.put_wall_post(message=message))
+        status = graph.put_wall_post(message=message)
+        self.post_id = status['id']
 
     def publish_update_image(self, message, image):
         import requests
         url = "https://graph.facebook.com/me/photos?access_token=" + self.access_token + "&message=" + message
         files = {'source': open(image, 'rb')}
         status = requests.post(url, files=files)
-        print(status.json())
+        status = dict(status.json())
+        self.post_id = status['post_id']
 
     def publish_update_image_page(self, message, image, page_id):
 
@@ -45,7 +51,8 @@ class Facebook(SocialMedia):
               + page_access_token + "&message=" + message
         files = {'source': open(image, 'rb')}
         status = requests.post(url, files=files)
-        print(status.json())
+        status = dict(status.json())
+        self.post_id = status['post_id']
 
     def publish_update_with_attachment(self, message="", name_att="", link_att="",
                                        caption_att="",
@@ -57,7 +64,8 @@ class Facebook(SocialMedia):
             'caption': caption_att,
             'description': description_att,
         }
-        print(graph.put_wall_post(message=message, attachment=attachment))
+        status = graph.put_wall_post(message=message, attachment=attachment)
+        self.post_id = status['id']
 
     def publish_update_with_image_attachment(self, message, image_url,
                                              name_att="", link_att="", caption_att="",
@@ -73,7 +81,8 @@ class Facebook(SocialMedia):
             'description': description_att,
             'picture': image_url
         }
-        print(graph.put_wall_post(message=message, attachment=attachment))
+        status = graph.put_wall_post(message=message, attachment=attachment)
+        self.post_id = status['id']
 
     def generate_long_lived_token(self):
         graph = facebook.GraphAPI(self.access_token)
@@ -82,6 +91,15 @@ class Facebook(SocialMedia):
         access_token = extended_token['access_token']
         print(access_token)
         return access_token
+
+    def get_link_latest_post(self, post_id=None):
+        try:
+            if post_id is None:
+                post_url = 'https://facebook.com/' + str(self.post_id).split('_', 1)[0]
+                return post_url
+        except (TypeError, KeyError) as e:
+            print(e)
+            return ""
 
 
 def main():

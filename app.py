@@ -242,29 +242,33 @@ def facebook_poster():
         facebook_user = Facebook(FACEBOOK_CLIENT_ID,
                                  FACEBOOK_CLIENT_SECRET,
                                  stored_cookie['facebook_access_token'])
+        thread = Thread()
         if is_string_empty(image) and is_string_empty(page_id):
             print("Posting to Wall...")
-            Thread(target=facebook_user.publish_update,
-                   kwargs=dict(message=title + "\n" + post)).start()
+            thread = Thread(target=facebook_user.publish_update,
+                            kwargs=dict(message=title + "\n" + post))
 
         if is_string_empty(image) and not is_string_empty(page_id):
             print("Posting to Page...")
-            Thread(target=facebook_user.publish_update_page,
-                   kwargs=dict(message=title + "\n" + post,
-                               page_id=page_id)).start()
+            thread = Thread(target=facebook_user.publish_update_page,
+                            kwargs=dict(message=title + "\n" + post,
+                                        page_id=page_id))
 
         if not is_string_empty(image) and is_string_empty(page_id):
             print("Posting to Wall with Image...")
-            Thread(target=facebook_user.publish_update_image,
-                   kwargs=dict(message=title + "\n" + post,
-                               image=image)).start()
+            thread = Thread(target=facebook_user.publish_update_image,
+                            kwargs=dict(message=title + "\n" + post,
+                                        image=image))
 
         if not is_string_empty(image) and not is_string_empty(page_id):
             print("Posting to Page with Image...")
-            Thread(target=facebook_user.publish_update_image_page,
-                   kwargs=dict(message=title + "\n" + post,
-                               page_id=page_id,
-                               image=image)).start()
+            thread = Thread(target=facebook_user.publish_update_image_page,
+                            kwargs=dict(message=title + "\n" + post,
+                                        page_id=page_id,
+                                        image=image))
+        thread.start()
+        thread.join()
+        session[FACEBOOK_NAME + '_POST_URL'] = facebook_user.get_link_latest_post()
 
         insert_post_current_user(title=title, content=post, image=image,
                                  social_network=FACEBOOK_NAME, db=db)
