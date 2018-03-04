@@ -622,7 +622,7 @@ def home():
 @app.route('/user_posts')
 def user_posts():
     posts = Post.query.filter_by(user_email=get_current_user()).all()
-    print(Post.query.filter_by(user_email=get_current_user()).all())
+    posts.reverse()  # Reverse Order of Posts
     table = PostTable(posts)
     return render_template('post/user_posts.html', table=table)
 
