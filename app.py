@@ -3,7 +3,7 @@ import os
 import sys
 from threading import Thread
 
-from flask import Flask, render_template, url_for, request, make_response
+from flask import Flask, render_template, url_for, request, make_response, session
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
@@ -12,7 +12,7 @@ from werkzeug.utils import secure_filename, redirect
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
     LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL, \
     TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, ON_HEROKU, UPLOAD_PATH, TWITTER_NAME, FACEBOOK_NAME, LINKEDIN_NAME, \
-    TUMBLR_NAME
+    TUMBLR_NAME, SUPPORTED_SOCIAL_NETWORKS
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramLoginForm import InstagramLoginForm
 from Forms.InstagramPostForm import InstagramPostForm
@@ -426,12 +426,16 @@ def tumblr_poster():
             title = 'PyMultiPoster'
 
         if str(image) in 'None' or str(image) in '' or image is None:
-            Thread(target=tumblr_api.publish_update,
-                   kwargs=dict(message=post, title=title, blog_name=blog_name)).start()
+            thread = Thread(target=tumblr_api.publish_update,
+                            kwargs=dict(message=post, title=title, blog_name=blog_name))
         else:
-            Thread(target=tumblr_api.publish_update_with_image_attachment,
-                   kwargs=dict(caption=post, image_links=image,
-                               blog_name=blog_name)).start()
+            thread = Thread(target=tumblr_api.publish_update_with_image_attachment,
+                            kwargs=dict(caption=post, image_links=image,
+                                        blog_name=blog_name))
+
+        thread.start()
+        thread.join()
+        session[TUMBLR_NAME + '_POST_URL'] = tumblr_api.get_link_latest_post()
 
         insert_post_current_user(title=title, content=post, image=image,
                                  social_network=TUMBLR_NAME, db=db)
@@ -443,6 +447,25 @@ def tumblr_poster():
         form.image.render_kw = {'disabled': 'disabled'}
 
     return render_template('post/tumblr_post.html', form=form, filename=image)
+
+
+def get_current_posts_with_links(networks=SUPPORTED_SOCIAL_NETWORKS):
+    posts_links = []
+    for network in networks:
+        try:
+            posts_links.append([network, session[network + '_POST_URL']])
+        except LookupError:
+            pass
+    print("Current Post Links", posts_links)
+    return posts_links
+
+
+def clear_current_posts(networks=SUPPORTED_SOCIAL_NETWORKS):
+    for network in networks:
+        try:
+            session.pop(network + '_POST_URL')
+        except LookupError:
+            pass
 
 
 @app.route('/next_poster/<done_socialnetwork>')
@@ -467,7 +490,9 @@ def next_poster(done_socialnetwork):
 @login_required
 def post_status():
     # TODO Create separate page and display links to posted stuff or simply display success
-    return "Done!"
+    data = get_current_posts_with_links()
+    clear_current_posts()
+    return render_template('post/done_post.html', data=data)
 
 
 @app.route('/dashboard')

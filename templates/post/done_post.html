@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block body %}
+
+    <h3>Posts Successful</h3>
+    <p class="lead">Recent posts are shown below.</p>
+    <table class="table table-hover table-striped">
+        {% for item in data %}
+            <tr>
+                <td>{{ item[0] }}</td>
+                <td><a href="{{ item[1] }}"> View</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

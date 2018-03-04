@@ -25,6 +25,7 @@ class Tumblr(SocialMedia):
         self.oauth_token_secret = oauth_token_secret
 
         self.post_id = None
+        self.blog_name = None
 
         self.tumblr_api = pytumblr.TumblrRestClient(
             self.client_id,
@@ -39,17 +40,20 @@ class Tumblr(SocialMedia):
                                                    slug="testing-text-posts",
                                                    title=title,
                                                    body=message)
-        print("Tumblr Post ID:", self.post_id)
+        self.blog_name = blog_name
 
-        post_url = self.get_link_latest_post(blog_name=blog_name)
+        print("Tumblr Post ID:", self.post_id)
+        post_url = self.get_link_latest_post()
         print('Tumblr Post URL:', post_url)
 
     def publish_update_with_attachment(self, body="", title="", url="", blog_name=""):
         self.post_id = self.tumblr_api.create_link(blog_name, title=title, url=url,
                                                    description=body)
+        self.blog_name = blog_name
+
         print("Tumblr Post ID:", self.post_id)
 
-        post_url = self.get_link_latest_post(blog_name=blog_name)
+        post_url = self.get_link_latest_post()
         print('Tumblr Post URL:', post_url)
 
     def publish_update_with_image_attachment(self, caption="", image_links=None,
@@ -58,6 +62,8 @@ class Tumblr(SocialMedia):
                                              state="published"):
         # https://github.com/tumblr/pytumblr#creating-a-photo-post
         # image_links here is a list of all the images to be posted
+        self.blog_name = blog_name
+
         if tags is None:
             tags = [""]
         self.post_id = self.tumblr_api.create_photo(blog_name,
@@ -66,14 +72,14 @@ class Tumblr(SocialMedia):
                                                     caption=caption)
         print("Tumblr Post ID:", self.post_id)
 
-        post_url = self.get_link_latest_post(blog_name=blog_name)
+        post_url = self.get_link_latest_post()
         print('Tumblr Post URL:', post_url)
 
-    def get_link_latest_post(self, blog_name, post_id=None):
+    def get_link_latest_post(self, post_id=None):
         try:
             if post_id is None:
                 post_id = str(self.post_id['id'])
-                post_url = 'https://' + blog_name + '.tumblr.com/post/' + post_id
+                post_url = 'https://' + self.blog_name + '.tumblr.com/post/' + post_id
                 return post_url
         except (TypeError, KeyError) as e:
             print(e)
