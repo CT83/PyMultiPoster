@@ -186,7 +186,7 @@ def login():
 def logout():
     logout_user()
     clear_session()
-    return "Logged out"
+    return redirect_root()
 
 
 @app.route('/main', methods=('GET', 'POST'))
