@@ -378,16 +378,10 @@ def linkedin_poster():
         linkedin_api = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET,
                                 stored_cookie['linkedin_access_token'])
         if is_string_empty(image):
-            # print(linkedin_api.publish_update(title=title, message=post))
             Thread(target=linkedin_api.publish_update,
                    kwargs=dict(title=title, message=post)).start()
         else:
-            # image_url = upload_to_imgur(IMGUR_CLIENT_ID, image)
-            # print(
-            #     linkedin_api.publish_update_with_image_attachment(title=title,
-            #                                                       message=post,
-            #                                                       image_url=image_url))
-            Thread(target=linkedin_api.convert_publish_update_with_image_attachment,
+            Thread(target=linkedin_api.upload_publish_image,
                    kwargs=dict(title=title,
                                message=post,
                                image_url=image)).start()

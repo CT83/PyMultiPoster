@@ -52,27 +52,28 @@ class LinkedIn(SocialMedia):
         self.linkedin_api = LinkedInApplication(token=self.oauth_token)
 
     def publish_update(self, message, title=""):
-        self.linkedin_api.submit_share(title=title, comment=title + " " + message)
+        print(self.linkedin_api.submit_share(title=title, comment=title + " " + message))
 
     def publish_update_with_attachment(self, message="", name_att="", link_att="",
                                        caption_att="",
                                        description_att=""):
-        self.linkedin_api.submit_share(message, name_att, description_att,
-                                       link_att)
+        print(self.linkedin_api.submit_share(message, name_att, description_att,
+                                             link_att))
 
     def publish_update_with_image_attachment(self, message="", image_url="", link_att="",
                                              caption_att="", description_att="",
                                              title=""):
         if link_att in "":
             link_att = image_url
-        self.linkedin_api.submit_share(message, title, description_att,
-                                       link_att, image_url)
+        print(self.linkedin_api.submit_share(message, title, description_att,
+                                             link_att, image_url))
 
-    def convert_publish_update_with_image_attachment(self, message="", image_url="",
-                                                     title=""):
+    def upload_publish_image(self, message="", image_url="",
+                             title=""):
         image_url = upload_to_imgur(IMGUR_CLIENT_ID, image_url)
         print("Linkedin Uploaded Image:", image_url)
-        self.linkedin_api.submit_share(message, title, "", image_url, image_url)
+        self.publish_update_with_image_attachment(message=message, title=title,
+                                                  image_url=image_url, link_att=image_url)
 
 
 def main():
