@@ -61,7 +61,7 @@ class Users(db.Model):
     email = db.Column(db.String(80), primary_key=True)
     password = db.Column(db.String(80))
     name = db.Column(db.Text)
-    role = db.Column(db.Integer)  # Admin is level 10
+    role = db.Column(db.Integer, default=1)  # Admin is level 10
     articles = db.relationship('Post', backref='user')
 
     def __init__(self, email, password, name, role=1):
