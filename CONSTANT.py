@@ -17,8 +17,10 @@ if ON_HEROKU:
 
     # LinkedIn
     LINKEDIN_RETURN_URL = 'https://pymultiposter-2.herokuapp.com/linkedin_redirect'
-    LINKEDIN_CLIENT_ID = '81spnwn20ee6ve'
-    LINKEDIN_CLIENT_SECRET = '0Yg845bXH8Z3K4Sf'
+    # LINKEDIN_CLIENT_ID = '81spnwn20ee6ve'
+    # LINKEDIN_CLIENT_SECRET = '0Yg845bXH8Z3K4Sf'
+    LINKEDIN_CLIENT_ID = '81yloqxu0xgoeo'
+    LINKEDIN_CLIENT_SECRET = 'wyElIY59DrZwTRIA'
 
     # Twitter
     TWITTER_CLIENT_ID = "ecf8Ygwl3Sr9te5dvHoknoq7h"
@@ -38,8 +40,10 @@ else:
 
     # LinkedIn
     LINKEDIN_RETURN_URL = 'http://localhost:5000/linkedin_redirect'
-    LINKEDIN_CLIENT_ID = '81spnwn20ee6ve'
-    LINKEDIN_CLIENT_SECRET = '0Yg845bXH8Z3K4Sf'
+    # LINKEDIN_CLIENT_ID = '81spnwn20ee6ve'
+    # LINKEDIN_CLIENT_SECRET = '0Yg845bXH8Z3K4Sf'
+    LINKEDIN_CLIENT_ID = '81yloqxu0xgoeo'
+    LINKEDIN_CLIENT_SECRET = 'wyElIY59DrZwTRIA'
 
     # Twitter
     TWITTER_CLIENT_ID = "ecf8Ygwl3Sr9te5dvHoknoq7h"

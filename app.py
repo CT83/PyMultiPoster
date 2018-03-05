@@ -55,6 +55,7 @@ db = SQLAlchemy(app)
 # Major
 # TODO Add some separate workflow for instagram
 # TODO Add Admin View to see who posted what.
+# TODO Shift Auth Keys to Database
 
 class Users(db.Model):
     email = db.Column(db.String(80), primary_key=True)
