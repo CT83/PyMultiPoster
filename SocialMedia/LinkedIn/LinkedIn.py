@@ -51,22 +51,27 @@ class LinkedIn(SocialMedia):
         self.oauth_token = oauth
         self.linkedin_api = LinkedInApplication(token=self.oauth_token)
 
+        self.post_url = None
+
     def publish_update(self, message, title=""):
-        print(self.linkedin_api.submit_share(title=title, comment=title + " " + message))
+        status = self.linkedin_api.submit_share(title=title, comment=title + " " + message)
+        self.post_url = status['updateUrl']
 
     def publish_update_with_attachment(self, message="", name_att="", link_att="",
                                        caption_att="",
                                        description_att=""):
-        print(self.linkedin_api.submit_share(message, name_att, description_att,
-                                             link_att))
+        status = self.linkedin_api.submit_share(message, name_att, description_att,
+                                                link_att)
+        self.post_url = status['updateUrl']
 
     def publish_update_with_image_attachment(self, message="", image_url="", link_att="",
                                              caption_att="", description_att="",
                                              title=""):
         if link_att in "":
             link_att = image_url
-        print(self.linkedin_api.submit_share(message, title, description_att,
-                                             link_att, image_url))
+        status = self.linkedin_api.submit_share(message, title, description_att,
+                                                link_att, image_url)
+        self.post_url = status['updateUrl']
 
     def upload_publish_image(self, message="", image_url="",
                              title=""):
@@ -74,6 +79,9 @@ class LinkedIn(SocialMedia):
         print("Linkedin Uploaded Image:", image_url)
         self.publish_update_with_image_attachment(message=message, title=title,
                                                   image_url=image_url, link_att=image_url)
+
+    def get_link_latest_post(self):
+        return self.post_url
 
 
 def main():

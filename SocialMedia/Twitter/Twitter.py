@@ -14,16 +14,27 @@ class Twitter(SocialMedia):
         auth.access_token = oauth_token
         auth.access_token_secret = oauth_token_secret
         self.twitter_api = tweepy.API(auth)
+        self.post_id = None
 
-    def publish_update(self, message, ):
-        self.twitter_api.update_status(status=message)
-
-    def publish_update_with_attachment(self, body="", title="", url="",
-                                       blog_name=""):
-        pass
+    def publish_update(self, message, **kwargs):
+        status = self.twitter_api.update_status(status=message)
+        self.post_id = status.id_str
 
     def publish_update_with_image_attachment(self, message, image_url, url=""):
-        self.twitter_api.update_with_media(filename=image_url, status=message)
+        status = self.twitter_api.update_with_media(filename=image_url, status=message)
+        self.post_id = status.id_str
+
+    def get_link_latest_post(self, post_id=None):
+        try:
+            if post_id is None:
+                post_id = str(self.post_id)
+                me = self.twitter_api.me()
+                print(me)
+                post_url = 'https://twitter.com/' + me.id_str + '/status/' + post_id
+                return post_url
+        except (TypeError, KeyError) as e:
+            print(e)
+            return ""
 
 
 if __name__ == '__main__':

@@ -310,14 +310,16 @@ def twitter_poster():
 
         if is_string_empty(image):
             # print(twitter_api.publish_update(post))
-            Thread(target=twitter_api.publish_update,
-                   kwargs=dict(message=post)).start()
+            thread = Thread(target=twitter_api.publish_update,
+                            kwargs=dict(message=post))
         else:
             # print(twitter_api.publish_update_with_image_attachment(post, image))
-            Thread(target=twitter_api.publish_update_with_image_attachment,
-                   kwargs=dict(message=post,
-                               image_url=image)).start()
-
+            thread = Thread(target=twitter_api.publish_update_with_image_attachment,
+                            kwargs=dict(message=post,
+                                        image_url=image))
+        thread.start()
+        thread.join()
+        session[TWITTER_NAME + '_POST_URL'] = twitter_api.get_link_latest_post()
         insert_post_current_user(content=post, image=image, social_network=TWITTER_NAME, db=db)
         print("Redirecting...")
         return redirect('/next_poster' + "/twitter")
@@ -387,13 +389,17 @@ def linkedin_poster():
         linkedin_api = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET,
                                 stored_cookie['linkedin_access_token'])
         if is_string_empty(image):
-            Thread(target=linkedin_api.publish_update,
-                   kwargs=dict(title=title, message=post)).start()
+            thread = Thread(target=linkedin_api.publish_update,
+                            kwargs=dict(title=title, message=post))
         else:
-            Thread(target=linkedin_api.upload_publish_image,
-                   kwargs=dict(title=title,
-                               message=post,
-                               image_url=image)).start()
+            thread = Thread(target=linkedin_api.upload_publish_image,
+                            kwargs=dict(title=title,
+                                        message=post,
+                                        image_url=image))
+
+        thread.start()
+        thread.join()
+        session[LINKEDIN_NAME + '_POST_URL'] = linkedin_api.get_link_latest_post()
 
         insert_post_current_user(title=title, content=post, image=image,
                                  social_network=LINKEDIN_NAME, db=db)
