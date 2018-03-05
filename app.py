@@ -90,7 +90,10 @@ class Users(db.Model):
         self.role = 10
 
     def is_admin(self):
-        return self.role >= 10
+        if self.role is not None:
+            return self.role >= 10
+        else:
+            return False
 
 
 class Post(db.Model):
