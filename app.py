@@ -30,7 +30,7 @@ from SocialMedia.Twitter.Twitter import Twitter
 from cookie_management import set_cookie, get_cookie, get_signed_social
 from session_management import save_session, retrieve_session, remove_session_socialnetwork, \
     store_list_session, retrieve_session_socialnetworks, clear_session
-from table.models import PostTable
+from table.models import PostTable, UsersTable
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -686,6 +686,18 @@ def admin_signup():
 @login_required
 def admin_view():
     return "Admin View"
+
+
+@app.route('/admin_view_users')
+@login_required
+# TODO Create a @admin_required decorator to manage admin only views.
+# TODO Lock this down.
+def admin_view_users():
+    users = Users.query.all()
+    for user in users:
+        user.link = "Profile Link"
+    table = UsersTable(users)
+    return render_template('admin/view_users.html', table=table)
 
 
 @app.route('/home')
