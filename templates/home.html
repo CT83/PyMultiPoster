@@ -32,4 +32,15 @@
         <span class="fa fa-sign-in cye-lm-tag"></span> Sign into Accounts
     </a>
 
+    {% if current_user.is_admin() %}
+
+        <br>
+        <br>
+
+        <a href="{{ url_for('admin_view') }}" class="btn btn-lg btn-primary btn-danger">
+            <span class="fa cye-lm-tag"></span> View Admin Panel
+        </a>
+
+    {% endif %}
+
 {% endblock %}

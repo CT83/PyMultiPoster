@@ -61,15 +61,18 @@ class Users(db.Model):
     email = db.Column(db.String(80), primary_key=True)
     password = db.Column(db.String(80))
     name = db.Column(db.Text)
+    role = db.Column(db.Integer)  # Admin is level 10
     articles = db.relationship('Post', backref='user')
 
-    def __init__(self, email, password, name):
+    def __init__(self, email, password, name, role=1):
         self.email = email
         self.password = password
         self.name = name
+        self.role = role
 
     def __repr__(self):
-        return '<User {} {} {} {}>'.format(self.email, self.password, self.name, self.articles)
+        return '<User {} {} {} {} {}>'.format(self.email, self.password, self.name, self.articles,
+                                              self.role)
 
     def is_authenticated(self):
         return True
@@ -82,6 +85,12 @@ class Users(db.Model):
 
     def get_id(self):
         return str(self.email)
+
+    def promote_to_admin(self):
+        self.role = 10
+
+    def is_admin(self):
+        return self.role >= 10
 
 
 class Post(db.Model):
@@ -650,6 +659,32 @@ def temp():
     return render_template('temp.html')
 
 
+@app.route('/admin_signup', methods=('GET', 'POST'))
+# TODO Make Admin Signup more secured
+def admin_signup():
+    form = SignupForm()
+    if request.method == 'GET':
+        return render_template('admin/admin_signup.html', form=form)
+    elif request.method == 'POST':
+        if form.validate_on_submit():
+            if Users.query.filter_by(email=form.email.data).first():
+                return "Email address already exists"
+            else:
+                newuser = Users(form.email.data, form.password.data, form.name.data, role=10)
+                db.session.add(newuser)
+                db.session.commit()
+                login_user(newuser)
+                return "Signed Up successfully as Admin"
+        else:
+            return "Form didn't validate"
+
+
+@app.route('/admin_view')
+@login_required
+def admin_view():
+    return "Admin View"
+
+
 @app.route('/home')
 def home():
     if current_user.is_authenticated:
@@ -658,8 +693,8 @@ def home():
         return redirect(url_for('redirect_root'))
 
 
-@login_required
 @app.route('/user_posts')
+@login_required
 def user_posts():
     posts = Post.query.filter_by(user_email=get_current_user()).all()
     posts.reverse()  # Reverse Order of Posts
