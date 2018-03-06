@@ -714,7 +714,7 @@ def home():
 # TODO Add admin required decorator here
 # DRY This function with user_posts
 def admin_user_posts():
-    user = request.args.get('id')
+    user = request.args.get('username')
     print(request.args)
     print(user)
     posts = Post.query.filter_by(user_email=user).all()

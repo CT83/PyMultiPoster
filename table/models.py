@@ -22,4 +22,4 @@ class UsersTable(Table):
     name = Col('Name')
     role = Col('Role')
     link = LinkCol('Link', 'admin_user_posts',
-                   url_kwargs=dict(id='link'), attr='name')
+                   url_kwargs=dict(username='link'), attr='name')
