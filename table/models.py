@@ -1,4 +1,4 @@
-from flask_table import Table, Col
+from flask_table import Table, Col, LinkCol
 
 
 class PostTable(Table):
@@ -21,4 +21,5 @@ class UsersTable(Table):
     email = Col('Email')
     name = Col('Name')
     role = Col('Role')
-    link = Col('Link')
+    link = LinkCol('Link', 'admin_user_posts',
+                   url_kwargs=dict(id='link'), attr='name')

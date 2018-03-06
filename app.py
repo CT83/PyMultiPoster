@@ -695,8 +695,9 @@ def admin_view():
 def admin_view_users():
     users = Users.query.all()
     for user in users:
-        user.link = "Profile Link"
+        user.link = user.email
     table = UsersTable(users)
+    print(table.__html__())
     return render_template('admin/view_users.html', table=table)
 
 
@@ -706,6 +707,20 @@ def home():
         return render_template('home.html')
     else:
         return redirect(url_for('redirect_root'))
+
+
+@app.route('/admin_user_posts')
+@login_required
+# TODO Add admin required decorator here
+# DRY This function with user_posts
+def admin_user_posts():
+    user = request.args.get('id')
+    print(request.args)
+    print(user)
+    posts = Post.query.filter_by(user_email=user).all()
+    posts.reverse()  # Reverse Order of Posts
+    table = PostTable(posts)
+    return render_template('post/user_posts.html', table=table)
 
 
 @app.route('/user_posts')
