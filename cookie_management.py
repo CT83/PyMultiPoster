@@ -51,6 +51,19 @@ def set_cookie(resp, facebook_access_token="", twitter_access_token="",
     return resp
 
 
+def delete_all_cookies(resp):
+    print("All cookies have been deleted.")
+    resp.set_cookie('FACEBOOK_ACCESS_TOKEN', expires=0)
+    resp.set_cookie('TWITTER_ACCESS_TOKEN', expires=0)
+    resp.set_cookie('TWITTER_ACCESS_SECRET', expires=0)
+    resp.set_cookie('INSTAGRAM_EMAIL', expires=0)
+    resp.set_cookie('INSTAGRAM_PASSWORD', expires=0)
+    resp.set_cookie('LINKEDIN_ACCESS_TOKEN', expires=0)
+    resp.set_cookie('TUMBLR_ACCESS_TOKEN', expires=0)
+    resp.set_cookie('TUMBLR_ACCESS_SECRET', expires=0)
+    return resp
+
+
 def get_signed_social(req):
     """This function searches for the name of the social network in stored
     cookies, the get_cookie() function returns a dict. of cookies. This

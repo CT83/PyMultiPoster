@@ -27,7 +27,7 @@ from SocialMedia.Instagram.Instagram import Instagram
 from SocialMedia.LinkedIn.LinkedIn import LinkedIn, LinkedInAuth
 from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
-from cookie_management import set_cookie, get_cookie, get_signed_social
+from cookie_management import set_cookie, get_cookie, get_signed_social, delete_all_cookies
 from session_management import save_session, retrieve_session, remove_session_socialnetwork, \
     store_list_session, retrieve_session_socialnetworks, clear_session
 from table.models import PostTable, UsersTable
@@ -206,7 +206,9 @@ def login():
 def logout():
     logout_user()
     clear_session()
-    return redirect_root()
+    resp = make_response(redirect(url_for('redirect_root')))
+    resp = delete_all_cookies(resp)
+    return resp
 
 
 @app.route('/main', methods=('GET', 'POST'))
