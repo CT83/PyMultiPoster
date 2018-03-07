@@ -54,8 +54,10 @@ def set_cookie(resp, facebook_access_token="", twitter_access_token="",
 def get_signed_social(req):
     """This function searches for the name of the social network in stored
     cookies, the get_cookie() function returns a dict. of cookies. This
-    function check the names of soical networks again the names of the
-    returned dict. keys and the returns a list of found items."""
+    function checks the names of social networks against the names of the
+    returned dict. keys and the returns a list of found items.
+    It is used to show which social networks have cookie keys associated with them.
+    """
     signed_social = []
     cookies = get_cookie(req)
     cookies = {k: v for k, v in cookies.items() if v is not None}
