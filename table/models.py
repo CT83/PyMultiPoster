@@ -5,6 +5,7 @@ class PostTable(Table):
     def sort_url(self, col_id, reverse=False):
         pass
 
+    no = Col('#')
     classes = ['table', 'table-hover', 'table-striped']
     date_posted = Col('Date')
     title = Col('Title')
@@ -18,6 +19,7 @@ class UsersTable(Table):
         pass
 
     classes = ['table', 'table-hover', 'table-striped']
+    no = Col('#')
     email = Col('Email')
     name = Col('Name')
     role = Col('Role')

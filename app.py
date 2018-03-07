@@ -57,6 +57,9 @@ db = SQLAlchemy(app)
 # TODO Add Admin View to see who posted what.
 # TODO Shift Auth Keys to Database
 
+# Minor
+# TODO Delete Cookies after logout
+
 class Users(db.Model):
     email = db.Column(db.String(80), primary_key=True)
     password = db.Column(db.String(80))
@@ -696,6 +699,7 @@ def admin_view_users():
     users = Users.query.all()
     for user in users:
         user.link = user.email
+        user.no = users.index(user) + 1
     table = UsersTable(users)
     print(table.__html__())
     return render_template('admin/view_users.html', table=table)
@@ -719,6 +723,8 @@ def admin_user_posts():
     print(user)
     posts = Post.query.filter_by(user_email=user).all()
     posts.reverse()  # Reverse Order of Posts
+    for post in posts:
+        post.no = posts.index(post) + 1
     table = PostTable(posts)
     return render_template('post/user_posts.html', table=table)
 
@@ -728,6 +734,8 @@ def admin_user_posts():
 def user_posts():
     posts = Post.query.filter_by(user_email=get_current_user()).all()
     posts.reverse()  # Reverse Order of Posts
+    for post in posts:
+        post.no = posts.index(post) + 1
     table = PostTable(posts)
     return render_template('post/user_posts.html', table=table)
 
