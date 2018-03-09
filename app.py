@@ -690,7 +690,7 @@ def admin_signup():
 @app.route('/admin_view')
 @login_required
 def admin_view():
-    return "Admin View"
+    return render_template('admin/admin_panel.html')
 
 
 @app.route('/admin_view_users')
