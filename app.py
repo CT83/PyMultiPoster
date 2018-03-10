@@ -6,7 +6,6 @@ from threading import Thread
 from flask import Flask, render_template, url_for, request, make_response, session
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename, redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
@@ -27,9 +26,11 @@ from SocialMedia.Instagram.Instagram import Instagram
 from SocialMedia.LinkedIn.LinkedIn import LinkedIn, LinkedInAuth
 from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
-from cookie_management import set_cookie, get_cookie, get_signed_social, delete_all_cookies
+from cookie_management import get_signed_social
+from models.Credentials import save_credentials, get_credentials
 from session_management import save_session, retrieve_session, remove_session_socialnetwork, \
     store_list_session, retrieve_session_socialnetworks, clear_session
+from shared.models import db
 from table.models import PostTable, UsersTable
 
 app = Flask(__name__)
@@ -49,8 +50,6 @@ else:
     print("Running on Heroku...")
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
-db = SQLAlchemy(app)
-
 
 # Major
 # TODO Add some separate workflow for instagram
@@ -58,8 +57,6 @@ db = SQLAlchemy(app)
 # TODO Shift Auth Keys to Database
 
 # Minor
-# TODO Delete Cookies after logout
-
 class Users(db.Model):
     email = db.Column(db.String(80), primary_key=True)
     password = db.Column(db.String(80))
@@ -207,7 +204,6 @@ def logout():
     logout_user()
     clear_session()
     resp = make_response(redirect(url_for('redirect_root')))
-    resp = delete_all_cookies(resp)
     return resp
 
 
@@ -217,7 +213,7 @@ def main():
     # TODO Determine which social networks are linked and display checkboxes only for them.
 
     form = MainPostForm()
-    signed_social = get_signed_social(request)
+    signed_social = get_signed_social(get_current_user())
     form.selected_socialnetworks.choices = [(x, x) for x in signed_social]
 
     if form.validate_on_submit():
@@ -260,7 +256,8 @@ def facebook_poster():
         print("Image:", image)
         print("Page ID:", page_id)
 
-        stored_cookie = get_cookie(request)
+        # stored_cookie = get_cookie(request)
+        stored_cookie = get_credentials(get_current_user())
         facebook_user = Facebook(FACEBOOK_CLIENT_ID,
                                  FACEBOOK_CLIENT_SECRET,
                                  stored_cookie['facebook_access_token'])
@@ -319,11 +316,12 @@ def twitter_poster():
         print("Post:", post)
         print("Image:", image)
 
-        stored_cookie = get_cookie(request)
+        # stored_c = get_cookie(request)
+        stored_c = get_credentials(get_current_user())
         twitter_api = Twitter(TWITTER_CLIENT_ID,
                               TWITTER_CLIENT_SECRET,
-                              stored_cookie['twitter_access_token'],
-                              stored_cookie['twitter_access_secret'])
+                              stored_c['twitter_access_token'],
+                              stored_c['twitter_access_secret'])
 
         if is_string_empty(image):
             # print(twitter_api.publish_update(post))
@@ -363,10 +361,11 @@ def instagram_poster():
         print("Image:", image)
         # TODO Add allow uploading if no image is selected
 
-        stored_cookie = get_cookie(request)
+        # stored_c = get_cookie(request)
+        stored_c = get_credentials(get_current_user())
 
-        instagram_api = Instagram(stored_cookie['instagram_email'],
-                                  stored_cookie['instagram_password'])
+        instagram_api = Instagram(stored_c['instagram_email'],
+                                  stored_c['instagram_password'])
         # jpg_image = instagram_api.convert_image_to_compatible_format(image)
         Thread(target=instagram_api.convert_publish_update_with_image_attachment,
                kwargs=dict(message=post,
@@ -402,9 +401,10 @@ def linkedin_poster():
         print("Post:", post)
         print("Image:", image)
 
-        stored_cookie = get_cookie(request)
+        # stored_c = get_cookie(request)
+        stored_c = get_credentials(get_current_user())
         linkedin_api = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET,
-                                stored_cookie['linkedin_access_token'])
+                                stored_c['linkedin_access_token'])
         if is_string_empty(image):
             thread = Thread(target=linkedin_api.publish_update,
                             kwargs=dict(title=title, message=post))
@@ -448,11 +448,12 @@ def tumblr_poster():
         print("Post:", post)
         # TODO Look into how titles and hashtags are managed for all social network posters
         # print("Image:", image)
-        stored_cookie = get_cookie(request)
+        # stored_c = get_cookie(request)
+        stored_c = get_credentials(get_current_user())
         tumblr_api = Tumblr(TUMBLR_CLIENT_ID,
                             TUMBLR_CLIENT_SECRET,
-                            stored_cookie['tumblr_access_token'],
-                            stored_cookie['tumblr_access_secret'])
+                            stored_c['tumblr_access_token'],
+                            stored_c['tumblr_access_secret'])
 
         if is_string_empty(title):
             title = 'PyMultiPoster'
@@ -530,8 +531,9 @@ def post_status():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    stored_cookie = get_cookie(request)
-    print("Stored Cookies:", stored_cookie)
+    # stored_c = get_cookie(request)
+    stored_c = get_credentials(get_current_user())
+    print("Stored Cookies:", stored_c)
     linkedin_auth = LinkedInAuth(LINKEDIN_CLIENT_ID,
                                  LINKEDIN_CLIENT_SECRET, LINKEDIN_RETURN_URL)
 
@@ -570,7 +572,9 @@ def facebook_redirect():
     print("Facebook Long Lived Access Token:", access_token)
 
     resp = make_response(redirect(url_for('dashboard')))
-    resp = set_cookie(resp=resp, facebook_access_token=access_token)
+    # resp = set_cookie(resp=resp, facebook_access_token=access_token)
+
+    save_credentials(get_current_user(), facebook_access_token=access_token)
     return resp
 
 
@@ -584,7 +588,9 @@ def linkedin_redirect():
     access_token = linkedin_auth.get_access_token_from_url(request.url)
     print("LinkedIn Access Token:", access_token)
     resp = make_response(redirect(url_for('dashboard')))
-    resp = set_cookie(resp=resp, linkedin_access_token=access_token)
+    # resp = set_cookie(resp=resp, linkedin_access_token=access_token)
+
+    save_credentials(get_current_user(), linkedin_access_token=access_token)
     return resp
 
 
@@ -599,7 +605,9 @@ def instagram_login():
         print("Instagram Username:", username)
         print("Instagram Password:", password)
         resp = make_response(redirect(url_for('dashboard')))
-        resp = set_cookie(resp=resp, instagram_email=username, instagram_password=password)
+        # resp = set_cookie(resp=resp, instagram_email=username, instagram_password=password)
+
+        save_credentials(get_current_user(), instagram_email=username, instagram_password=password)
         return resp
     return render_template('dashboard/instagram_login.html', form=form)
 
@@ -620,8 +628,11 @@ def twitter_redirect():
                                   token=token)
 
     resp = make_response(redirect(url_for('dashboard')))
-    resp = set_cookie(resp=resp, twitter_access_token=access_token,
-                      twitter_access_secret=access_token_secret)
+    # resp = set_cookie(resp=resp, twitter_access_token=access_token,
+    #                   twitter_access_secret=access_token_secret)
+
+    save_credentials(get_current_user(), twitter_access_token=access_token,
+                     twitter_access_secret=access_token_secret)
     return resp
 
 
@@ -643,8 +654,11 @@ def tumblr_redirect():
 
     print(tokens)
     resp = make_response(redirect(url_for('dashboard')))
-    resp = set_cookie(resp=resp, tumblr_access_token=tokens['oauth_token'],
-                      tumblr_access_secret=tokens['oauth_token_secret'])
+    # resp = set_cookie(resp=resp, tumblr_access_token=tokens['oauth_token'],
+    #                   tumblr_access_secret=tokens['oauth_token_secret'])
+
+    save_credentials(get_current_user(), tumblr_access_token=tokens['oauth_token'],
+                     tumblr_access_secret=tokens['oauth_token_secret'])
 
     return resp
 
