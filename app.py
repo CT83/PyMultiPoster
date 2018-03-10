@@ -60,12 +60,12 @@ else:
 # TODO Add Quick Post button
 # TODO Change image Aspect Ratio to fit instagram
 # TODO Add allow uploading if no image is selected
-# TODO Look into how titles and hashtags are managed for all social network posters
+# TODO Look into how titles and hash tags are managed for all social network posters
 # TODO Check instagram password on the server
 
 
 # Minor
-# TODO Change to validate_on_submit
+# TODO Cleanup up Project
 # TODO DRY admin_user_posts function
 # TODO Create a @admin_required decorator to manage admin only views.
 
@@ -702,6 +702,5 @@ def user_posts():
     return render_template('post/user_posts.html', table=table)
 
 
-if __name__ == '__main__':
-    init_db()
-    app.run(debug=True)
+init_db()
+app.run(debug=True)
