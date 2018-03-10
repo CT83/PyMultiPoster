@@ -713,11 +713,13 @@ def admin_view():
 # TODO Lock this down.
 def admin_view_users():
     users = Users.query.all()
+
     for user in users:
         user.link = user.email
         user.no = users.index(user) + 1
+        user.no_of_posts = Post.query.filter_by(user_email=user.email).count()
+
     table = UsersTable(users)
-    print(table.__html__())
     return render_template('admin/view_users.html', table=table)
 
 

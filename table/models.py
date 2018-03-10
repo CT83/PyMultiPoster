@@ -22,6 +22,7 @@ class UsersTable(Table):
     no = Col('#')
     email = Col('Email')
     name = Col('Name')
+    no_of_posts = Col('Posts')
     role = Col('Role')
     link = LinkCol('Link', 'admin_user_posts',
                    url_kwargs=dict(username='link'), attr='name')
