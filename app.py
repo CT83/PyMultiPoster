@@ -699,4 +699,4 @@ def user_posts():
 db.init_app(app)
 db.app = app
 db.create_all()
-app.run(use_reloader=False)
+app.run(debug=True, use_reloader=False)
