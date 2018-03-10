@@ -93,12 +93,6 @@ def signup():
             return "Form didn't validate"
 
 
-def init_db():
-    db.init_app(app)
-    db.app = app
-    db.create_all()
-
-
 @app.route('/protected')
 @login_required
 def protected():
@@ -702,5 +696,7 @@ def user_posts():
     return render_template('post/user_posts.html', table=table)
 
 
-init_db()
-app.run(debug=True)
+db.init_app(app)
+db.app = app
+db.create_all()
+app.run()
