@@ -51,6 +51,10 @@ else:
     print("Running on Heroku...")
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
+db.app = app
+db.init_app(app)
+db.create_all()
+
 
 # Major
 # TODO Add some separate workflow for instagram
@@ -697,7 +701,4 @@ def user_posts():
 
 
 if __name__ == "__main__":
-    db.init_app(app)
-    db.app = app
-    db.create_all()
     app.run(debug=True, use_reloader=False)
