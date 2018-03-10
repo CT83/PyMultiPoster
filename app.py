@@ -53,10 +53,21 @@ else:
 
 # Major
 # TODO Add some separate workflow for instagram
-# TODO Add Admin View to see who posted what.
-# TODO Shift Auth Keys to Database
+
+# Future
+# TODO Make Admin Signup more secured
+# TODO Add Quick Post button
+# TODO Change image Aspect Ratio to fit instagram
+# TODO Add allow uploading if no image is selected
+# TODO Look into how titles and hashtags are managed for all social network posters
+# TODO Check instagram password on the server
+
 
 # Minor
+# TODO Change to validate_on_submit
+# TODO DRY admin_user_posts function
+# TODO Create a @admin_required decorator to manage admin only views.
+
 class Users(db.Model):
     email = db.Column(db.String(80), primary_key=True)
     password = db.Column(db.String(80))
@@ -112,8 +123,6 @@ class Post(db.Model):
                     self.date_posted)
 
 
-# TODO Change image Aspect Ratio to fit instagram
-# TODO Add Quick Post button
 def is_string_empty(s):
     return str(s) in 'None' or str(s) in "" or s is None
 
@@ -180,7 +189,6 @@ def insert_post_current_user(content, social_network, db, image="", title="",
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    # TODO Change to validate_on_submit
     if request.method == 'GET':
         return render_template('login.html', form=form)
     elif request.method == 'POST':
@@ -210,8 +218,6 @@ def logout():
 @app.route('/main', methods=('GET', 'POST'))
 @login_required
 def main():
-    # TODO Determine which social networks are linked and display checkboxes only for them.
-
     form = MainPostForm()
     signed_social = get_signed_social(get_current_user())
     form.selected_socialnetworks.choices = [(x, x) for x in signed_social]
@@ -359,7 +365,6 @@ def instagram_poster():
         print("Posting to Instagram...")
         print("Post:", post)
         print("Image:", image)
-        # TODO Add allow uploading if no image is selected
 
         # stored_c = get_cookie(request)
         stored_c = get_credentials(get_current_user())
@@ -446,7 +451,6 @@ def tumblr_poster():
         print("Posting to Tumblr...")
         print("Title:", title)
         print("Post:", post)
-        # TODO Look into how titles and hashtags are managed for all social network posters
         # print("Image:", image)
         # stored_c = get_cookie(request)
         stored_c = get_credentials(get_current_user())
@@ -522,7 +526,6 @@ def next_poster(done_socialnetwork):
 @app.route('/post_status')
 @login_required
 def post_status():
-    # TODO Create separate page and display links to posted stuff or simply display success
     data = get_current_posts_with_links()
     clear_current_posts()
     return render_template('post/done_post.html', data=data)
@@ -597,7 +600,6 @@ def linkedin_redirect():
 @app.route('/instagram_login', methods=('GET', 'POST'))
 @login_required
 def instagram_login():
-    # TODO Check instagram password on the server
     form = InstagramLoginForm()
     if form.validate_on_submit():
         username = form.username.data
@@ -682,7 +684,6 @@ def temp():
 
 
 @app.route('/admin_signup', methods=('GET', 'POST'))
-# TODO Make Admin Signup more secured
 def admin_signup():
     form = SignupForm()
     if request.method == 'GET':
@@ -709,8 +710,6 @@ def admin_view():
 
 @app.route('/admin_view_users')
 @login_required
-# TODO Create a @admin_required decorator to manage admin only views.
-# TODO Lock this down.
 def admin_view_users():
     users = Users.query.all()
 
@@ -733,8 +732,6 @@ def home():
 
 @app.route('/admin_user_posts')
 @login_required
-# TODO Add admin required decorator here
-# DRY This function with user_posts
 def admin_user_posts():
     user = request.args.get('username')
     print(request.args)
