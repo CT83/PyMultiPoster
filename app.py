@@ -1,4 +1,3 @@
-import datetime
 import os
 import sys
 from threading import Thread
@@ -28,6 +27,8 @@ from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
 from cookie_management import get_signed_social
 from models.Credentials import save_credentials, get_credentials
+from models.Post import Post
+from models.Users import Users
 from session_management import save_session, retrieve_session, remove_session_socialnetwork, \
     store_list_session, retrieve_session_socialnetworks, clear_session
 from shared.models import db
@@ -67,60 +68,6 @@ else:
 # TODO Change to validate_on_submit
 # TODO DRY admin_user_posts function
 # TODO Create a @admin_required decorator to manage admin only views.
-
-class Users(db.Model):
-    email = db.Column(db.String(80), primary_key=True)
-    password = db.Column(db.String(80))
-    name = db.Column(db.Text)
-    role = db.Column(db.Integer, default=1)  # Admin is level 10
-    articles = db.relationship('Post', backref='user')
-
-    def __init__(self, email, password, name, role=1):
-        self.email = email
-        self.password = password
-        self.name = name
-        self.role = role
-
-    def __repr__(self):
-        return '<User {} {} {} {} {}>'.format(self.email, self.password, self.name, self.articles,
-                                              self.role)
-
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return str(self.email)
-
-    def promote_to_admin(self):
-        self.role = 10
-
-    def is_admin(self):
-        if self.role is not None:
-            return self.role >= 10
-        else:
-            return False
-
-
-class Post(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.Text)
-    content = db.Column(db.Text)
-    image = db.Column(db.Text)
-    social_network = db.Column(db.Text)
-    date_posted = db.Column(db.DateTime(), default=datetime.datetime.now())
-    user_email = db.Column(db.String(80), db.ForeignKey('users.email'))
-
-    def __repr__(self):
-        return '<Post:{} {} {} {} {} {} {}>' \
-            .format(self.id, self.title, self.content, self.image,
-                    self.social_network, self.user_email,
-                    self.date_posted)
 
 
 def is_string_empty(s):
