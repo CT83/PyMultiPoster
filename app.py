@@ -696,7 +696,8 @@ def user_posts():
     return render_template('post/user_posts.html', table=table)
 
 
-db.init_app(app)
-db.app = app
-db.create_all()
-app.run(debug=True, use_reloader=False)
+if __name__ == "__main__":
+    db.init_app(app)
+    db.app = app
+    db.create_all()
+    app.run(debug=True, use_reloader=False)
