@@ -55,7 +55,7 @@ app.register_blueprint(posters)
 # TODO Add allow uploading if no image is selected
 # TODO Look into how titles and hash tags are managed for all social network posters
 # TODO Check instagram password on the server
-
+# TODO Move to MDBootstrap
 
 # Minor
 # TODO Cleanup up Project

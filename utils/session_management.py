@@ -1,6 +1,6 @@
 from flask import session
 
-from json_management import list_to_json, json_to_list
+from utils.JSONUtils import list_to_json, json_to_list
 
 
 def clear_session():

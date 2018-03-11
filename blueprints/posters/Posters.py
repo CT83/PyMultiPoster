@@ -19,13 +19,13 @@ from SocialMedia.LinkedIn.LinkedIn import LinkedIn
 from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
 from blueprints.login.Login import get_current_user
-from cookie_management import get_signed_social
 from models.Credentials import get_credentials
 from models.Post import insert_post_current_user
-from session_management import save_session, retrieve_session, remove_session_socialnetwork, store_list_session, \
-    retrieve_session_socialnetworks
 from shared.models import db
+from utils.MiscUtils import get_signed_social
 from utils.StringUtils import is_string_empty
+from utils.session_management import save_session, retrieve_session, remove_session_socialnetwork, store_list_session, \
+    retrieve_session_socialnetworks
 
 posters = Blueprint('Posters', __name__)
 
