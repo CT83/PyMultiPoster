@@ -19,12 +19,12 @@
                         Signed in as {{ current_user.name }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                        <a class="dropdown-item" href="{{ url_for('Login.logout') }}">Logout</a>
                     </div>
                 </div>
             {% else %}
                 <div class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    <a class="nav-link" href="{{ url_for('Login.login') }}">Login</a>
                 </div>
             {% endif %}
             <a class="nav-link nav-item" href="#">Help</a>
