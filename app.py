@@ -57,6 +57,7 @@ db.init_app(app)
 db.create_all()
 app.register_blueprint(posters)
 
+
 # Major
 # TODO Add some separate workflow for instagram
 
@@ -96,12 +97,6 @@ def signup():
                 return redirect(url_for('login'))
         else:
             return "Form didn't validate"
-
-
-@app.route('/protected')
-@login_required
-def protected():
-    return "protected area"
 
 
 @login_manager.user_loader
@@ -617,16 +612,6 @@ def redirect_root():
         return redirect('/home')
     else:
         return render_template('/home_page.html')
-
-
-@app.route('/temp')
-@login_required
-def temp():
-    for user in Users.query.all():
-        print(user)
-    for post in Post.query.all():
-        print(post)
-    return render_template('temp.html')
 
 
 @app.route('/admin_signup', methods=('GET', 'POST'))
