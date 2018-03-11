@@ -25,6 +25,7 @@ from SocialMedia.Instagram.Instagram import Instagram
 from SocialMedia.LinkedIn.LinkedIn import LinkedIn, LinkedInAuth
 from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
+from blueprints.posters.PostersBlueprint import posters
 from cookie_management import get_signed_social
 from models.Credentials import save_credentials, get_credentials
 from models.Post import Post
@@ -54,7 +55,7 @@ else:
 db.app = app
 db.init_app(app)
 db.create_all()
-
+app.register_blueprint(posters)
 
 # Major
 # TODO Add some separate workflow for instagram
