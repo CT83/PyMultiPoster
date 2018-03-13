@@ -4,10 +4,11 @@
 
 <body>
 
-    {% include 'nav_bar.html' %}
-<div class="container">
-    {% block body %}{% endblock %}
-    {#{% include 'footer.html' %}#}
+{% include 'nav_bar.html' %}
+
+<div class="container-fluid">
+    {% block body %}
+    {% endblock %}
 </div>
 
 </body>
