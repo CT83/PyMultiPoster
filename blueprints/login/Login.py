@@ -1,5 +1,7 @@
+from functools import wraps
+
 from flask import Blueprint, request, render_template, redirect, url_for, make_response
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 
 from Forms.LoginForm import LoginForm
 from Forms.SignupForm import SignupForm
@@ -69,3 +71,18 @@ def logout():
     clear_session()
     resp = make_response(redirect(url_for('redirect_root')))
     return resp
+
+
+def admin_login_required():
+    def wrapper(fn):
+        @wraps(fn)
+        def decorated_view():
+            print("Current User :", current_user.email, " Role :", current_user.role)
+            if current_user.is_admin():
+                return fn()
+            else:
+                return login_manager.unauthorized()
+
+        return decorated_view
+
+    return wrapper

@@ -2,6 +2,7 @@ from flask import Blueprint, request, render_template
 from flask_login import login_user, login_required
 
 from Forms.SignupForm import SignupForm
+from blueprints.login.Login import admin_login_required
 from models.Post import Post
 from models.Users import Users
 from shared.models import db
@@ -36,12 +37,14 @@ def admin_signup():
 
 @admin_blueprint.route('/admin_view')
 @login_required
+@admin_login_required()
 def admin_view():
     return render_template('admin/admin_panel.html')
 
 
 @admin_blueprint.route('/admin_view_users')
 @login_required
+@admin_login_required()
 def admin_view_users():
     users = Users.query.all()
 
@@ -56,6 +59,7 @@ def admin_view_users():
 
 @admin_blueprint.route('/admin_user_posts')
 @login_required
+@admin_login_required()
 def admin_user_posts():
     user = request.args.get('username')
     posts = Post.query.filter_by(user_email=user).all()

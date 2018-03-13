@@ -53,11 +53,11 @@ app.register_blueprint(oauth_workflow)
 # TODO Look into how titles and hash tags are managed for all social network posters
 # TODO Check instagram password on the server
 # TODO Move to MDBootstrap
+# TODO Check if Instagram Extension is installed chrome-extension://nlhjgcligpbnjphflfdbmabbmjidnmek/main.html
 
 # Minor
 # TODO Cleanup up Project
 # TODO DRY admin_user_posts function
-# TODO Create a @admin_required decorator to manage admin only views.
 
 
 @app.route('/')
