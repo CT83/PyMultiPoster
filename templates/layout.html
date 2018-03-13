@@ -2,8 +2,11 @@
 <html lang="en">
 {% include 'header.html' %}
 
-{% include 'nav_bar.html' %}
 <body>
+
+<div class="container-fluid">
+    {% include 'nav_bar.html' %}
+</div>
 
 <div class="container">
     {% block body %}{% endblock %}
