@@ -111,7 +111,9 @@ def facebook_poster():
         session[FACEBOOK_NAME + '_POST_URL'] = facebook_user.get_link_latest_post()
 
         insert_post_current_user(title=title, content=post, image=image,
-                                 social_network=FACEBOOK_NAME, db=db)
+                                 social_network=FACEBOOK_NAME,
+                                 link=facebook_user.get_link_latest_post(),
+                                 db=db)
 
         print("Redirecting...")
         return redirect('/next_poster' + "/facebook")
@@ -156,7 +158,8 @@ def twitter_poster():
         thread.start()
         thread.join()
         session[TWITTER_NAME + '_POST_URL'] = twitter_api.get_link_latest_post()
-        insert_post_current_user(content=post, image=image, social_network=TWITTER_NAME, db=db)
+        insert_post_current_user(content=post, image=image, social_network=TWITTER_NAME,
+                                 link=twitter_api.get_link_latest_post(), db=db)
         print("Redirecting...")
         return redirect('/next_poster' + "/twitter")
     else:
@@ -239,7 +242,9 @@ def linkedin_poster():
         session[LINKEDIN_NAME + '_POST_URL'] = linkedin_api.get_link_latest_post()
 
         insert_post_current_user(title=title, content=post, image=image,
-                                 social_network=LINKEDIN_NAME, db=db)
+                                 social_network=LINKEDIN_NAME,
+                                 link=linkedin_api.get_link_latest_post(),
+                                 db=db)
         print("Redirecting...")
         return redirect('/next_poster' + "/linkedin")
     else:
@@ -290,7 +295,9 @@ def tumblr_poster():
         session[TUMBLR_NAME + '_POST_URL'] = tumblr_api.get_link_latest_post()
 
         insert_post_current_user(title=title, content=post, image=image,
-                                 social_network=TUMBLR_NAME, db=db)
+                                 social_network=TUMBLR_NAME,
+                                 link=tumblr_api.get_link_latest_post(),
+                                 db=db)
         return redirect('/next_poster' + "/tumblr")
     else:
         form.title.data = title
@@ -344,3 +351,11 @@ def post_status():
     data = get_current_posts_with_links()
     clear_current_posts()
     return render_template('post/done_post.html', data=data)
+
+
+@posters.route('/view_post')
+@login_required
+def view_post():
+    from flask import request
+    redirect_url = request.args.get('url')
+    return redirect(redirect_url)

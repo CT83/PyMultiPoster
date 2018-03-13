@@ -11,6 +11,7 @@ class PostTable(Table):
     title = Col('Title')
     content = Col('Content')
     image = Col('Image')
+    link = LinkCol('View', 'Posters.view_post', url_kwargs=dict(url='link'))
     social_network = Col('Social Network')
 
 

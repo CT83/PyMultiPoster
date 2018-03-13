@@ -11,6 +11,7 @@ class Post(db.Model):
     image = db.Column(db.Text)
     social_network = db.Column(db.Text)
     date_posted = db.Column(db.DateTime(), default=datetime.datetime.now())
+    link = db.Column(db.Text, default="#")
     user_email = db.Column(db.String(80), db.ForeignKey('users.email'))
 
     def __repr__(self):
@@ -20,7 +21,7 @@ class Post(db.Model):
                     self.date_posted)
 
 
-def insert_post_current_user(content, social_network, db, image="", title="",
+def insert_post_current_user(content, social_network, db, image="", title="", link="",
                              user=None):
     if user is None:
         user = load_user(get_current_user())
@@ -30,6 +31,6 @@ def insert_post_current_user(content, social_network, db, image="", title="",
     time_indian = time_indian + datetime.timedelta(hours=5, minutes=30)
 
     post = Post(title=title, content=content, social_network=social_network, image=image,
-                user=user, date_posted=time_indian)
+                user=user, date_posted=time_indian, link=link)
     db.session.add(post)
     db.session.commit()
