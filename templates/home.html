@@ -29,7 +29,7 @@
     <br><br>
 
     {% if current_user.is_admin() %}
-        <a href="{{ url_for('admin_view') }}" class="btn btn-lg btn-primary btn-danger">
+        <a href="{{ url_for('Administrator.admin_view') }}" class="btn btn-lg btn-primary btn-danger">
             <span class="fa fa-cog cye-lm-tag"></span> View Admin Panel
         </a>
     {% endif %}

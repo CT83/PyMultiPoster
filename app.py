@@ -3,23 +3,22 @@ import sys
 
 from flask import Flask, render_template, url_for, request, make_response
 from flask_bootstrap import Bootstrap
-from flask_login import login_required, login_user, current_user
+from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 
 from CONSTANT import FACEBOOK_CLIENT_SECRET, FACEBOOK_CLIENT_ID, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
     LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TUMBLR_CLIENT_SECRET, TUMBLR_CLIENT_ID, LINKEDIN_RETURN_URL, \
     TWITTER_REDIRECT_URL, TUMBLR_REDIRECT_URL, ON_HEROKU
 from Forms.InstagramLoginForm import InstagramLoginForm
-from Forms.SignupForm import SignupForm
 from SocialMedia.Facebook.Facebook import Facebook
 from SocialMedia.LinkedIn.LinkedIn import LinkedInAuth
+from blueprints.administrator.Administrator import admin_blueprint
 from blueprints.login.Login import get_current_user, login_blueprint
 from blueprints.posters.Posters import posters
 from models.Credentials import save_credentials, get_credentials
 from models.Post import Post
-from models.Users import Users
 from shared.models import db, login_manager
-from table.models import PostTable, UsersTable
+from table.models import PostTable
 
 app = Flask(__name__)
 
@@ -43,6 +42,7 @@ db.init_app(app)
 db.create_all()
 app.register_blueprint(login_blueprint)
 app.register_blueprint(posters)
+app.register_blueprint(admin_blueprint)
 
 
 # Major
@@ -205,65 +205,12 @@ def redirect_root():
         return render_template('/home_page.html')
 
 
-@app.route('/admin_signup', methods=('GET', 'POST'))
-def admin_signup():
-    form = SignupForm()
-    if request.method == 'GET':
-        return render_template('admin/admin_signup.html', form=form)
-    elif request.method == 'POST':
-        if form.validate_on_submit():
-            if Users.query.filter_by(email=form.email.data).first():
-                return "Email address already exists"
-            else:
-                newuser = Users(form.email.data, form.password.data, form.name.data, role=10)
-                db.session.add(newuser)
-                db.session.commit()
-                login_user(newuser)
-                return "Signed Up successfully as Admin"
-        else:
-            return "Form didn't validate"
-
-
-@app.route('/admin_view')
-@login_required
-def admin_view():
-    return render_template('admin/admin_panel.html')
-
-
-@app.route('/admin_view_users')
-@login_required
-def admin_view_users():
-    users = Users.query.all()
-
-    for user in users:
-        user.link = user.email
-        user.no = users.index(user) + 1
-        user.no_of_posts = Post.query.filter_by(user_email=user.email).count()
-
-    table = UsersTable(users)
-    return render_template('admin/view_users.html', table=table)
-
-
 @app.route('/home')
 def home():
     if current_user.is_authenticated:
         return render_template('home.html')
     else:
         return redirect(url_for('redirect_root'))
-
-
-@app.route('/admin_user_posts')
-@login_required
-def admin_user_posts():
-    user = request.args.get('username')
-    print(request.args)
-    print(user)
-    posts = Post.query.filter_by(user_email=user).all()
-    posts.reverse()  # Reverse Order of Posts
-    for post in posts:
-        post.no = posts.index(post) + 1
-    table = PostTable(posts)
-    return render_template('post/user_posts.html', table=table)
 
 
 @app.route('/user_posts')
