@@ -56,9 +56,7 @@ app.register_blueprint(oauth_workflow)
 # TODO Check if Instagram Extension is installed chrome-extension://nlhjgcligpbnjphflfdbmabbmjidnmek/main.html
 
 # Minor
-# TODO Cleanup up Project
-# TODO DRY admin_user_posts function
-
+# TODO Fix Facebook post link not stored in database
 
 @app.route('/')
 def redirect_root():

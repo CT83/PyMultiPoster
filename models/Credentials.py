@@ -14,7 +14,8 @@ class Credentials(db.Model):
 
     user_email = db.Column(db.String(80), db.ForeignKey('users.email'))
 
-    # TODO Define Repr here
+    def __repr__(self):
+        return '<Credential:{} {} >'.format(self.id, self.user_email)
 
     def save_credential_to_db(self, dictionary):
         user_email = self.user_email
@@ -81,3 +82,9 @@ def get_credentials(username):
                    }
 
     return credentials
+
+
+def delete_credential(cred):
+    print("Deleted Credentials for", cred)
+    db.session.delete(cred)
+    db.session.commit()

@@ -27,3 +27,20 @@ class UsersTable(Table):
     role = Col('Role')
     link = LinkCol('Link', 'Administrator.admin_user_posts',
                    url_kwargs=dict(username='link'), attr='name')
+
+
+class CredentialsTable(Table):
+    def sort_url(self, col_id, reverse=False):
+        pass
+
+    classes = ['table', 'table-hover', 'table-striped']
+    no = Col('#')
+
+    facebook_access_token = Col("Facebook Token")
+    twitter_access_token = Col("Twitter Token")
+    twitter_access_secret = Col("Twitter Secret")
+    instagram_email = Col("Instagram Email")
+    instagram_password = Col("Instagram Password")
+    linkedin_access_token = Col("LinkedIn Token")
+    tumblr_access_token = Col("Tumblr Token")
+    tumblr_access_secret = Col("Tumblr Secret")

@@ -8,7 +8,7 @@ from Forms.InstagramLoginForm import InstagramLoginForm
 from SocialMedia.Facebook.Facebook import Facebook
 from SocialMedia.LinkedIn.LinkedIn import LinkedInAuth
 from blueprints.login.Login import get_current_user
-from models.Credentials import get_credentials, save_credentials
+from models.Credentials import get_credentials, save_credentials, Credentials, delete_credential
 
 oauth_workflow = Blueprint('OAuthWorkflow', __name__)
 
@@ -145,3 +145,22 @@ def tumblr_redirect():
                      tumblr_access_secret=tokens['oauth_token_secret'])
 
     return resp
+
+
+@oauth_workflow.route('/manage_credentials')
+@login_required
+def manage_credentials():
+    credential = None
+    try:
+        credential = Credentials.query.filter_by(user_email=get_current_user()).first()
+    except:
+        pass
+    return render_template('dashboard/manage_credentials.html', cred=credential)
+
+
+@oauth_workflow.route('/delete_all_credentials')
+@login_required
+def delete_all_credentials():
+    cred = Credentials.query.filter_by(user_email=get_current_user()).first()
+    delete_credential(cred)
+    return redirect(url_for("OAuthWorkflow.manage_credentials"))
