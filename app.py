@@ -57,6 +57,7 @@ app.register_blueprint(oauth_workflow)
 
 # Minor
 # TODO Fix Facebook post link not stored in database
+# TODO Don't Display the delete button if No Credentials are saved
 
 @app.route('/')
 def redirect_root():
