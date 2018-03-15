@@ -2,6 +2,45 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block body %}
+    <style>
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 140px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 150%;
+            left: 50%;
+            margin-left: -75px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
 
     <script>
         function openInNewTab(url) {
@@ -35,9 +74,30 @@
         </ol>
     </div>
 
+
+    <script>
+        function copyText() {
+            var copyText = document.getElementById("{{ form.post.id }}");
+            copyText.select();
+            document.execCommand("Copy");
+        }
+
+    </script>
+
+
+    <h4>Edit Instagram Post</h4>
+    <br>
+
+    <button onclick="copyText()" class="btn-sm btn-primary">
+        <span class="tooltiptext fa fa-copy cye-lm-tag" id="myTooltip"></span>
+        <b>Copy</b>
+    </button>
+    Paste the copied text in Instagram's Caption input field, and then click
+    <em> Confirm Manual Post & Proceed</em>
+    <br>
+    <br>
+
     <form action="{{ url_for('Posters.instagram_poster') }}" method="POST" enctype="multipart/form-data">
-        <h4>Edit Instagram Post</h4>
-        <br>
         <fieldset>
             {{ wtf.quick_form(form) }}
         </fieldset>
