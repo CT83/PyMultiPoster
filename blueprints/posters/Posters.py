@@ -201,8 +201,8 @@ def instagram_poster():
         return redirect('/next_poster' + "/instagram")
     else:
         form.post.data = post
-        form.image.data = image
-        form.image.render_kw = {'disabled': 'disabled'}
+        # form.image.data = image
+        # form.image.render_kw = {'disabled': 'disabled'}
 
     return render_template('post/instagram_post.html', form=form, filename=image)
 
