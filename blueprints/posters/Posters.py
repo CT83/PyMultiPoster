@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 
 from CONSTANT import UPLOAD_PATH, FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, FACEBOOK_NAME, TWITTER_CLIENT_ID, \
     TWITTER_CLIENT_SECRET, TWITTER_NAME, LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, LINKEDIN_NAME, TUMBLR_CLIENT_ID, \
-    TUMBLR_CLIENT_SECRET, TUMBLR_NAME, SUPPORTED_SOCIAL_NETWORKS
+    TUMBLR_CLIENT_SECRET, TUMBLR_NAME, SUPPORTED_SOCIAL_NETWORKS, INSTAGRAM_NAME
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramPostForm import InstagramPostForm
 from Forms.LinkedInPostForm import LinkedInPostForm
@@ -14,7 +14,6 @@ from Forms.MainPostForm import MainPostForm
 from Forms.TumblrPostForm import TumblrPostForm
 from Forms.TwitterPostForm import TwitterPostForm
 from SocialMedia.Facebook.Facebook import Facebook
-from SocialMedia.Instagram.Instagram import Instagram
 from SocialMedia.LinkedIn.LinkedIn import LinkedIn
 from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
@@ -177,26 +176,26 @@ def instagram_poster():
     _, post, image = retrieve_session()
     form = InstagramPostForm()
     if form.validate_on_submit():
-        post = form.post.data
+        # post = form.post.data
         # image = form.image.data
 
-        print("Posting to Instagram...")
-        print("Post:", post)
-        print("Image:", image)
+        # print("Posting to Instagram...")
+        # print("Post:", post)
+        # print("Image:", image)
 
         # stored_c = get_cookie(request)
-        stored_c = get_credentials(get_current_user())
-
-        instagram_api = Instagram(stored_c['instagram_email'],
-                                  stored_c['instagram_password'])
+        # stored_c = get_credentials(get_current_user())
+        #
+        # instagram_api = Instagram(stored_c['instagram_email'],
+        #                           stored_c['instagram_password'])
         # jpg_image = instagram_api.convert_image_to_compatible_format(image)
-        Thread(target=instagram_api.convert_publish_update_with_image_attachment,
-               kwargs=dict(message=post,
-                           image_url=image)).start()
+        # Thread(target=instagram_api.convert_publish_update_with_image_attachment,
+        #        kwargs=dict(message=post,
+        #                    image_url=image)).start()
 
         # instagram_api.cleanup()
 
-        insert_post_current_user(content=post, image=image, social_network=TWITTER_NAME, db=db)
+        insert_post_current_user(content=post, image=image, social_network=INSTAGRAM_NAME, db=db)
 
         print("Redirecting...")
         return redirect('/next_poster' + "/instagram")

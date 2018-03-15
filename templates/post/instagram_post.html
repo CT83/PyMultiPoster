@@ -2,8 +2,41 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block body %}
+
+    <script>
+        function openInNewTab(url) {
+            var win = window.open(url, '_blank');
+            win.focus();
+        }
+    </script>
+
+    <div class="jumbotron">
+        <h3>Post to Instagram</h3>
+        <p class="lead"> Posting to Instagram using Graph API is still in closed Beta, hence it is not available at the
+            moment.</p>
+        <p class="lead"><b> Steps to manually post to Instagram </b></p>
+        <ol type="1">
+            <li>
+                Follow the initial setup instructions
+                <a href="#"
+                   onclick="openInNewTab('{{ url_for('OAuthWorkflow.instagram_login') }}');"
+                   target="_blank">
+                    here.</a>
+            </li>
+            <li>Click the <b>Copy Button</b> to copy the caption to your clipboard.</li>
+            <li>Open <b>Desktop for Instagram</b> from the Chrome Apps Toolbar</li>
+            <li>Click the <b>Plus (+) Icon</b> in the center of the screen.</li>
+            <li>Select the image which you want to post.</li>
+            <li>Click <b>Next</b></li>
+            <li><b>Paste</b> the caption from your clipboard in the text area.</li>
+            <li>Click <b>Share</b></li>
+            <li>Close the tab after posting the image.</li>
+            <li>Click <b>Confirm Manual Post and Proceed</b>.</li>
+        </ol>
+    </div>
+
     <form action="{{ url_for('Posters.instagram_poster') }}" method="POST" enctype="multipart/form-data">
-        <legend>Edit Instagram Post</legend>
+        <h4>Edit Instagram Post</h4>
         <br>
         <fieldset>
             {{ wtf.quick_form(form) }}

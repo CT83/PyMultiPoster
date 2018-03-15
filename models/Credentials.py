@@ -71,11 +71,15 @@ def get_credentials(username):
     except:
         pass
 
+    # TODO To make instagram_email and instagram_password work again uncomment the commented lines and remove the redundant ones
+
     credentials = {'facebook_access_token': getattr(c, 'facebook_access_token', None),
                    'twitter_access_token': getattr(c, 'twitter_access_token', None),
                    'twitter_access_secret': getattr(c, 'twitter_access_secret', None),
-                   'instagram_email': getattr(c, 'instagram_email', None),
-                   'instagram_password': getattr(c, 'instagram_password', None),
+                   # 'instagram_email': getattr(c, 'instagram_email', None),
+                   # 'instagram_password': getattr(c, 'instagram_password', None),
+                   'instagram_email': "INSTAGRAM_EMAIL",
+                   'instagram_password': "INSTAGRAM_PASSWORD",
                    'linkedin_access_token': getattr(c, 'linkedin_access_token', None),
                    'tumblr_access_token': getattr(c, 'tumblr_access_token', None),
                    'tumblr_access_secret': getattr(c, 'tumblr_access_secret', None),
