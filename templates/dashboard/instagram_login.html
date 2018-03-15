@@ -1,16 +1,29 @@
 {% extends "layout.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{#TODO Implement CSRF Tokening#}
 
 {% block body %}
-    <form action="{{ url_for('instagram_login') }}" method="POST">
-        <legend>Instagram Login</legend>
-        <br>
-        <fieldset>
-            {{ wtf.quick_form(form) }}
-        </fieldset>
-    </form>
+    <script>
+        function openInNewTab(url) {
+            var win = window.open(url, '_blank');
+            win.focus();
+        }
+    </script>
+    <div class="jumbotron">
+        <h3>Setup Instagram Posting</h3>
+        <p class="lead"> Steps to get Instagram Posting working.</p>
+        <ol type="1">
+            <li>
+                Install the
+                <a href="#"
+                   onclick="openInNewTab('https://chrome.google.com/webstore/detail/desktop-for-instagram/nlhjgcligpbnjphflfdbmabbmjidnmek');"
+                   target="_blank">
+                    Desktop for Instagram</a> Chrome Extension.
+            </li>
+            <li>Open <b>Desktop for Instagram</b> from the Chrome Apps Toolbar</li>
+            <li>Sign in your Instagram Account in the Chrome Extension Tab.</li>
+        </ol>
 
-    <br>
+    </div>
+
 
 {% endblock %}
