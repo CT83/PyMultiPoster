@@ -46,17 +46,11 @@ app.register_blueprint(oauth_workflow)
 
 # Future
 # TODO Make Admin Signup more secured
-# TODO Add Quick Post button
-# TODO Change image Aspect Ratio to fit instagram
-# TODO Add allow uploading if no image is selected
 # TODO Look into how titles and hash tags are managed for all social network posters
-# TODO Check instagram password on the server
 # TODO Move to MDBootstrap
 
 
 # Minor
-# TODO Fix Facebook post link not stored in database
-# TODO Don't Display the delete button if No Credentials are saved
 # TODO Add Red Colored Button for submitting InstagramForm.
 # TODO Replace {{wtf.quick_form(form)}} with proper HTML Formatted forms
 
