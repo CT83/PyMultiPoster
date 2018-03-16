@@ -2,9 +2,17 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block body %}
+    <h3>Administrator Control Panel</h3>
+    <p>All the Administrator features and settings can be controlled from here.</p>
     <br>
-    <a href="{{ url_for('Administrator.admin_view_users') }}" class="btn btn-lg btn-primary btn-secondary">
+    <a href="{{ url_for('Administrator.admin_view_users') }}" class="btn btn-lg btn-primary btn-outline-dark">
         <span class="fa fa-eye  cye-lm-tag"></span> View All User Posts
+    </a>
+    <br>
+    <br>
+
+    <a href="{{ url_for('Administrator.admin_signup') }}" class="btn btn-lg btn-primary btn-outline-success">
+        <span class="fa fa-user-plus cye-lm-tag"></span> Create New Admin Accounts
     </a>
     <br>
     <br>
