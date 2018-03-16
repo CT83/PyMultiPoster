@@ -26,7 +26,7 @@ def signup():
                 db.session.add(newuser)
                 db.session.commit()
                 login_user(newuser)
-                return redirect(url_for('login'))
+                return redirect(url_for('Login.login'))
         else:
             return "Form didn't validate"
 
