@@ -11,12 +11,18 @@
 
     <h3>Posts Successful</h3>
     <p class="lead">Recent posts are shown below.</p>
-    <table class="table table-hover table-striped">
+    <table class="table table-hover table-striped table-bordered">
+        <th>Social Network</th>
+        <th>View Post</th>
         {% for item in data %}
             <tr>
                 <td>{{ item[0] }}</td>
-                <td><a href="#" onclick="openInNewTab('{{ item[1] }}');" target="_blank">
-                    View </a></td>
+                {% if item[1] not in "#" %}
+                    <td><a href="#" onclick="openInNewTab('{{ item[1] }}');" target="_blank">
+                        View </a></td>
+                {% else %}
+                    <td>Link Unavailable</td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>
