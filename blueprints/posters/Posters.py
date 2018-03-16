@@ -176,7 +176,7 @@ def instagram_poster():
     _, post, image = retrieve_session()
     form = InstagramPostForm()
     if form.validate_on_submit():
-        # post = form.post.data
+        post = form.post.data
         # image = form.image.data
 
         # print("Posting to Instagram...")
@@ -194,7 +194,8 @@ def instagram_poster():
         #                    image_url=image)).start()
 
         # instagram_api.cleanup()
-
+        # TODO Replace # with actual post url in the future
+        session[INSTAGRAM_NAME + '_POST_URL'] = "#"
         insert_post_current_user(content=post, image=image, social_network=INSTAGRAM_NAME, db=db)
 
         print("Redirecting...")

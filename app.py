@@ -58,6 +58,8 @@ app.register_blueprint(oauth_workflow)
 # Minor
 # TODO Fix Facebook post link not stored in database
 # TODO Don't Display the delete button if No Credentials are saved
+# TODO Add Red Colored Button for submitting InstagramForm.
+# TODO Replace {{wtf.quick_form(form)}} with proper HTML Formatted forms
 
 @app.route('/')
 def redirect_root():
