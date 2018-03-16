@@ -17,5 +17,5 @@ class MainPostForm(FlaskForm):
                          validators=[InputRequired(), Length(min=4, max=80)])
     photo = FileField('Photo (Optional)', validators=[ImageFileRequired()])
 
-    selected_socialnetworks = MultiCheckboxField('Social Networks')
+    selected_socialnetworks = MultiCheckboxField('Social Networks', validators=[InputRequired()])
     submit = SubmitField('Proceed')
