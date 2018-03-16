@@ -97,7 +97,8 @@ class Facebook(SocialMedia):
          not be view sometimes due to some errors, instead it returns the Profile link."""
         try:
             if post_id is None:
-                post_url = 'https://facebook.com/' + str(self.post_id).split('_', 1)[0]
+                # post_url = 'https://facebook.com/' + str(self.post_id).split('_', 1)[0]
+                post_url = 'https://facebook.com/' + self.post_id
                 return post_url
         except (TypeError, KeyError) as e:
             print(e)

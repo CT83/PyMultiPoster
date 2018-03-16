@@ -43,7 +43,6 @@ app.register_blueprint(oauth_workflow)
 
 
 # Major
-# TODO Add some separate workflow for instagram
 
 # Future
 # TODO Make Admin Signup more secured
@@ -53,7 +52,7 @@ app.register_blueprint(oauth_workflow)
 # TODO Look into how titles and hash tags are managed for all social network posters
 # TODO Check instagram password on the server
 # TODO Move to MDBootstrap
-# TODO Check if Instagram Extension is installed chrome-extension://nlhjgcligpbnjphflfdbmabbmjidnmek/main.html
+
 
 # Minor
 # TODO Fix Facebook post link not stored in database
