@@ -18,7 +18,7 @@ oauth_workflow = Blueprint('OAuthWorkflow', __name__)
 def dashboard():
     # stored_c = get_cookie(request)
     stored_c = get_credentials(get_current_user())
-    print("Stored Cookies:", stored_c)
+    print("Stored Credentials:", stored_c)
     linkedin_auth = LinkedInAuth(LINKEDIN_CLIENT_ID,
                                  LINKEDIN_CLIENT_SECRET, LINKEDIN_RETURN_URL)
 

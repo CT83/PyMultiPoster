@@ -15,11 +15,20 @@ class Credentials(db.Model):
     user_email = db.Column(db.String(80), db.ForeignKey('users.email'))
 
     def __repr__(self):
-        return '<Credential:{} {} >'.format(self.id, self.user_email)
+        return '<Credential:{} {} {}>'.format(self.id, self.user_email,
+                                              self.facebook_access_token)
 
     def save_credential_to_db(self, dictionary):
         user_email = self.user_email
-        cred = Credentials.query.filter_by(user_email=user_email).update(dictionary)
+
+        count = Credentials.query.filter_by(user_email=user_email).count()
+        print("Found", count, "matching rows!")
+        if not count:
+            cred = Credentials(user_email=user_email)
+            db.session.add(cred)
+            db.session.commit()
+
+        Credentials.query.filter_by(user_email=user_email).update(dictionary)
         db.session.commit()
 
 
@@ -28,13 +37,13 @@ def save_credentials(username, facebook_access_token="", twitter_access_token=""
                      linkedin_access_token="", tumblr_access_token="",
                      tumblr_access_secret=""):
     if facebook_access_token:
-        print("Saving Facebook Credentials to DB")
+        print("Saving Facebook Credentials to DB:", facebook_access_token)
         cred = Credentials(user_email=username,
                            facebook_access_token=facebook_access_token)
         cred.save_credential_to_db(dict(facebook_access_token=facebook_access_token))
 
     if twitter_access_token and twitter_access_secret:
-        print("Saving Twitter Credentials to DB")
+        print("Saving Twitter Credentials to DB", twitter_access_token, twitter_access_secret)
         cred = Credentials(user_email=username,
                            twitter_access_token=twitter_access_token,
                            twitter_access_secret=twitter_access_secret)
@@ -42,7 +51,7 @@ def save_credentials(username, facebook_access_token="", twitter_access_token=""
                                         twitter_access_secret=twitter_access_secret))
 
     if instagram_email and instagram_password:
-        print("Saving Instagram Credentials to DB")
+        print("Saving Instagram Credentials to DB", instagram_email, instagram_password)
         cred = Credentials(user_email=username,
                            instagram_email=instagram_email,
                            instagram_password=instagram_password)
@@ -50,13 +59,13 @@ def save_credentials(username, facebook_access_token="", twitter_access_token=""
                                         instagram_password=instagram_password))
 
     if linkedin_access_token:
-        print("Saving Linkedin Credentials to DB")
+        print("Saving Linkedin Credentials to DB", linkedin_access_token)
         cred = Credentials(user_email=username,
                            linkedin_access_token=linkedin_access_token)
         cred.save_credential_to_db(dict(linkedin_access_token=linkedin_access_token))
 
     if tumblr_access_token and tumblr_access_secret:
-        print("Saving Tumblr Credentials to DB")
+        print("Saving Tumblr Credentials to DB", tumblr_access_token, tumblr_access_secret)
         cred = Credentials(user_email=username,
                            tumblr_access_token=tumblr_access_token,
                            tumblr_access_secret=tumblr_access_secret)
@@ -84,6 +93,7 @@ def get_credentials(username):
                    'tumblr_access_token': getattr(c, 'tumblr_access_token', None),
                    'tumblr_access_secret': getattr(c, 'tumblr_access_secret', None),
                    }
+    print("get_credentials Returned:", credentials)
 
     return credentials
 
