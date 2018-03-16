@@ -6,20 +6,20 @@ class PostTable(Table):
         pass
 
     no = Col('#')
-    classes = ['table', 'table-hover', 'table-striped']
+    classes = ['table', 'table-hover', 'table-striped', 'table-responsive']
     date_posted = Col('Date')
+    social_network = Col('Social Network')
     title = Col('Title')
     content = Col('Content')
     image = Col('Image')
     link = LinkCol('View', 'Posters.view_post', url_kwargs=dict(url='link'))
-    social_network = Col('Social Network')
 
 
 class UsersTable(Table):
     def sort_url(self, col_id, reverse=False):
         pass
 
-    classes = ['table', 'table-hover', 'table-striped']
+    classes = ['table', 'table-responsive', 'table-hover', 'table-striped']
     no = Col('#')
     email = Col('Email')
     name = Col('Name')
@@ -33,7 +33,7 @@ class CredentialsTable(Table):
     def sort_url(self, col_id, reverse=False):
         pass
 
-    classes = ['table', 'table-hover', 'table-striped']
+    classes = ['table', 'table-responsive', 'table-hover', 'table-striped']
     no = Col('#')
 
     facebook_access_token = Col("Facebook Token")
