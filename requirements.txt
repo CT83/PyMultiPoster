@@ -18,3 +18,4 @@ pytumblr
 flask-sqlalchemy
 psycopg2-binary
 flask-table
+boto3

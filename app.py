@@ -43,6 +43,7 @@ app.register_blueprint(oauth_workflow)
 
 
 # Major
+# TODO Move Images storage to S3
 
 # Future
 # TODO Make Admin Signup more secured
