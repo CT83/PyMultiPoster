@@ -104,3 +104,9 @@ ENV/
 .idea/
 /venv
 venv/
+
+/tmp/
+/tmp
+
+/uploads/
+/uploads
