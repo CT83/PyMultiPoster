@@ -10,6 +10,10 @@ ON_HEROKU = 'ON_HEROKU' in os.environ
 IMGUR_CLIENT_ID = "3f4360ea159fad4"
 IMGUR_CLIENT_SECRET = "be5c53e8daf8645f2f33c3b9d8c8ac9488396fb6"
 
+S3_BUCKET = "pymultiposter-2"
+S3_KEY = "AKIAJEYHDBZNM4XQTOHA"
+S3_SECRET = "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"
+
 if ON_HEROKU:
     # # Facebook App pymultiposter-2
     FACEBOOK_CLIENT_ID = "2061306277447865"

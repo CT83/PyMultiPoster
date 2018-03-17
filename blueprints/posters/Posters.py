@@ -44,6 +44,15 @@ def main():
             filename = secure_filename(form.photo.data.filename)
             form.photo.data.save(UPLOAD_PATH + filename)
             filename = UPLOAD_PATH + filename
+
+            # s3 = S3(bucket=S3_BUCKET,
+            #         key=S3_KEY,
+            #         secret=S3_SECRET)
+            # from datetime import datetime
+            # import random
+            # filename = s3.upload(open(filename, 'rb'),
+            #                      str(datetime.now()) + str(random.randint(1, 101)))
+
         except AttributeError:
             filename = ""
         print("main() Submitted Form...")

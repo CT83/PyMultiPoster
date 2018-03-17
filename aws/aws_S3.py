@@ -1,41 +1,44 @@
-import os
-
 import boto3
 
-S3_BUCKET = "pymultiposter-2"
-S3_KEY = "AKIAJEYHDBZNM4XQTOHA"
-S3_SECRET = "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"
-# S3_LOCATION = 'http://{}.s3.amazonaws.com/'.format(S3_BUCKET)
-S3_LOCATION = "https://s3.amazonaws.com/{}".format(S3_BUCKET)
-
-SECRET_KEY = os.urandom(32)
-DEBUG = True
-PORT = 5000
-
-s3 = boto3.client(
-    "s3",
-    aws_access_key_id=S3_KEY,
-    aws_secret_access_key=S3_SECRET
-)
+from CONSTANT import S3_BUCKET, S3_SECRET, S3_KEY
 
 
-def upload_file_to_s3(file, bucket_name):
-    try:
+class S3:
+    def __init__(self, bucket, key, secret):
+        self.bucket = bucket
+        self.key = key
+        self.secret = secret
+        self.location = "https://s3.amazonaws.com/{}".format(bucket)
 
-        s3.upload_fileobj(
-            file,
-            bucket_name,
-            file.name)
+        self.s3 = boto3.client(
+            "s3",
+            aws_access_key_id=self.key,
+            aws_secret_access_key=self.secret
+        )
 
-    except Exception as e:
-        print("Something Happened: ", e)
-        return e
+    def upload(self, source_file, destination_filename=None):
 
-    return "{}{}".format(S3_LOCATION, file.name)
+        if destination_filename is None:
+            destination_filename = source_file.name
+
+            try:
+
+                self.s3.upload_fileobj(
+                    source_file,
+                    self.bucket,
+                    destination_filename,
+                    ExtraArgs={'ACL': 'public-read'})
+
+            except Exception as e:
+                print("Something Happened: ", e)
+                return e
+
+            return "{}/{}".format(self.location, destination_filename)
 
 
-f = open("read.txt", "w+")
-for i in range(10):
-    f.write("This is line %d\r\n" % (i + 1))
-f = open('read.txt', 'rb')
-upload_file_to_s3(f, S3_BUCKET)
+if __name__ == '__main__':
+    s3 = S3(bucket=S3_BUCKET,
+            key=S3_KEY,
+            secret=S3_SECRET)
+    file = open('21tread.txt', 'rb')
+    print(s3.upload(file))
