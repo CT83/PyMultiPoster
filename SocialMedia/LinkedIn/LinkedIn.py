@@ -75,6 +75,7 @@ class LinkedIn(SocialMedia):
 
     def upload_publish_image(self, message="", image_url="",
                              title=""):
+        # TODO Change this to use the actual S3 URL instead of Imgur
         image_url = upload_to_imgur(IMGUR_CLIENT_ID, image_url)
         print("Linkedin Uploaded Image:", image_url)
         self.publish_update_with_image_attachment(message=message, title=title,

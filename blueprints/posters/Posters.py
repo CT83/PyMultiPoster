@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 
 from CONSTANT import UPLOAD_PATH, FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET, FACEBOOK_NAME, TWITTER_CLIENT_ID, \
     TWITTER_CLIENT_SECRET, TWITTER_NAME, LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, LINKEDIN_NAME, TUMBLR_CLIENT_ID, \
-    TUMBLR_CLIENT_SECRET, TUMBLR_NAME, SUPPORTED_SOCIAL_NETWORKS, INSTAGRAM_NAME
+    TUMBLR_CLIENT_SECRET, TUMBLR_NAME, SUPPORTED_SOCIAL_NETWORKS, INSTAGRAM_NAME, S3_BUCKET, S3_KEY, S3_SECRET
 from Forms.FacebookPostForm import FacebookPostForm
 from Forms.InstagramPostForm import InstagramPostForm
 from Forms.LinkedInPostForm import LinkedInPostForm
@@ -17,6 +17,7 @@ from SocialMedia.Facebook.Facebook import Facebook
 from SocialMedia.LinkedIn.LinkedIn import LinkedIn
 from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
+from aws.aws_S3 import S3
 from blueprints.login.Login import get_current_user
 from models.Credentials import get_credentials
 from models.Post import insert_post_current_user
@@ -45,13 +46,14 @@ def main():
             form.photo.data.save(UPLOAD_PATH + filename)
             filename = UPLOAD_PATH + filename
 
-            # s3 = S3(bucket=S3_BUCKET,
-            #         key=S3_KEY,
-            #         secret=S3_SECRET)
-            # from datetime import datetime
-            # import random
-            # filename = s3.upload(open(filename, 'rb'),
-            #                      str(datetime.now()) + str(random.randint(1, 101)))
+            # TODO Retrieve the images completely from S3 in the future instead of just storing them there for Log purposes
+            s3 = S3(bucket=S3_BUCKET,
+                    key=S3_KEY,
+                    secret=S3_SECRET)
+            from datetime import datetime
+            import random
+            image_s3_url = s3.upload(open(filename, 'rb'),
+                                     str(datetime.now()) + str(random.randint(1, 101)))
 
         except AttributeError:
             filename = ""
