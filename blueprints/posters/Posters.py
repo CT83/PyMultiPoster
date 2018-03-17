@@ -76,11 +76,10 @@ def facebook_poster():
         print("Image:", image)
         print("Page ID:", page_id)
 
-        # stored_cookie = get_cookie(request)
-        stored_cookie = get_credentials(get_current_user())
+        stored_cred = get_credentials(get_current_user())
         facebook_user = Facebook(FACEBOOK_CLIENT_ID,
                                  FACEBOOK_CLIENT_SECRET,
-                                 stored_cookie['facebook_access_token'])
+                                 stored_cred['facebook_access_token'])
         thread = Thread()
         if is_string_empty(image) and is_string_empty(page_id):
             print("Posting to Wall...")
@@ -138,7 +137,6 @@ def twitter_poster():
         print("Post:", post)
         print("Image:", image)
 
-        # stored_c = get_cookie(request)
         stored_c = get_credentials(get_current_user())
         twitter_api = Twitter(TWITTER_CLIENT_ID,
                               TWITTER_CLIENT_SECRET,
@@ -146,11 +144,9 @@ def twitter_poster():
                               stored_c['twitter_access_secret'])
 
         if is_string_empty(image):
-            # print(twitter_api.publish_update(post))
             thread = Thread(target=twitter_api.publish_update,
                             kwargs=dict(message=post))
         else:
-            # print(twitter_api.publish_update_with_image_attachment(post, image))
             thread = Thread(target=twitter_api.publish_update_with_image_attachment,
                             kwargs=dict(message=post,
                                         image_url=image))
@@ -224,7 +220,6 @@ def linkedin_poster():
         print("Post:", post)
         print("Image:", image)
 
-        # stored_c = get_cookie(request)
         stored_c = get_credentials(get_current_user())
         linkedin_api = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET,
                                 stored_c['linkedin_access_token'])
@@ -266,13 +261,10 @@ def tumblr_poster():
         title = form.title.data
         post = form.post.data
         blog_name = form.blog_name.data
-        # image = form.image.data
 
         print("Posting to Tumblr...")
         print("Title:", title)
         print("Post:", post)
-        # print("Image:", image)
-        # stored_c = get_cookie(request)
         stored_c = get_credentials(get_current_user())
         tumblr_api = Tumblr(TUMBLR_CLIENT_ID,
                             TUMBLR_CLIENT_SECRET,

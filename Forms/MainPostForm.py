@@ -12,9 +12,9 @@ class MultiCheckboxField(SelectMultipleField):
 
 
 class MainPostForm(FlaskForm):
-    title = StringField('Title (Optional)', validators=[Length(max=100)])
+    title = StringField('Title (Optional)', validators=[Length(max=200)])
     post = TextAreaField('Post', render_kw={"rows": 10, "cols": 70},
-                         validators=[InputRequired(), Length(min=4, max=80)])
+                         validators=[InputRequired(), Length(min=1, max=450000)])
     photo = FileField('Photo (Optional)', validators=[ImageFileRequired()])
 
     selected_socialnetworks = MultiCheckboxField('Social Networks', validators=[InputRequired()])

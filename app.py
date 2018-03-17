@@ -51,7 +51,6 @@ app.register_blueprint(oauth_workflow)
 
 
 # Minor
-# TODO Add Red Colored Button for submitting InstagramForm.
 # TODO Replace {{wtf.quick_form(form)}} with proper HTML Formatted forms
 
 @app.route('/')
