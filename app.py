@@ -43,11 +43,10 @@ app.register_blueprint(oauth_workflow)
 
 
 # Major
+# TODO Cleanup SocialMedia Package and remove unused .py files
 # TODO Move Images storage to S3
 
 # Future
-# TODO Make Admin Signup more secured
-# TODO Look into how titles and hash tags are managed for all social network posters
 # TODO Move to MDBootstrap
 
 
