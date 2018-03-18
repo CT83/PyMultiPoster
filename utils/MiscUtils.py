@@ -28,9 +28,19 @@ def get_signed_social(user):
     return signed_social
 
 
-def delete_file(filename):
-    try:
-        import os
-        os.remove(filename)
-    except OSError:
-        pass
+def get_random_string():
+    from datetime import datetime
+    import random
+    rand_filename = str(datetime.now()) + str(random.randint(1, 101))
+    rand_filename = make_safe_filename(rand_filename)
+    return rand_filename
+
+
+def make_safe_filename(s):
+    def safe_char(c):
+        if c.isalnum():
+            return c
+        else:
+            return "_"
+
+    return "".join(safe_char(c) for c in s).rstrip("_")

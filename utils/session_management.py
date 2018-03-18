@@ -1,7 +1,7 @@
 from flask import session
 
+from utils.FileUtils import delete_file
 from utils.JSONUtils import list_to_json, json_to_list
-from utils.MiscUtils import delete_file
 
 
 def clear_session():

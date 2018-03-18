@@ -22,7 +22,8 @@ from blueprints.login.Login import get_current_user
 from models.Credentials import get_credentials
 from models.Post import insert_post_current_user
 from shared.models import db
-from utils.MiscUtils import get_signed_social
+from utils.FileUtils import rename_file, get_file_extension
+from utils.MiscUtils import get_signed_social, get_random_string
 from utils.StringUtils import is_string_empty
 from utils.session_management import save_session, retrieve_session, remove_session_socialnetwork, store_list_session, \
     retrieve_session_socialnetworks, clear_session
@@ -46,14 +47,18 @@ def main():
             form.photo.data.save(UPLOAD_PATH + filename)
             filename = UPLOAD_PATH + filename
 
+            image_path = "".join([UPLOAD_PATH,
+                                  get_random_string(),
+                                  get_file_extension(filename)])
+            print("Randomized Image Path:", image_path)
+
+            rename_file(old=filename, new=image_path)
+            filename = image_path
+
             # TODO Retrieve the images completely from S3 in the future instead of just storing them there for Log purposes
-            s3 = S3(bucket=S3_BUCKET,
-                    key=S3_KEY,
-                    secret=S3_SECRET)
-            from datetime import datetime
-            import random
-            image_s3_url = s3.upload(open(filename, 'rb'),
-                                     str(datetime.now()) + str(random.randint(1, 101)))
+            s3 = S3(bucket=S3_BUCKET, key=S3_KEY, secret=S3_SECRET)
+            image_s3_url = s3.upload(open(filename, 'rb'))
+            print("S3 Image URL:", image_s3_url)
 
         except AttributeError:
             filename = ""

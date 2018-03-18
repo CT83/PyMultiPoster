@@ -51,6 +51,7 @@ app.register_blueprint(oauth_workflow)
 
 
 # Minor
+# TODO rename image files after upload
 # TODO Replace {{wtf.quick_form(form)}} with proper HTML Formatted forms
 
 @app.route('/')
