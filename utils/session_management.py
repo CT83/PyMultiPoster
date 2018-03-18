@@ -1,9 +1,11 @@
 from flask import session
 
 from utils.JSONUtils import list_to_json, json_to_list
+from utils.MiscUtils import delete_file
 
 
 def clear_session():
+    delete_file(session["image"])
     session.pop('title', None)
     session.pop('post', None)
     session.pop('image', None)

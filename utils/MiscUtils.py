@@ -26,3 +26,11 @@ def get_signed_social(user):
     signed_social = list(set(signed_social))
     print("Signed in Social Networks:", signed_social)
     return signed_social
+
+
+def delete_file(filename):
+    try:
+        import os
+        os.remove(filename)
+    except OSError:
+        pass

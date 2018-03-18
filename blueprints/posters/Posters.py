@@ -25,7 +25,7 @@ from shared.models import db
 from utils.MiscUtils import get_signed_social
 from utils.StringUtils import is_string_empty
 from utils.session_management import save_session, retrieve_session, remove_session_socialnetwork, store_list_session, \
-    retrieve_session_socialnetworks
+    retrieve_session_socialnetworks, clear_session
 
 posters = Blueprint('Posters', __name__)
 
@@ -345,6 +345,7 @@ def next_poster(done_socialnetwork):
     if social_networks:
         return redirect("/" + social_networks[0].lower() + "_poster")
     else:
+        clear_session()
         return redirect(url_for('Posters.post_status'))
 
 
