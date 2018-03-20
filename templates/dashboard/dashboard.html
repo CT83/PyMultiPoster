@@ -66,17 +66,37 @@
     <br>
     <br>
 
-    <div class="card w-75">
-        <div class="card-body">
-            <h5 class="card-title">Signed In</h5>
-            <p class="card-text">Logged in as Username.</p>
-            <a class="btn btn-primary btn-social btn-twitter" onclick="login();">
-                <span class="fa fa-facebook"></span> Sign in with Facebook
-            </a>
+    {% if facebook_status %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="pull-left fa fa-check"></i>
+                    Connected
+                </h5>
+                <p class="card-text">Logged in as <b>{{ facebook_status }}</b>.</p>
+                <p class="card-text">You can login with another Facebook below.</p>
+                <a class="btn btn-primary btn-social btn-twitter" onclick="login();">
+                    <span class="fa fa-facebook"></span> Sign in with Facebook
+                </a>
 
+            </div>
         </div>
-    </div>
+    {% else %}
+        <div class="card w-75">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="pull-left fa fa-times"></i>
+                    Not Connected
+                </h5>
+                <p class="card-text">Link your Facebook Account to allow PyMultiPoster to post to Facebook.</p>
+                <a class="btn btn-primary btn-social btn-twitter" onclick="login();">
+                    <span class="fa fa-facebook"></span> Sign in with Facebook
+                </a>
 
+            </div>
+        </div>
+
+    {% endif %}
 
     <a href="{{ linkedin_login }}" class="btn btn-lg btn-social btn-linkedin">
         <span class="fa fa-linkedin"></span> Sign in with LinkedIn
