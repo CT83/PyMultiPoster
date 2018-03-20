@@ -36,12 +36,28 @@ def dashboard():
                                                       TUMBLR_REDIRECT_URL)
     session['tumblr_request_token'] = (tum_key, tum_sec)
 
+    stored_cred = get_credentials(get_current_user())
+    try:
+        facebook_user = Facebook(FACEBOOK_CLIENT_ID,
+                                 FACEBOOK_CLIENT_SECRET,
+                                 stored_cred['facebook_access_token'])
+        facebook_status = facebook_user.get_profile_name()
+    except:
+        facebook_status = None
+
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
                            linkedin_login=linkedin_auth.get_authorization_url(),
                            tumblr_login=tum_url,
                            twitter_login=twitter_auth_url,
-                           instagram_login=url_for('OAuthWorkflow.instagram_login'))
+                           instagram_login=url_for('OAuthWorkflow.instagram_login'),
+
+                           facebook_status=facebook_status,
+                           linkedin_status="",
+                           tumblr_status="",
+                           twitter_status="",
+                           instagram_status="",
+                           )
 
 
 @oauth_workflow.route('/facebook_redirect')

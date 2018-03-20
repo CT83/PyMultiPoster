@@ -19,3 +19,9 @@ class SocialMedia:
 
     def publish_update_with_image_attachment(self, message, image_url, **kwargs):
         pass
+
+    def get_user_id_name(self):
+        pass
+
+    def get_profile_name(self):
+        pass

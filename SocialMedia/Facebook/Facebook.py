@@ -12,6 +12,16 @@ class Facebook(SocialMedia):
 
         self.post_id = None
 
+    def get_user_id_name(self):
+        graph = facebook.GraphAPI(self.access_token)
+        profile = graph.get_object("me")
+        return profile['id']
+
+    def get_profile_name(self):
+        graph = facebook.GraphAPI(self.access_token)
+        profile = graph.get_object("me")
+        return profile['name']
+
     def publish_update(self, message, **kwargs):
         graph = facebook.GraphAPI(self.access_token)
         status = graph.put_wall_post(message=message)
@@ -115,6 +125,7 @@ def main():
     #                                                    page_id="328045644353380",
     #                                                    link_att='temp1.png',
     #                                                    image_url='temp1.png')
+    facebook_user.get_user_id_name()
     facebook_user.publish_update_image_page(message="Posst 1sa",
                                             page_id="328045644353380",
                                             image='temp1.png')
