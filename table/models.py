@@ -1,4 +1,4 @@
-from flask_table import Table, Col, LinkCol
+from flask_table import Table, Col, LinkCol, DatetimeCol
 
 
 class PostTable(Table):
@@ -7,7 +7,7 @@ class PostTable(Table):
 
     no = Col('#')
     classes = ['table', 'table-hover', 'table-striped', 'table-responsive']
-    date_posted = Col('Date')
+    date_posted = DatetimeCol('Date')
     social_network = Col('Social Network')
     title = Col('Title')
     content = Col('Content')

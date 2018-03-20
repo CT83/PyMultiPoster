@@ -1,7 +1,12 @@
 import os
+
+os.environ.setdefault('LC_TIME', 'en_GB')
+# Don't change the position of this as this need to be set before the imports
+
 import sys
 
-from flask import Flask, render_template, url_for
+from flask import Flask
+from flask import render_template, url_for
 from flask_bootstrap import Bootstrap
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
