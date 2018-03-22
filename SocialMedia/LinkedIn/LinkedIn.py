@@ -84,6 +84,11 @@ class LinkedIn(SocialMedia):
     def get_link_latest_post(self):
         return self.post_url
 
+    def get_profile_name(self):
+        profile = self.linkedin_api.get_profile()
+        print(profile)
+        return profile['firstName'] + " " + profile['lastName']
+
 
 def main():
     linkedin_auth = LinkedInAuth(LINKEDIN_CLIENT_ID,
@@ -95,16 +100,17 @@ def main():
     auth_token = linkedin_auth.get_access_token_from_url(link)
 
     linkedin_poster = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, auth_token)
+    linkedin_poster.get_profile_name()
 
-    linkedin_poster.publish_update("Only Update")
-
-    linkedin_poster.publish_update_with_attachment("Update with Attachment",
-                                                   "name_att", "link_att",
-                                                   "caption_att",
-                                                   "description_att")
-    image_url = upload_to_imgur(IMGUR_CLIENT_ID, 'temp.jpg')
-    linkedin_poster.publish_update_with_image_attachment(
-        title="Title", image_url=image_url, message="Update with Image Attachment")
+    # linkedin_poster.publish_update("Only Update")
+    #
+    # linkedin_poster.publish_update_with_attachment("Update with Attachment",
+    #                                                "name_att", "link_att",
+    #                                                "caption_att",
+    #                                                "description_att")
+    # image_url = upload_to_imgur(IMGUR_CLIENT_ID, 'temp.jpg')
+    # linkedin_poster.publish_update_with_image_attachment(
+    #     title="Title", image_url=image_url, message="Update with Image Attachment")
 
 
 if __name__ == '__main__':

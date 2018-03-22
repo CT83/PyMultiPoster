@@ -6,7 +6,7 @@ from CONSTANT import LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, LINKEDIN_RETURN
     FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET
 from Forms.InstagramLoginForm import InstagramLoginForm
 from SocialMedia.Facebook.Facebook import Facebook
-from SocialMedia.LinkedIn.LinkedIn import LinkedInAuth
+from SocialMedia.LinkedIn.LinkedIn import LinkedInAuth, LinkedIn
 from blueprints.login.Login import get_current_user
 from models.Credentials import get_credentials, save_credentials, Credentials, delete_credential
 
@@ -37,6 +37,7 @@ def dashboard():
     session['tumblr_request_token'] = (tum_key, tum_sec)
 
     stored_cred = get_credentials(get_current_user())
+
     try:
         facebook_user = Facebook(FACEBOOK_CLIENT_ID,
                                  FACEBOOK_CLIENT_SECRET,
@@ -44,6 +45,15 @@ def dashboard():
         facebook_status = facebook_user.get_profile_name()
     except:
         facebook_status = None
+
+    try:
+        linkedin_poster = LinkedIn(LINKEDIN_CLIENT_ID,
+                                   LINKEDIN_CLIENT_SECRET,
+                                   stored_cred['linkedin_access_token'])
+        linkedin_status = linkedin_poster.get_profile_name()
+
+    except:
+        linkedin_status = None
 
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
@@ -53,7 +63,7 @@ def dashboard():
                            instagram_login=url_for('OAuthWorkflow.instagram_login'),
 
                            facebook_status=facebook_status,
-                           linkedin_status="",
+                           linkedin_status=linkedin_status,
                            tumblr_status="",
                            twitter_status="",
                            instagram_status="",
