@@ -86,7 +86,6 @@ class LinkedIn(SocialMedia):
 
     def get_profile_name(self):
         profile = self.linkedin_api.get_profile()
-        print(profile)
         return profile['firstName'] + " " + profile['lastName']
 
 
