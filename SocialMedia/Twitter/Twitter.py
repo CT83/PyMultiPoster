@@ -36,6 +36,11 @@ class Twitter(SocialMedia):
             print(e)
             return ""
 
+    def get_profile_name(self):
+        profile = self.twitter_api.me()
+        # print("Twitter get_profile:", profile.name)
+        return profile.name
+
 
 if __name__ == '__main__':
     client_key = TWITTER_CLIENT_ID

@@ -7,6 +7,7 @@ from CONSTANT import LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, LINKEDIN_RETURN
 from Forms.InstagramLoginForm import InstagramLoginForm
 from SocialMedia.Facebook.Facebook import Facebook
 from SocialMedia.LinkedIn.LinkedIn import LinkedInAuth, LinkedIn
+from SocialMedia.Twitter.Twitter import Twitter
 from blueprints.login.Login import get_current_user
 from models.Credentials import get_credentials, save_credentials, Credentials, delete_credential
 
@@ -55,6 +56,17 @@ def dashboard():
     except:
         linkedin_status = None
 
+    try:
+        twitter_poster = Twitter(TWITTER_CLIENT_ID,
+                                 TWITTER_CLIENT_SECRET,
+                                 stored_cred['twitter_access_token'],
+                                 stored_cred['twitter_access_secret'])
+        twitter_status = twitter_poster.get_profile_name()
+
+    except Exception as e:
+        print(e)
+        twitter_status = None
+
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
                            linkedin_login=linkedin_auth.get_authorization_url(),
@@ -65,7 +77,7 @@ def dashboard():
                            facebook_status=facebook_status,
                            linkedin_status=linkedin_status,
                            tumblr_status="",
-                           twitter_status="",
+                           twitter_status=twitter_status,
                            instagram_status="",
                            )
 
