@@ -63,8 +63,6 @@
         </p>
     </div>
 
-    <br>
-    <br>
 
     {% if facebook_status %}
         <div class="card">
@@ -74,7 +72,7 @@
                     Connected
                 </h5>
                 <p class="card-text">Logged in as <b>{{ facebook_status }}</b>.</p>
-                <p class="card-text">You can login with another Facebook below.</p>
+                <p class="card-text">You can login with another Facebook Account below.</p>
                 <a class="btn btn-primary btn-social btn-twitter" onclick="login();">
                     <span class="fa fa-facebook"></span> Sign in with Facebook
                 </a>
@@ -82,46 +80,123 @@
             </div>
         </div>
     {% else %}
-        <div class="card w-75">
+        <div class="card ">
             <div class="card-body">
                 <h5 class="card-title">
                     <i class="pull-left fa fa-times"></i>
                     Not Connected
                 </h5>
-                <p class="card-text">Link your Facebook Account to allow PyMultiPoster to post to Facebook.</p>
+                <p class="card-text">Link your Facebook Account to allow PyMultiPoster to post.</p>
                 <a class="btn btn-primary btn-social btn-twitter" onclick="login();">
                     <span class="fa fa-facebook"></span> Sign in with Facebook
                 </a>
 
             </div>
         </div>
-
     {% endif %}
-
-    <a href="{{ linkedin_login }}" class="btn btn-lg btn-social btn-linkedin">
-        <span class="fa fa-linkedin"></span> Sign in with LinkedIn
-    </a>
-    <br>
     <br>
 
 
-    <a href="{{ tumblr_login }}" class="btn btn-lg btn-social btn-tumblr">
-        <span class="fa fa-tumblr"></span> Sign in with Tumblr
-    </a>
-    <br>
+    {% if linkedin_status %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="pull-left fa fa-check"></i>
+                    Connected
+                </h5>
+                <p class="card-text">Logged in as <b>{{ linkedin_status }}</b>.</p>
+                <p class="card-text">You can login with another LinkedIn Account below.</p>
+                <a href="{{ linkedin_login }}" class="btn btn-lg btn-social btn-linkedin">
+                    <span class="fa fa-linkedin"></span> Sign in with LinkedIn
+                </a>
+
+            </div>
+        </div>
+    {% else %}
+        <div class="card ">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="pull-left fa fa-times"></i>
+                    Not Connected
+                </h5>
+                <p class="card-text">Link your LinkedIn Account to allow PyMultiPoster post.</p>
+                <a href="{{ linkedin_login }}" class="btn btn-lg btn-social btn-linkedin">
+                    <span class="fa fa-linkedin"></span> Sign in with LinkedIn
+                </a>
+
+            </div>
+        </div>
+    {% endif %}
     <br>
 
-    <a href="{{ twitter_login }}" class="btn btn-lg btn-social btn-twitter">
-        <span class="fa fa-twitter"></span> Sign in with Twitter
-    </a>
-    <br>
+
+    {% if tumblr_status %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="pull-left fa fa-check"></i>
+                    Connected
+                </h5>
+                <p class="card-text">Logged in as <b>{{ tumblr_status }}</b>.</p>
+                <p class="card-text">You can login with another Tumblr Account below.</p>
+                <a href="{{ tumblr_login }}" class="btn btn-lg btn-social btn-tumblr">
+                    <span class="fa fa-tumblr"></span> Sign in with Tumblr
+                </a>
+
+            </div>
+        </div>
+    {% else %}
+        <div class="card ">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="pull-left fa fa-times"></i>
+                    Not Connected
+                </h5>
+                <p class="card-text">Link your Tumblr Account to allow PyMultiPoster to post.</p>
+                <a href="{{ tumblr_login }}" class="btn btn-lg btn-social btn-tumblr">
+                    <span class="fa fa-tumblr"></span> Sign in with Tumblr
+                </a>
+
+            </div>
+        </div>
+    {% endif %}
     <br>
 
+
+    {% if twitter_status %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="pull-left fa fa-check"></i>
+                    Connected
+                </h5>
+                <p class="card-text">Logged in as <b>{{ twitter_status }}</b>.</p>
+                <p class="card-text">You can login with another Twitter Account below.</p>
+                <a href="{{ twitter_login }}" class="btn btn-lg btn-social btn-twitter">
+                    <span class="fa fa-twitter"></span> Sign in with Twitter
+                </a>
+
+            </div>
+        </div>
+    {% else %}
+        <div class="card ">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="pull-left fa fa-times"></i>
+                    Not Connected
+                </h5>
+                <p class="card-text">Link your Twitter Account to allow PyMultiPoster to post.</p>
+                <a href="{{ twitter_login }}" class="btn btn-lg btn-social btn-twitter">
+                    <span class="fa fa-twitter"></span> Sign in with Twitter
+                </a>
+
+            </div>
+        </div>
+    {% endif %}
+    <br>
 
     <a href="{{ instagram_login }}" class="btn btn-lg btn-social btn-instagram">
         <span class="fa fa-instagram"></span> Setup Instagram
     </a>
-    <br>
-    <br>
 
 {% endblock %}
