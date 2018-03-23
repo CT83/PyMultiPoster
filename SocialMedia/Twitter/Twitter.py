@@ -38,7 +38,6 @@ class Twitter(SocialMedia):
 
     def get_profile_name(self):
         profile = self.twitter_api.me()
-        # print("Twitter get_profile:", profile.name)
         return profile.name
 
 
