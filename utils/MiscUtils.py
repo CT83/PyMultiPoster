@@ -1,4 +1,10 @@
-from CONSTANT import FACEBOOK_NAME, INSTAGRAM_NAME, TWITTER_NAME, TUMBLR_NAME, LINKEDIN_NAME
+from CONSTANT import FACEBOOK_NAME, INSTAGRAM_NAME, TWITTER_NAME, TUMBLR_NAME, LINKEDIN_NAME, FACEBOOK_CLIENT_ID, \
+    FACEBOOK_CLIENT_SECRET, LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, TWITTER_CLIENT_ID, TWITTER_CLIENT_SECRET, \
+    TUMBLR_CLIENT_ID, TUMBLR_CLIENT_SECRET
+from SocialMedia.Facebook.Facebook import Facebook
+from SocialMedia.LinkedIn.LinkedIn import LinkedIn
+from SocialMedia.Tumblr.Tumblr import Tumblr
+from SocialMedia.Twitter.Twitter import Twitter
 
 
 def get_signed_social(user):
@@ -44,3 +50,42 @@ def make_safe_filename(s):
             return "_"
 
     return "".join(safe_char(c) for c in s).rstrip("_")
+
+
+def get_all_signed_usernames(stored_cred):
+    try:
+        facebook_user = Facebook(FACEBOOK_CLIENT_ID,
+                                 FACEBOOK_CLIENT_SECRET,
+                                 stored_cred['facebook_access_token'])
+        facebook_status = facebook_user.get_profile_name()
+    except:
+        facebook_status = None
+    try:
+        linkedin_poster = LinkedIn(LINKEDIN_CLIENT_ID,
+                                   LINKEDIN_CLIENT_SECRET,
+                                   stored_cred['linkedin_access_token'])
+        linkedin_status = linkedin_poster.get_profile_name()
+
+    except:
+        linkedin_status = None
+    try:
+        twitter_poster = Twitter(TWITTER_CLIENT_ID,
+                                 TWITTER_CLIENT_SECRET,
+                                 stored_cred['twitter_access_token'],
+                                 stored_cred['twitter_access_secret'])
+        twitter_status = twitter_poster.get_profile_name()
+
+    except Exception as e:
+        print(e)
+        twitter_status = None
+    try:
+        tumblr_poster = Tumblr(TUMBLR_CLIENT_ID,
+                               TUMBLR_CLIENT_SECRET,
+                               stored_cred['tumblr_access_token'],
+                               stored_cred['tumblr_access_secret'])
+        tumblr_status = tumblr_poster.get_profile_name()
+
+    except Exception as e:
+        print(e)
+        tumblr_status = None
+    return facebook_status, linkedin_status, tumblr_status, twitter_status

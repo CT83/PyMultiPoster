@@ -6,11 +6,10 @@ from CONSTANT import LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET, LINKEDIN_RETURN
     FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET
 from Forms.InstagramLoginForm import InstagramLoginForm
 from SocialMedia.Facebook.Facebook import Facebook
-from SocialMedia.LinkedIn.LinkedIn import LinkedInAuth, LinkedIn
-from SocialMedia.Tumblr.Tumblr import Tumblr
-from SocialMedia.Twitter.Twitter import Twitter
+from SocialMedia.LinkedIn.LinkedIn import LinkedInAuth
 from blueprints.login.Login import get_current_user
 from models.Credentials import get_credentials, save_credentials, Credentials, delete_credential
+from utils.MiscUtils import get_all_signed_usernames
 
 oauth_workflow = Blueprint('OAuthWorkflow', __name__)
 
@@ -40,44 +39,8 @@ def dashboard():
 
     stored_cred = get_credentials(get_current_user())
 
-    try:
-        facebook_user = Facebook(FACEBOOK_CLIENT_ID,
-                                 FACEBOOK_CLIENT_SECRET,
-                                 stored_cred['facebook_access_token'])
-        facebook_status = facebook_user.get_profile_name()
-    except:
-        facebook_status = None
-
-    try:
-        linkedin_poster = LinkedIn(LINKEDIN_CLIENT_ID,
-                                   LINKEDIN_CLIENT_SECRET,
-                                   stored_cred['linkedin_access_token'])
-        linkedin_status = linkedin_poster.get_profile_name()
-
-    except:
-        linkedin_status = None
-
-    try:
-        twitter_poster = Twitter(TWITTER_CLIENT_ID,
-                                 TWITTER_CLIENT_SECRET,
-                                 stored_cred['twitter_access_token'],
-                                 stored_cred['twitter_access_secret'])
-        twitter_status = twitter_poster.get_profile_name()
-
-    except Exception as e:
-        print(e)
-        twitter_status = None
-
-    try:
-        tumblr_poster = Tumblr(TUMBLR_CLIENT_ID,
-                               TUMBLR_CLIENT_SECRET,
-                               stored_cred['tumblr_access_token'],
-                               stored_cred['tumblr_access_secret'])
-        tumblr_status = tumblr_poster.get_profile_name()
-
-    except Exception as e:
-        print(e)
-        tumblr_status = None
+    facebook_status, linkedin_status, tumblr_status, twitter_status \
+        = get_all_signed_usernames(stored_cred)
 
     return render_template('dashboard/dashboard.html',
                            facebook_client_id=FACEBOOK_CLIENT_ID,
