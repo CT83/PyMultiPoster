@@ -85,6 +85,10 @@ class Tumblr(SocialMedia):
             print(e)
             return ""
 
+    def get_profile_name(self):
+        user = self.tumblr_api.info()['user']
+        return user['name']
+
 
 if __name__ == '__main__':
     url, res_key, res_sec = get_authorization_url(TUMBLR_CLIENT_ID,
