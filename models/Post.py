@@ -22,7 +22,7 @@ class Post(db.Model):
 
 
 def insert_post_current_user(content, social_network, db, image="", title="", link="",
-                             user=None):
+                             user=None, image_url=None):
     if user is None:
         user = load_user(get_current_user())
 
@@ -30,7 +30,11 @@ def insert_post_current_user(content, social_network, db, image="", title="", li
     time_indian = datetime.datetime.utcnow()
     time_indian = time_indian + datetime.timedelta(hours=5, minutes=30)
 
-    post = Post(title=title, content=content, social_network=social_network, image=image,
-                user=user, date_posted=time_indian, link=link)
+    if image_url:
+        post = Post(title=title, content=content, social_network=social_network, image=image_url,
+                    user=user, date_posted=time_indian, link=link)
+    else:
+        post = Post(title=title, content=content, social_network=social_network, image=image,
+                    user=user, date_posted=time_indian, link=link)
     db.session.add(post)
     db.session.commit()

@@ -62,12 +62,13 @@ def main():
 
         except AttributeError:
             filename = ""
+            image_s3_url = None
         print("main() Submitted Form...")
         print("Title:", title)
         print("Post:", post)
         print("Social Networks:", social_networks)
         print("Image:", filename)
-        save_session(filename, post, title, social_networks)
+        save_session(filename, post, title, social_networks, image_url=image_s3_url)
         print("Redirecting...")
         return redirect('/next_poster/main')
     return render_template('post/main.html', form=form, )
@@ -79,7 +80,9 @@ def facebook_poster():
     print("Facebook Poster...")
     print("Logged in as", get_current_user())
 
-    title, post, image = retrieve_session()
+    title, post, _ = retrieve_session()
+    image_url = session["image_url"]
+
     form = FacebookPostForm()
     if form.validate_on_submit():
         title = form.title.data
@@ -89,7 +92,7 @@ def facebook_poster():
         print("Posting to Facebook...")
         print("Title:", title)
         print("Post:", post)
-        print("Image:", image)
+        print("Image URL:", image_url)
         print("Page ID:", page_id)
 
         stored_cred = get_credentials(get_current_user())
@@ -97,47 +100,46 @@ def facebook_poster():
                                  FACEBOOK_CLIENT_SECRET,
                                  stored_cred['facebook_access_token'])
         thread = Thread()
-        if is_string_empty(image) and is_string_empty(page_id):
+        if is_string_empty(image_url) and is_string_empty(page_id):
             print("Posting to Wall...")
             thread = Thread(target=facebook_user.publish_update,
                             kwargs=dict(message=title + "\n" + post))
 
-        if is_string_empty(image) and not is_string_empty(page_id):
+        if is_string_empty(image_url) and not is_string_empty(page_id):
             print("Posting to Page...")
             thread = Thread(target=facebook_user.publish_update_page,
                             kwargs=dict(message=title + "\n" + post,
                                         page_id=page_id))
 
-        if not is_string_empty(image) and is_string_empty(page_id):
+        if not is_string_empty(image_url) and is_string_empty(page_id):
             print("Posting to Wall with Image...")
             thread = Thread(target=facebook_user.publish_update_image,
                             kwargs=dict(message=title + "\n" + post,
-                                        image=image))
+                                        image_url=image_url))
 
-        if not is_string_empty(image) and not is_string_empty(page_id):
+        if not is_string_empty(image_url) and not is_string_empty(page_id):
             print("Posting to Page with Image...")
             thread = Thread(target=facebook_user.publish_update_image_page,
                             kwargs=dict(message=title + "\n" + post,
                                         page_id=page_id,
-                                        image=image))
+                                        image_url=image_url))
         thread.start()
         thread.join()
         session[FACEBOOK_NAME + '_POST_URL'] = facebook_user.get_link_latest_post()
 
-        insert_post_current_user(title=title, content=post, image=image,
+        insert_post_current_user(title=title, content=post, image_url=image_url,
                                  social_network=FACEBOOK_NAME,
                                  link=facebook_user.get_link_latest_post(),
                                  db=db)
 
-        print("Redirecting...")
         return redirect('/next_poster' + "/facebook")
     else:
         form.title.data = title
         form.post.data = post
-        form.image.data = image
+        form.image.data = image_url
         form.image.render_kw = {'disabled': 'disabled'}
 
-    return render_template('post/facebook_post.html', form=form, filename=image)
+    return render_template('post/facebook_post.html', form=form, filename=image_url)
 
 
 @posters.route('/twitter_poster', methods=('GET', 'POST'))

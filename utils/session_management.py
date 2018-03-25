@@ -9,15 +9,17 @@ def clear_session():
     session.pop('title', None)
     session.pop('post', None)
     session.pop('image', None)
+    session.pop('image_url', None)
     session.pop("selected_socialnetworks", None)
 
 
-def save_session(filename, post, title, social_networks_list=None):
+def save_session(filename, post, title, social_networks_list=None, image_url=None):
     if social_networks_list is None:
         social_networks_list = []
     session["title"] = title
     session["post"] = post
     session["image"] = filename
+    session["image_url"] = image_url
     if social_networks_list:
         store_list_session(social_networks_list)
 
@@ -25,8 +27,8 @@ def save_session(filename, post, title, social_networks_list=None):
 def retrieve_session():
     title = session["title"]
     post = session["post"]
-    filename = session["image"]
-    return title, post, filename
+    image = session["image"]
+    return title, post, image
 
 
 def retrieve_session_socialnetworks():
