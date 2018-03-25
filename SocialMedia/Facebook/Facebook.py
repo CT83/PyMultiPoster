@@ -39,15 +39,23 @@ class Facebook(SocialMedia):
         status = graph.put_wall_post(message=message)
         self.post_id = status['id']
 
-    def publish_update_image(self, message, image):
+    def publish_update_image(self, message, image=None, image_url=None):
         import requests
-        url = "https://graph.facebook.com/me/photos?access_token=" + self.access_token + "&message=" + message
-        files = {'source': open(image, 'rb')}
-        status = requests.post(url, files=files)
-        status = dict(status.json())
-        self.post_id = status['post_id']
+        if image_url is None:
+            url = "https://graph.facebook.com/me/photos?access_token=" + self.access_token + "&message=" + message
+            files = {'source': open(image, 'rb')}
+            status = requests.post(url, files=files)
+            status = dict(status.json())
+            self.post_id = status['post_id']
+        else:
+            url = "https://graph.facebook.com/me/photos?access_token=" + self.access_token + \
+                  "&message=" + message \
+                  + "&url=" + image_url
+            status = requests.post(url)
+            status = dict(status.json())
+            self.post_id = status['post_id']
 
-    def publish_update_image_page(self, message, image, page_id):
+    def publish_update_image_page(self, message, image=None, page_id=None, image_url=None):
 
         graph = facebook.GraphAPI(self.access_token)
         resp = graph.get_object('me/accounts')
@@ -57,12 +65,19 @@ class Facebook(SocialMedia):
                 page_access_token = page['access_token']
 
         import requests
-        url = "https://graph.facebook.com/" + page_id + "/photos?access_token=" \
-              + page_access_token + "&message=" + message
-        files = {'source': open(image, 'rb')}
-        status = requests.post(url, files=files)
-        status = dict(status.json())
-        self.post_id = status['post_id']
+        if image_url is None:
+            url = "https://graph.facebook.com/" + page_id + "/photos?access_token=" \
+                  + page_access_token + "&message=" + message
+            files = {'source': open(image, 'rb')}
+            status = requests.post(url, files=files)
+            status = dict(status.json())
+            self.post_id = status['post_id']
+        else:
+            url = "https://graph.facebook.com/" + page_id + "/photos?access_token=" \
+                  + page_access_token + "&message=" + message + "&url=" + image_url
+            status = requests.post(url)
+            status = dict(status.json())
+            self.post_id = status['post_id']
 
     def publish_update_with_attachment(self, message="", name_att="", link_att="",
                                        caption_att="",
@@ -128,7 +143,10 @@ def main():
     facebook_user.get_user_id_name()
     facebook_user.publish_update_image_page(message="Posst 1sa",
                                             page_id="328045644353380",
-                                            image='temp1.png')
+                                            image_url='https://s3.amazonaws.com/pymultiposter-2/uploads/Capture.PNG')
+
+    facebook_user.publish_update_image(message="Posst 1sa",
+                                       image_url='https://s3.amazonaws.com/pymultiposter-2/uploads/Capture.PNG')
 
 
 if __name__ == '__main__':
