@@ -49,7 +49,6 @@ app.register_blueprint(oauth_workflow)
 
 # Major
 # TODO Move Images storage to S3
-# TODO Allow posting to Linkedin Company Pages
 # TODO Setup different user levels to allow or prohibit users from signining in with their own accounts.
 
 # Future
