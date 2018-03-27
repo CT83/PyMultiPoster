@@ -228,6 +228,7 @@ def linkedin_poster():
     print("LinkedIn Poster...")
     title, post, image = retrieve_session()
     image_url = session["image_url"]
+    image = image_url
     form = LinkedInPostForm()
     if form.validate_on_submit():
         title = form.title.data
@@ -245,12 +246,12 @@ def linkedin_poster():
                                 stored_c['linkedin_access_token'])
         if is_string_populated(page_id):
             if is_string_empty(image):
-                print("Posting Image to Company Page, LinkedIn")
+                print("Posting message to Company Page, LinkedIn")
                 thread = Thread(target=linkedin_api.publish_update_company_page,
                                 kwargs=dict(title=title, message=post,
                                             company_id=page_id))
             else:
-                print("Posting message to Company Page, LinkedIn")
+                print("Posting Image to Company Page, LinkedIn")
                 thread = Thread(target=linkedin_api.publish_update_company_page,
                                 kwargs=dict(title=title, message=post,
                                             company_id=page_id,
@@ -259,21 +260,21 @@ def linkedin_poster():
 
         else:
             if is_string_empty(image):
-                print("Posting Image, LinkedIn")
+                print("Posting message, LinkedIn")
                 thread = Thread(target=linkedin_api.publish_update,
                                 kwargs=dict(title=title, message=post))
             else:
-                print("Posting message, LinkedIn")
-                thread = Thread(target=linkedin_api.upload_publish_image,
-                                kwargs=dict(title=title,
-                                            message=post,
-                                            image_url=image))
+                print("Posting Image, LinkedIn")
+                thread = Thread(target=linkedin_api.publish_update_with_image_attachment,
+                                kwargs=dict(title=title, message=post,
+                                            image_url=image_url,
+                                            link_att=image_url))
 
         thread.start()
         thread.join()
         session[LINKEDIN_NAME + '_POST_URL'] = linkedin_api.get_link_latest_post()
 
-        insert_post_current_user(title=title, content=post, image=image,
+        insert_post_current_user(title=title, content=post, image=image_url,
                                  social_network=LINKEDIN_NAME,
                                  link=linkedin_api.get_link_latest_post(),
                                  db=db)
