@@ -115,13 +115,8 @@ class LinkedIn(SocialMedia):
                   "x-li-format": "json",
                   'Connection': 'Keep-Alive'
                   }
-        print("Auth Token:", auth)
-        print("Headers:", header)
-        print("url:", url)
-        print("json_j:", json_j)
 
         status = requests.post(url, headers=header, data=json_j)
-        print(status.json())
         status = dict(status.json())
 
         url = "https://www.linkedin.com/feed/update/urn:li:activity:{}/" \
