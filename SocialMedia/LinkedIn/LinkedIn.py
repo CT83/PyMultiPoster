@@ -81,13 +81,6 @@ class LinkedIn(SocialMedia):
         self.publish_update_with_image_attachment(message=message, title=title,
                                                   image_url=image_url, link_att=image_url)
 
-    def get_link_latest_post(self):
-        return self.post_url
-
-    def get_profile_name(self):
-        profile = self.linkedin_api.get_profile()
-        return profile['firstName'] + " " + profile['lastName']
-
     def publish_update_company_page(self, message="", title="", company_id="",
                                     submitted_url="",
                                     submitted_image_url=""):
@@ -124,6 +117,13 @@ class LinkedIn(SocialMedia):
 
         self.post_url = url
         return self.post_url
+
+    def get_link_latest_post(self):
+        return self.post_url
+
+    def get_profile_name(self):
+        profile = self.linkedin_api.get_profile()
+        return profile['firstName'] + " " + profile['lastName']
 
 
 def main():

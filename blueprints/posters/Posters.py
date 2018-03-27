@@ -24,7 +24,7 @@ from models.Post import insert_post_current_user
 from shared.models import db
 from utils.FileUtils import rename_file, get_file_extension
 from utils.MiscUtils import get_signed_social, get_random_string
-from utils.StringUtils import is_string_empty
+from utils.StringUtils import is_string_empty, is_string_populated
 from utils.session_management import save_session, retrieve_session, remove_session_socialnetwork, store_list_session, \
     retrieve_session_socialnetworks, clear_session
 
@@ -227,11 +227,13 @@ def instagram_poster():
 def linkedin_poster():
     print("LinkedIn Poster...")
     title, post, image = retrieve_session()
+    image_url = session["image_url"]
     form = LinkedInPostForm()
     if form.validate_on_submit():
         title = form.title.data
         post = form.post.data
         # image = form.image.data
+        page_id = form.page_id.data
 
         print("Posting to LinkedIn...")
         print("Title:", title)
@@ -241,14 +243,31 @@ def linkedin_poster():
         stored_c = get_credentials(get_current_user())
         linkedin_api = LinkedIn(LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET,
                                 stored_c['linkedin_access_token'])
-        if is_string_empty(image):
-            thread = Thread(target=linkedin_api.publish_update,
-                            kwargs=dict(title=title, message=post))
+        if is_string_populated(page_id):
+            if is_string_empty(image):
+                print("Posting Image to Company Page, LinkedIn")
+                thread = Thread(target=linkedin_api.publish_update_company_page,
+                                kwargs=dict(title=title, message=post,
+                                            company_id=page_id))
+            else:
+                print("Posting message to Company Page, LinkedIn")
+                thread = Thread(target=linkedin_api.publish_update_company_page,
+                                kwargs=dict(title=title, message=post,
+                                            company_id=page_id,
+                                            submitted_url=image_url,
+                                            submitted_image_url=image_url))
+
         else:
-            thread = Thread(target=linkedin_api.upload_publish_image,
-                            kwargs=dict(title=title,
-                                        message=post,
-                                        image_url=image))
+            if is_string_empty(image):
+                print("Posting Image, LinkedIn")
+                thread = Thread(target=linkedin_api.publish_update,
+                                kwargs=dict(title=title, message=post))
+            else:
+                print("Posting message, LinkedIn")
+                thread = Thread(target=linkedin_api.upload_publish_image,
+                                kwargs=dict(title=title,
+                                            message=post,
+                                            image_url=image))
 
         thread.start()
         thread.join()
