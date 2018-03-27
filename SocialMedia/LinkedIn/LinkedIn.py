@@ -1,7 +1,6 @@
 from linkedin.linkedin import LinkedInApplication, LinkedInAuthentication
 
-from CONSTANT import IMGUR_CLIENT_ID, LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET
-from Imgur.Imgur import upload_to_imgur
+from CONSTANT import LINKEDIN_CLIENT_ID, LINKEDIN_CLIENT_SECRET
 from SocialMedia.SocialMedia import SocialMedia
 
 
@@ -72,14 +71,6 @@ class LinkedIn(SocialMedia):
         status = self.linkedin_api.submit_share(message, title, description_att,
                                                 link_att, image_url)
         self.post_url = status['updateUrl']
-
-    def upload_publish_image(self, message="", image_url="",
-                             title=""):
-        # TODO Change this to use the actual S3 URL instead of Imgur
-        image_url = upload_to_imgur(IMGUR_CLIENT_ID, image_url)
-        print("Linkedin Uploaded Image:", image_url)
-        self.publish_update_with_image_attachment(message=message, title=title,
-                                                  image_url=image_url, link_att=image_url)
 
     def publish_update_company_page(self, message="", title="", company_id="",
                                     submitted_url="",
