@@ -56,6 +56,8 @@ app.register_blueprint(oauth_workflow)
 
 
 # Minor
+# TODO Add where to find company page id for linkedin
+# TODO Add where to find page id for facebook
 # TODO Replace {{wtf.quick_form(form)}} with proper HTML Formatted forms
 
 @app.route('/')
@@ -86,4 +88,4 @@ def user_posts():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    app.run(debug=not ON_HEROKU, use_reloader=False)
