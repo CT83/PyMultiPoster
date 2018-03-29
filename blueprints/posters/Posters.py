@@ -14,6 +14,7 @@ from Forms.MainPostForm import MainPostForm
 from Forms.TumblrPostForm import TumblrPostForm
 from Forms.TwitterPostForm import TwitterPostForm
 from SocialMedia.Facebook.Facebook import Facebook
+from SocialMedia.Instagram.Instagram import Instagram
 from SocialMedia.LinkedIn.LinkedIn import LinkedIn
 from SocialMedia.Tumblr.Tumblr import Tumblr
 from SocialMedia.Twitter.Twitter import Twitter
@@ -187,37 +188,32 @@ def twitter_poster():
 @login_required
 def instagram_poster():
     print("Instagram Poster...")
-    _, post, image = retrieve_session()
+    _, post, _ = retrieve_session()
+    image = session["image_url"]
     form = InstagramPostForm()
     if form.validate_on_submit():
         post = form.post.data
-        # image = form.image.data
 
-        # print("Posting to Instagram...")
-        # print("Post:", post)
-        # print("Image:", image)
+        print("Posting to Instagram...")
+        print("Post:", post)
+        print("Image:", image)
 
-        # stored_c = get_cookie(request)
-        # stored_c = get_credentials(get_current_user())
-        #
-        # instagram_api = Instagram(stored_c['instagram_email'],
-        #                           stored_c['instagram_password'])
-        # jpg_image = instagram_api.convert_image_to_compatible_format(image)
-        # Thread(target=instagram_api.convert_publish_update_with_image_attachment,
-        #        kwargs=dict(message=post,
-        #                    image_url=image)).start()
+        instagram_api = Instagram()
+        instagram_api.publish_update_image(message=post, image=image,
+                                           db_session=db.session,
+                                           user_email=get_current_user())
 
-        # instagram_api.cleanup()
-        # TODO Replace # with actual post url in the future
         session[INSTAGRAM_NAME + '_POST_URL'] = "#"
-        insert_post_current_user(content=post, image=image, social_network=INSTAGRAM_NAME, db=db)
+        insert_post_current_user(content=post, image=image,
+                                 social_network=INSTAGRAM_NAME,
+                                 db=db)
 
         print("Redirecting...")
         return redirect('/next_poster' + "/instagram")
     else:
         form.post.data = post
-        # form.image.data = image
-        # form.image.render_kw = {'disabled': 'disabled'}
+        form.image.data = image
+        form.image.render_kw = {'disabled': 'disabled'}
 
     return render_template('post/instagram_post.html', form=form, filename=image)
 
