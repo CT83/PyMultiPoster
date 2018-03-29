@@ -37,6 +37,9 @@ else:
     print("Running on Heroku...")
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
+app.config['SQLALCHEMY_BINDS'] = {
+    "common_queue": "postgresql://administrator:cybertech83@pymultiposter-common-queue.c44vnyfhjrjn.us-east-1.rds.amazonaws.com:5432/postgres"}
+
 db.app = app
 db.init_app(app)
 db.create_all()
