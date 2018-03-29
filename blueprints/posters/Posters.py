@@ -385,4 +385,7 @@ def post_status():
 def view_post():
     from flask import request
     redirect_url = request.args.get('url')
-    return redirect(redirect_url)
+    if redirect_url:
+        return redirect(redirect_url)
+    else:
+        return ('', 204)
