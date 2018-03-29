@@ -11,7 +11,7 @@ from flask_bootstrap import Bootstrap
 from flask_login import login_required, current_user
 from werkzeug.utils import redirect
 
-from CONSTANT import ON_HEROKU
+from CONSTANT import ON_HEROKU, AWS_RDS_URL, LOCALHOST_POSTGRES
 from blueprints.administrator.Administrator import admin_blueprint
 from blueprints.login.Login import get_current_user, login_blueprint
 from blueprints.oauth_workflow.OAuthWorkflow import oauth_workflow
@@ -32,13 +32,12 @@ bootstrap = Bootstrap(app)
 if not ON_HEROKU:
     print("Running on Local Environment...")
     os.chdir(sys.path[0])
-    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:cybertech83@localhost/postgres"
+    app.config['SQLALCHEMY_DATABASE_URI'] = LOCALHOST_POSTGRES
 else:
     print("Running on Heroku...")
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
-app.config['SQLALCHEMY_BINDS'] = {
-    "common_queue": "postgresql://administrator:cybertech83@pymultiposter-common-queue.c44vnyfhjrjn.us-east-1.rds.amazonaws.com:5432/postgres"}
+app.config['SQLALCHEMY_BINDS'] = {"common_queue": AWS_RDS_URL}
 
 db.app = app
 db.init_app(app)
