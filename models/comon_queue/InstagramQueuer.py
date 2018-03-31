@@ -10,3 +10,4 @@ class InstagramQueuer(db.Model):
     image_url = db.Column(db.Text, nullable=False)
     date_queued = db.Column(db.DateTime(), default=datetime.datetime.now())
     user_email = db.Column(db.Text, nullable=False)
+    status = db.Column(db.Text)
