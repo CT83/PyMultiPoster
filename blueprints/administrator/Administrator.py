@@ -5,6 +5,7 @@ from Forms.SignupForm import SignupForm
 from blueprints.login.Login import admin_login_required
 from models.Post import Post
 from models.Users import Users
+from models.comon_queue.InstagramQueuer import InstagramQueuer
 from shared.models import db
 from table.models import UsersTable, PostTable
 
@@ -49,6 +50,7 @@ def admin_view():
 @admin_login_required()
 def admin_view_users():
     users = Users.query.all()
+    InstagramQueuer.query.all()
 
     for user in users:
         user.link = user.email

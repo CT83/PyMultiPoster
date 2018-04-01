@@ -1,5 +1,7 @@
 import os
 
+from models.comon_queue.InstagramQueuer import InstagramQueuer
+
 os.environ.setdefault('LC_TIME', 'en_GB')
 # Don't change the position of this as this need to be set before the imports
 
@@ -47,6 +49,7 @@ app.register_blueprint(login_blueprint)
 app.register_blueprint(posters)
 app.register_blueprint(admin_blueprint)
 app.register_blueprint(oauth_workflow)
+InstagramQueuer()
 
 
 # Major
