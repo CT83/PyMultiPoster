@@ -23,7 +23,7 @@ from blueprints.login.Login import get_current_user
 from models.Credentials import get_credentials
 from models.Post import insert_post_current_user
 from shared.models import db
-from utils.FileUtils import rename_file, get_file_extension
+from utils.FileUtils import rename_file, get_file_extension, get_filename_from_url
 from utils.MiscUtils import get_signed_social, get_random_string
 from utils.StringUtils import is_string_empty, is_string_populated
 from utils.session_management import save_session, retrieve_session, remove_session_socialnetwork, store_list_session, \
@@ -58,7 +58,9 @@ def main():
 
             # TODO Retrieve the images completely from S3 in the future instead of just storing them there for Log purposes
             s3 = S3(bucket=S3_BUCKET, key=S3_KEY, secret=S3_SECRET)
-            image_s3_url = s3.upload(open(filename, 'rb'))
+            image_s3_url = s3.upload(open(filename, 'rb'),
+                                     destination_filename="uploads/"
+                                                          + get_filename_from_url(filename))
             print("S3 Image URL:", image_s3_url)
 
         except AttributeError:

@@ -23,3 +23,7 @@ def get_file_extension(file_path):
 def get_file_name(file_path):
     filename, file_extension = os.path.splitext(file_path)
     return filename
+
+
+def get_filename_from_url(url):
+    return os.path.basename(url)

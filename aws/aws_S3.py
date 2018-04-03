@@ -21,19 +21,19 @@ class S3:
         if destination_filename is None:
             destination_filename = source_file.name
 
-            try:
+        try:
 
-                self.s3.upload_fileobj(
-                    source_file,
-                    self.bucket,
-                    destination_filename,
-                    ExtraArgs={'ACL': 'public-read'})
+            self.s3.upload_fileobj(
+                source_file,
+                self.bucket,
+                destination_filename,
+                ExtraArgs={'ACL': 'public-read'})
 
-            except Exception as e:
-                print("Something Happened: ", e)
-                return e
+        except Exception as e:
+            print("AWS Upload Error : ", e)
+            return e
 
-            return "{}/{}".format(self.location, destination_filename)
+        return "{}/{}".format(self.location, destination_filename)
 
 
 if __name__ == '__main__':
