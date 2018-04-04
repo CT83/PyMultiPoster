@@ -4,6 +4,8 @@
 {% block body %}
     <form action="{{ url_for('Posters.instagram_poster') }}" method="POST" enctype="multipart/form-data">
         <legend>Edit Instagram Post</legend>
+        <p>All Instagram posts will be queued and then be posted by a remote server. Hence,
+            post links will not be available.</p>
         <br>
         <fieldset>
             {{ wtf.quick_form(form) }}
