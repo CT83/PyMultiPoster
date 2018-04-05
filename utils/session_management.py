@@ -5,12 +5,15 @@ from utils.JSONUtils import list_to_json, json_to_list
 
 
 def clear_session():
-    delete_file(session["image"])
-    session.pop('title', None)
-    session.pop('post', None)
-    session.pop('image', None)
-    session.pop('image_url', None)
-    session.pop("selected_socialnetworks", None)
+    try:
+        delete_file(session["image"])
+        session.pop('title', None)
+        session.pop('post', None)
+        session.pop('image', None)
+        session.pop('image_url', None)
+        session.pop("selected_socialnetworks", None)
+    except KeyError as ke:
+        pass
 
 
 def save_session(filename, post, title, social_networks_list=None, image_url=None):
