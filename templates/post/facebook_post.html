@@ -4,6 +4,10 @@
 {% block body %}
     <form action="{{ url_for('Posters.facebook_poster') }}" method="POST" enctype="multipart/form-data">
         <legend>Edit Facebook Post</legend>
+        <p>You can find your Facebook Page ID
+            <a href="https://www.facebook.com/help/community/question/?id=378910098941520">here</a>.
+        </p>
+        <br>
         <br>
         <fieldset>
             {{ wtf.quick_form(form) }}
