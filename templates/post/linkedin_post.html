@@ -4,7 +4,12 @@
 {% block body %}
     <form action="{{ url_for('Posters.linkedin_poster') }}" method="POST" enctype="multipart/form-data">
         <legend>Edit LinkedIn Post</legend>
+        <p>You can find your LinkedIn Company ID <a
+                href="https://help.applicantstack.com/hc/en-us/articles/115004639828-How-do-I-find-my-LinkedIn-company-ID-">here</a>.
+        </p>
         <br>
+
+
         <fieldset>
             {{ wtf.quick_form(form) }}
         </fieldset>
