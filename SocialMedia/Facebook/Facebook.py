@@ -118,8 +118,6 @@ class Facebook(SocialMedia):
         return access_token
 
     def get_link_latest_post(self, post_id=None):
-        """REMEMBER! This function doesn't actually return the post link; as the post link could
-         not be view sometimes due to some errors, instead it returns the Profile link."""
         try:
             if post_id is None:
                 # post_url = 'https://facebook.com/' + str(self.post_id).split('_', 1)[0]
