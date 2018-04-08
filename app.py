@@ -53,6 +53,7 @@ InstagramQueuer()
 
 
 # Major
+# TODO Add notification to remind user to sigin in to facebook accounts after few days to generate tokens
 # TODO Move Images storage to S3
 # TODO Setup different user levels to allow or prohibit users from signining in with their own accounts.
 
