@@ -1,4 +1,4 @@
-\# Dump Heroku Database to Working Dir.
+# Dump Heroku Database to Working Dir.
 heroku pg:backups:capture -a pymultiposter
 heroku pg:backups:download -a pymultiposter
 
