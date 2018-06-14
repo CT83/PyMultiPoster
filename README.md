@@ -9,3 +9,6 @@ Python Application using Flask to allow users to post to multiple Social Media P
 
 ### Pushing to Heroku
     `git push heroku master`
+
+### Running migrations
+    `python manage.py db migrate`
