@@ -19,7 +19,7 @@ def signup():
 
 @admin_blueprint.route('/admin_signup', methods=('GET', 'POST'))
 @login_required
-# @admin_login_required()
+@admin_login_required()
 def admin_signup():
     form = SignupForm()
     if request.method == 'GET':
