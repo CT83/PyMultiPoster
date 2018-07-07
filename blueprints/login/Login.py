@@ -7,7 +7,7 @@ from Forms.LoginForm import LoginForm
 from Forms.SignupForm import SignupForm
 from models.Users import Users
 from shared.models import db, login_manager
-from utils.session_management import clear_session
+from utils.SessionUtils import clear_session
 
 login_blueprint = Blueprint('Login', __name__)
 

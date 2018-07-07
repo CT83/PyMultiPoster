@@ -26,7 +26,7 @@ from shared.models import db
 from utils.FileUtils import rename_file, get_file_extension, get_filename_from_url
 from utils.MiscUtils import get_signed_social, get_random_string
 from utils.StringUtils import is_string_empty, is_string_populated
-from utils.session_management import save_session, retrieve_session, remove_session_socialnetwork, store_list_session, \
+from utils.SessionUtils import save_session, retrieve_session, remove_session_socialnetwork, store_list_session, \
     retrieve_session_socialnetworks, clear_session
 
 posters = Blueprint('Posters', __name__)
